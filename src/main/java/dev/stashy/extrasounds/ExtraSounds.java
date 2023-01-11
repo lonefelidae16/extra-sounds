@@ -58,9 +58,6 @@ public class ExtraSounds implements ClientModInitializer {
                 if (hasCursor)
                     SoundManager.playSound(Sounds.ITEM_PICK_ALL, SoundType.PICKUP);
                 return;
-            case CLONE:
-                SoundManager.playSound(Sounds.ITEM_CLONE, SoundType.PLACE);
-                return;
             case THROW:
                 if (!hasCursor) {
                     SoundManager.playThrow(inSlot);
