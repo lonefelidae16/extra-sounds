@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds.sounds;
 
+import dev.stashy.extrasounds.ExtraSounds;
 import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.sound.SoundEvent;
@@ -8,31 +9,31 @@ import net.minecraft.util.math.floatprovider.ConstantFloatProvider;
 
 import java.util.List;
 
-public class Sounds extends SoundRegistry
+public class Sounds
 {
-    public static final SoundEvent CHAT = register("chat.message");
-    public static final SoundEvent CHAT_MENTION = register("chat.mention");
-    public static final SoundEvent HOTBAR_SCROLL = register("hotbar_scroll");
-    public static final SoundEvent INVENTORY_OPEN = register("inventory.open");
-    public static final SoundEvent INVENTORY_CLOSE = register("inventory.close");
-    public static final SoundEvent INVENTORY_SCROLL = register("inventory.scroll");
-    public static final SoundEvent ITEM_DROP = register("item.drop");
-    public static final SoundEvent ITEM_PICK = register("item.pickup");
-    public static final SoundEvent ITEM_PICK_ALL = register("item.pickup_all");
-    public static final SoundEvent ITEM_CLONE = register("item.clone");
-    public static final SoundEvent ITEM_DELETE = register("item.delete");
-    public static final SoundEvent ITEM_DRAG = register("item.drag");
-    public static final SoundEvent EFFECT_ADD_POSITIVE = register("effect.add.positive");
-    public static final SoundEvent EFFECT_ADD_NEGATIVE = register("effect.add.negative");
-    public static final SoundEvent EFFECT_REMOVE_POSITIVE = register("effect.remove.positive");
-    public static final SoundEvent EFFECT_REMOVE_NEGATIVE = register("effect.remove.negative");
-    public static final SoundEvent KEYBOARD_TYPE = register("keyboard.type");
+    public static final SoundEvent CHAT = SoundEvent.of(new Identifier(ExtraSounds.MODID, "chat.message"));
+    public static final SoundEvent CHAT_MENTION = SoundEvent.of(new Identifier(ExtraSounds.MODID, "chat.mention"));
+    public static final SoundEvent HOTBAR_SCROLL = SoundEvent.of(new Identifier(ExtraSounds.MODID, "hotbar_scroll"));
+    public static final SoundEvent INVENTORY_OPEN = SoundEvent.of(new Identifier(ExtraSounds.MODID, "inventory.open"));
+    public static final SoundEvent INVENTORY_CLOSE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "inventory.close"));
+    public static final SoundEvent INVENTORY_SCROLL = SoundEvent.of(new Identifier(ExtraSounds.MODID, "inventory.scroll"));
+    public static final SoundEvent ITEM_DROP = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.drop"));
+    public static final SoundEvent ITEM_PICK = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.pickup"));
+    public static final SoundEvent ITEM_PICK_ALL = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.pickup_all"));
+    public static final SoundEvent ITEM_CLONE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.clone"));
+    public static final SoundEvent ITEM_DELETE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.delete"));
+    public static final SoundEvent ITEM_DRAG = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.drag"));
+    public static final SoundEvent EFFECT_ADD_POSITIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.add.positive"));
+    public static final SoundEvent EFFECT_ADD_NEGATIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.add.negative"));
+    public static final SoundEvent EFFECT_REMOVE_POSITIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.remove.positive"));
+    public static final SoundEvent EFFECT_REMOVE_NEGATIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.remove.negative"));
+    public static final SoundEvent KEYBOARD_TYPE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.type"));
 
     public static class Actions
     {
-        public static final SoundEvent BOW_PULL = register("action.bow");
-        public static final SoundEvent REPEATER_ADD = register("action.repeater.add");
-        public static final SoundEvent REPEATER_RESET = register("action.repeater.reset");
+        public static final SoundEvent BOW_PULL = SoundEvent.of(new Identifier(ExtraSounds.MODID, "action.bow"));
+        public static final SoundEvent REPEATER_ADD = SoundEvent.of(new Identifier(ExtraSounds.MODID, "action.repeater.add"));
+        public static final SoundEvent REPEATER_RESET = SoundEvent.of(new Identifier(ExtraSounds.MODID, "action.repeater.reset"));
     }
 
     public static SoundEntry aliased(SoundEvent e)

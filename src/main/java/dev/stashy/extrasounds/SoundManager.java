@@ -1,6 +1,7 @@
 package dev.stashy.extrasounds;
 
 import dev.stashy.extrasounds.debug.DebugUtils;
+import dev.stashy.extrasounds.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.client.MinecraftClient;
@@ -32,9 +33,12 @@ public class SoundManager
         }
 
         Identifier id = Identifier.tryParse(idString);
-        Registries.SOUND_EVENT.getOrEmpty(id).ifPresentOrElse(
-                (snd) -> playSound(snd, type),
-                () -> LOGGER.error("Sound cannot be found in registry: " + id));
+        SoundEvent event = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
+        if (event == null) {
+            LOGGER.error("Sound cannot be found in packs: {}", id);
+            return;
+        }
+        playSound(event, type);
     }
 
     public static void playSound(StatusEffect effect, boolean add)

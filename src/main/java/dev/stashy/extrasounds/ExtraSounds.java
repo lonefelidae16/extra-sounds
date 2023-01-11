@@ -2,7 +2,6 @@ package dev.stashy.extrasounds;
 
 import dev.stashy.extrasounds.debug.DebugUtils;
 import dev.stashy.extrasounds.mapping.SoundPackLoader;
-import dev.stashy.extrasounds.sounds.Categories;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.fabricmc.api.ClientModInitializer;
@@ -22,11 +21,6 @@ public class ExtraSounds implements ClientModInitializer
     @Override
     public void onInitializeClient()
     {
-        //load classes so they register all resources before they're used
-        Object loader = Categories.HAY;
-        loader = Sounds.CHAT;
-        loader = Sounds.Actions.BOW_PULL;
-
         SoundPackLoader.init();
         DebugUtils.init();
     }
