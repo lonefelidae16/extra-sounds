@@ -1787,5 +1787,15 @@
         "type": "event"
       }
     ]
+  },
+  "item.pickup.minecraft.bundle": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extrasounds:item.category.gear.generic",
+        "pitch": 1.5,
+        "type": "event"
+      }
+    ]
   }
 }

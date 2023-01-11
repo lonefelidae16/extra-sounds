@@ -100,6 +100,9 @@ public class ExtraSounds implements ClientModInitializer {
             return;
         }
 
+        final boolean bRightClick = (actionType != SlotActionType.THROW && actionType != SlotActionType.SWAP) && button == 1 ||
+                actionType == SlotActionType.QUICK_CRAFT && ScreenHandler.unpackQuickCraftButton(button) == 1;
+
         ItemStack slotItem = (slot == null) ? ItemStack.EMPTY : slot.getStack().copy();
         ItemStack cursorItem = cursor.copy();
         if (actionType == SlotActionType.QUICK_MOVE) {
@@ -110,10 +113,15 @@ public class ExtraSounds implements ClientModInitializer {
 
         if (slotIndex == -999 && actionType != SlotActionType.QUICK_CRAFT) {
             // out of screen area
-            if (button == 1) {
+            if (bRightClick) {
                 cursorItem.setCount(1);
             }
             SoundManager.playThrow(cursorItem);
+            return;
+        }
+
+        if ((slotItem.isOf(Items.BUNDLE) || cursorItem.isOf(Items.BUNDLE)) && bRightClick) {
+            // Bundle has its own sounds with Right click
             return;
         }
 
