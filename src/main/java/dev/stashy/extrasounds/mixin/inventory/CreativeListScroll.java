@@ -4,32 +4,38 @@ import dev.stashy.extrasounds.Mixers;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.sound.SoundEvent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(CreativeInventoryScreen.CreativeScreenHandler.class)
-public class CreativeListScroll
+public abstract class CreativeListScroll
 {
-    private static int lastPos = 0;
-    private static long lastTime = 0L;
-    private static final SoundEvent e = Sounds.INVENTORY_SCROLL;
+    @Unique
+    private int lastPos = 0;
+    @Unique
+    private long lastTime = 0L;
 
-    @ModifyVariable(method = "scrollItems", at = @At("STORE"), ordinal = 1)
-    int scroll(int position)
+    @Shadow
+    protected abstract int getRow(float scroll);
+
+    @Inject(method = "scrollItems", at = @At("HEAD"))
+    void scroll(float position, CallbackInfo ci)
     {
-        long now = System.currentTimeMillis();
-        long timeDiff = now - lastTime;
-        if (timeDiff > 20 && lastPos != position && !(lastPos != 1 && position == 0))
+        final long now = System.currentTimeMillis();
+        final long timeDiff = now - lastTime;
+        final int row = this.getRow(position);
+        if (timeDiff > 20 && lastPos != row && !(lastPos != 1 && row == 0))
         {
             SoundManager.playSound(
-                    e,
+                    Sounds.INVENTORY_SCROLL,
                     (1f - 0.1f + 0.1f * Math.min(1, 50f / timeDiff)),
                     Mixers.SCROLL);
             lastTime = now;
-            lastPos = position;
+            lastPos = row;
         }
-        return position;
     }
 }
