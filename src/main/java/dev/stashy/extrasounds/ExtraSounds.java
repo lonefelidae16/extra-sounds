@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds;
 
+import com.google.common.collect.Maps;
 import dev.stashy.extrasounds.debug.DebugUtils;
 import dev.stashy.extrasounds.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.sounds.Categories;
@@ -9,18 +10,40 @@ import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
+import java.util.function.BiPredicate;
 
 public class ExtraSounds implements ClientModInitializer {
     public static final String MODID = "extrasounds";
     static final Random mcRandom = Random.create();
+
+    /**
+     * Predicate of Right Mouse Click.
+     */
+    private static final BiPredicate<SlotActionType, Integer> RIGHT_CLICK_PREDICATE = (actionType, button) -> {
+        return (actionType != SlotActionType.THROW && actionType != SlotActionType.SWAP) && button == 1 ||
+                actionType == SlotActionType.QUICK_CRAFT && ScreenHandler.unpackQuickCraftButton(button) == 1;
+    };
+
+    /**
+     * Map of the item which should not play sounds.<br>
+     * BiPredicate in this value will be passed <code>SlotActionType</code> and <code>int</code> of button ID.<br>
+     * Item -&gt; BiPredicate&lt;SlotActionType, Integer&gt;
+     */
+    private static final Map<Item, BiPredicate<SlotActionType, Integer>> IGNORE_SOUND_PREDICATE_MAP = Util.make(Maps.newHashMap(), map -> {
+        map.put(Items.BUNDLE, RIGHT_CLICK_PREDICATE);
+    });
 
     @Override
     public void onInitializeClient()
@@ -100,31 +123,16 @@ public class ExtraSounds implements ClientModInitializer {
             return;
         }
 
-        final boolean bRightClick = (actionType != SlotActionType.THROW && actionType != SlotActionType.SWAP) && button == 1 ||
-                actionType == SlotActionType.QUICK_CRAFT && ScreenHandler.unpackQuickCraftButton(button) == 1;
-
-        ItemStack slotItem = (slot == null) ? ItemStack.EMPTY : slot.getStack().copy();
-        ItemStack cursorItem = cursor.copy();
+        // Determine Slot item
+        final ItemStack slotItem = (slot == null) ? ItemStack.EMPTY : slot.getStack().copy();
         if (actionType == SlotActionType.QUICK_MOVE) {
             // cursor holding an item, then Shift + mouse (double) click
             SoundManager.handleQuickMoveSound(slotItem);
             return;
         }
 
-        if (slotIndex == -999 && actionType != SlotActionType.QUICK_CRAFT) {
-            // out of screen area
-            if (bRightClick) {
-                cursorItem.setCount(1);
-            }
-            SoundManager.playThrow(cursorItem);
-            return;
-        }
-
-        if ((slotItem.isOf(Items.BUNDLE) || cursorItem.isOf(Items.BUNDLE)) && bRightClick) {
-            // Bundle has its own sounds with Right click
-            return;
-        }
-
+        // Determine Cursor item
+        final ItemStack cursorItem;
         if (actionType == SlotActionType.SWAP) {
             // Swap event
             if (PlayerInventory.isValidHotbarIndex(button)) {
@@ -134,11 +142,35 @@ public class ExtraSounds implements ClientModInitializer {
                 // Pressed offhand key
                 cursorItem = player.getOffHandStack().copy();
             }
+        } else {
+            cursorItem = cursor.copy();
+        }
+
+        if (slotIndex == -999 && actionType != SlotActionType.QUICK_CRAFT) {
+            // out of screen area
+            if (RIGHT_CLICK_PREDICATE.test(actionType, button)) {
+                cursorItem.setCount(1);
+            }
+            SoundManager.playThrow(cursorItem);
+            return;
         }
 
         if (actionType == SlotActionType.THROW && button == 0) {
             // one item drop from stack (default: Q key)
             slotItem.setCount(1);
+        }
+
+        // Test if the item should not play sound
+        try {
+            var predicateForCursor = IGNORE_SOUND_PREDICATE_MAP.getOrDefault(cursorItem.getItem(), null);
+            if (predicateForCursor != null && predicateForCursor.test(actionType, button)) {
+                return;
+            }
+            var predicateForSlot = IGNORE_SOUND_PREDICATE_MAP.getOrDefault(slotItem.getItem(), null);
+            if (predicateForSlot != null && predicateForSlot.test(actionType, button)) {
+                return;
+            }
+        } catch (Throwable ignore) {
         }
 
         inventoryClick(slotItem, cursorItem, actionType);
