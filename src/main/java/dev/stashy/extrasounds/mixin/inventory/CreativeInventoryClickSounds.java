@@ -21,14 +21,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import java.util.List;
+import java.util.Iterator;
 
 @Mixin(CreativeInventoryScreen.class)
 public abstract class CreativeInventoryClickSounds
         extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler>
 {
-
     @Shadow
     private static ItemGroup selectedTab;
 
@@ -36,43 +36,68 @@ public abstract class CreativeInventoryClickSounds
     @Nullable
     private Slot deleteItemSlot;
 
-    @Shadow
-    @Nullable
-    private List<Slot> slots;
-
     public CreativeInventoryClickSounds(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text)
     {
         super(screenHandler, playerInventory, text);
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;increment(I)V"), method = "onMouseClick")
-    void increment(Slot slot, int slotId, int button, SlotActionType actionType, CallbackInfo ci)
+    @Inject(method = "onMouseClick", at = @At("HEAD"))
+    private void extrasounds$creativeInventoryClickEvent(@Nullable Slot slot, int slotId, int button, SlotActionType actionType, CallbackInfo ci)
     {
-        if (slotId >= 0)
-            ExtraSounds.inventoryClick(slot, handler.getCursorStack(), actionType);
+        if (this.client == null || this.client.player == null)
+        {
+            return;
+        }
+
+        final boolean bOnHotbar = slot != null && slot.inventory instanceof PlayerInventory;
+
+        if (actionType == SlotActionType.THROW && slot != null && slotId >= 0) {
+            // CreativeInventory can drop items while holding anything on cursor
+            final ItemStack slotStack = slot.getStack().copy();
+            if (button == 1 && selectedTab != ItemGroups.INVENTORY) {
+                if (bOnHotbar) {
+                    // Pressed Ctrl + Q on Hotbar to delete the stack only when not in Inventory tab
+                    SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
+                    return;
+                }
+                // If not, it pressed on the slot in CreativeInventory tab
+                slotStack.setCount(slotStack.getMaxCount());
+            } else if (button == 0) {
+                // Pressed Q key only
+                slotStack.setCount(1);
+            }
+            SoundManager.playThrow(slotStack);
+            return;
+        }
+
+        final ItemStack cursorStack = this.handler.getCursorStack().copy();
+        if (!cursorStack.isEmpty()) {
+            if (this.deleteItemSlot != null && slot == this.deleteItemSlot) {
+                // Clicked deleteItemSlot
+                SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
+                return;
+            }
+
+            if (slotId > 0 &&
+                    actionType != SlotActionType.QUICK_CRAFT &&
+                    actionType != SlotActionType.PICKUP_ALL &&
+                    !bOnHotbar
+            ) {
+                // Clicked on the slot in CreativeInventory tab except Hotbar
+                SoundManager.playSound(cursorStack, SoundType.PLACE);
+                return;
+            }
+        }
+
+        ExtraSounds.handleInventorySlot(this.client.player, slot, slotId, cursorStack, actionType, button);
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/CreativeInventoryScreen$CreativeScreenHandler;setCursorStack(Lnet/minecraft/item/ItemStack;)V"), method = "onMouseClick")
-    void click(Slot slot, int slotId, int button, SlotActionType actionType, CallbackInfo ci)
+    @Inject(method = "mouseReleased", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/CreativeInventoryScreen;setSelectedTab(Lnet/minecraft/item/ItemGroup;)V"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    void tabChange(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir, double offsetX, double offsetY, Iterator iterator, ItemGroup itemGroup)
     {
-        if (slot == deleteItemSlot && !handler.getCursorStack().isEmpty())
-            SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
-        else if (slotId >= 0)
-            ExtraSounds.inventoryClick(slot, handler.getCursorStack(), actionType);
-    }
-
-    @Inject(at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;clickCreativeStack(Lnet/minecraft/item/ItemStack;I)V"), method = "onMouseClick")
-    void deleteAll(Slot slot, int slotId, int button, SlotActionType actionType, CallbackInfo ci)
-    {
-        if (slots != null && slots.stream().anyMatch(Slot::hasStack))
-            SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
-    }
-
-    @Inject(at = @At("HEAD"), method = "setSelectedTab")
-    void tabChange(ItemGroup group, CallbackInfo ci)
-    {
-        if (selectedTab != ItemGroups.getDefaultTab() && group != selectedTab)
-            SoundManager.playSound(group.getIcon(), SoundType.PICKUP);
+        if (selectedTab != itemGroup) {
+            SoundManager.playSound(itemGroup.getIcon(), SoundType.PICKUP);
+        }
     }
 }
 

@@ -7,19 +7,23 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class SoundManager
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static long lastPlayed = System.currentTimeMillis();
+    private static long lastPlayed = 0;
+    private static Item quickMovingItem = Items.AIR;
 
     public static void playSound(ItemStack stack, SoundType type)
     {
@@ -94,9 +98,48 @@ public class SoundManager
         });
     }
 
+    /**
+     * Plays the weighted THROW sound.<br>
+     * The pitch is clamped between 1.5 - 2.0. The smaller stack, the higher.<br>
+     * If the ItemStack is not stackable, the pitch is maximum.
+     * @param itemStack target stack to adjust the pitch.
+     *
+     * @see MathHelper#clampedLerp
+     * @see net.minecraft.client.sound.SoundSystem#play
+     * @see net.minecraft.client.sound.SoundSystem#getAdjustedPitch
+     */
+    public static void playThrow(ItemStack itemStack) {
+        if (itemStack.isEmpty()) {
+            return;
+        }
+        final float maxPitch = 2f;
+        final float pitch = (!itemStack.isStackable()) ? maxPitch :
+                MathHelper.clampedLerp(maxPitch, 1.5f, (float) itemStack.getCount() / itemStack.getItem().getMaxCount());
+        SoundManager.playSound(Sounds.ITEM_DROP, pitch, Mixers.INVENTORY);
+    }
+
     public static void stopSound(SoundEvent e, SoundType type)
     {
         MinecraftClient.getInstance().getSoundManager().stopSounds(e.getId(), type.category);
+    }
+
+    /**
+     * SlotActionType.QUICK_MOVE is too many method calls
+     * @param itemStack target item to quickMove
+     *
+     * @see net.minecraft.client.network.ClientPlayerInteractionManager#clickSlot
+     * @see net.minecraft.screen.ScreenHandler#internalOnSlotClick
+     */
+    public static void handleQuickMoveSound(ItemStack itemStack) {
+        if (itemStack == null || itemStack.isEmpty()) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (now - lastPlayed > 50 || !itemStack.isOf(quickMovingItem)) {
+            playSound(itemStack, SoundType.PICKUP);
+            lastPlayed = now;
+            quickMovingItem = itemStack.getItem();
+        }
     }
 
     private static void throttle(Runnable r)
@@ -107,10 +150,9 @@ public class SoundManager
             if (now - lastPlayed > 5) r.run();
             lastPlayed = now;
         }
-        catch (Exception e)
+        catch (Throwable e)
         {
-            System.err.println("Failed to play sound:");
-            e.printStackTrace();
+            LOGGER.error("Failed to play sound", e);
         }
     }
 

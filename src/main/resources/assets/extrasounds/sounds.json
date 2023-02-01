@@ -461,8 +461,7 @@
     "sounds": [
       {
         "name": "minecraft:random/bow",
-        "volume": 0.4,
-        "pitch": 1.5
+        "volume": 0.4
       }
     ]
   },
