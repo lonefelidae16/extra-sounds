@@ -14,6 +14,7 @@
     "HotbarSlotSound",
     "ItemPickSound",
     "KeyboardTypingSound",
+    "BookAndSignTypingSound",
     "action.BowPullSound",
     "action.RepeaterSwitchSound",
     "inventory.CreativeInventoryClickSounds",

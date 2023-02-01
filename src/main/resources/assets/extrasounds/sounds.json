@@ -533,6 +533,41 @@
       }
     ]
   },
+  "keyboard.move": {
+    "sounds": [
+      {
+        "name": "extrasounds:generic.scroll",
+        "pitch": 0.8,
+        "type": "event"
+      }
+    ]
+  },
+  "keyboard.erase": {
+    "sounds": [
+      {
+        "name": "extrasounds:generic.click",
+        "volume": 0.6,
+        "pitch": 2.4,
+        "type": "event"
+      }
+    ]
+  },
+  "keyboard.cut": {
+    "sounds": [
+      {
+        "name": "extrasounds:keyboard.erase",
+        "type": "event"
+      }
+    ]
+  },
+  "keyboard.paste": {
+    "sounds": [
+      {
+        "name": "extrasounds:keyboard.type",
+        "type": "event"
+      }
+    ]
+  },
   "item.pickup.minecraft.amethyst_shard": {
     "replace": true,
     "sounds": [

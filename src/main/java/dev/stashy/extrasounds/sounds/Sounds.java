@@ -28,6 +28,10 @@ public class Sounds
     public static final SoundEvent EFFECT_REMOVE_POSITIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.remove.positive"));
     public static final SoundEvent EFFECT_REMOVE_NEGATIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.remove.negative"));
     public static final SoundEvent KEYBOARD_TYPE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.type"));
+    public static final SoundEvent KEYBOARD_MOVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.move"));
+    public static final SoundEvent KEYBOARD_ERASE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.erase"));
+    public static final SoundEvent KEYBOARD_CUT = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.cut"));
+    public static final SoundEvent KEYBOARD_PASTE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.paste"));
 
     public static class Actions
     {

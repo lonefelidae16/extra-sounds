@@ -22,6 +22,15 @@ public class SoundManager
     private static final Logger LOGGER = LogManager.getLogger();
     private static long lastPlayed = System.currentTimeMillis();
 
+    public enum KeyType {
+        ERASE,
+        CUT,
+        INSERT,
+        PASTE,
+        RETURN,
+        CURSOR
+    }
+
     public static void playSound(ItemStack stack, SoundType type)
     {
         var itemId = Registries.ITEM.getId(stack.getItem());
@@ -101,6 +110,16 @@ public class SoundManager
     public static void stopSound(SoundEvent e, SoundType type)
     {
         MinecraftClient.getInstance().getSoundManager().stopSounds(e.getId(), type.category);
+    }
+
+    public static void keyboard(KeyType type) {
+        switch (type) {
+            case ERASE -> playSound(Sounds.KEYBOARD_ERASE, SoundType.TYPING);
+            case CUT -> playSound(Sounds.KEYBOARD_CUT, SoundType.TYPING);
+            case CURSOR, RETURN -> playSound(Sounds.KEYBOARD_MOVE, SoundType.TYPING);
+            case INSERT -> playSound(Sounds.KEYBOARD_TYPE, SoundType.TYPING);
+            case PASTE -> playSound(Sounds.KEYBOARD_PASTE, SoundType.TYPING);
+        }
     }
 
     private static void throttle(Runnable r)
