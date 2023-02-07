@@ -4,32 +4,33 @@ import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.RepeaterBlock;
+import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.property.IntProperty;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(RepeaterBlock.class)
+@Mixin(ClientPlayerInteractionManager.class)
 public class RepeaterSwitchSound
 {
-    @Shadow
-    @Final
-    public static IntProperty DELAY;
+    @Redirect(method = "interactBlockInternal", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;onUse(Lnet/minecraft/world/World;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/util/hit/BlockHitResult;)Lnet/minecraft/util/ActionResult;"))
+    private ActionResult onUse(BlockState instance, World world, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        SoundEvent sound = null;
+        if (instance.isOf(Blocks.REPEATER) && instance.contains(RepeaterBlock.DELAY)) {
+            sound = instance.get(RepeaterBlock.DELAY) == 4 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
+        }
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"), method = "onUse")
-    void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir)
-    {
-        var sound = state.get(DELAY) == 4 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
-        SoundManager.playSound(sound, SoundType.ACTION, pos);
+        final ActionResult actionResult = instance.onUse(world, player, hand, hit);
+        if (actionResult.isAccepted() && sound != null) {
+            SoundManager.playSound(sound, SoundType.ACTION, hit.getBlockPos());
+        }
+        return actionResult;
     }
 }

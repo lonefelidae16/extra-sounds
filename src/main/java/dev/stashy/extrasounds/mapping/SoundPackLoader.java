@@ -2,6 +2,7 @@ package dev.stashy.extrasounds.mapping;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.debug.DebugUtils;
@@ -16,13 +17,13 @@ import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.BlockItem;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,7 +40,7 @@ public class SoundPackLoader
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Path cachePath = FabricLoader.getInstance().getConfigDir().resolve("extrasounds.cache");
 
-    public static List<RuntimeResourcePack> packs = Collections.emptyList();
+    public static final Map<Identifier, SoundEvent> CUSTOM_SOUND_EVENT = new HashMap<>();
     public static Map<String, SoundGenerator> mappers = new HashMap<>();
 
     private static final Gson gson = new GsonBuilder()
@@ -65,6 +66,7 @@ public class SoundPackLoader
 
         genericPack.addResource(ResourceType.CLIENT_RESOURCES, soundsJsonId, jsonBytes);
         RRPCallback.BEFORE_VANILLA.register((packs) -> packs.add(genericPack));
+        LOGGER.info("[{}] sound pack successfully loaded; {} entries.", ExtraSounds.class.getSimpleName(), CUSTOM_SOUND_EVENT.keySet().size());
     }
 
     private static Map<String, SoundEntry> processSounds()
@@ -85,29 +87,24 @@ public class SoundPackLoader
                 catch (Exception ignored) {}
 
             List<Pair<SoundEvent, SoundEntry>> entries = new ArrayList<>();
-            var pickupSound = registerOrDefault(itemId, SoundType.PICKUP, def.pickup, Sounds.aliased(Sounds.ITEM_PICK));
+            var pickupSound = generateSoundEntry(itemId, SoundType.PICKUP, def.pickup, Sounds.aliased(Sounds.ITEM_PICK));
             entries.add(pickupSound);
-            entries.add(registerOrDefault(itemId, SoundType.PLACE, def.place, Sounds.aliased(pickupSound.getLeft())));
-            entries.add(registerOrDefault(itemId, SoundType.HOTBAR, def.hotbar, Sounds.aliased(pickupSound.getLeft())));
+            entries.add(generateSoundEntry(itemId, SoundType.PLACE, def.place, Sounds.aliased(pickupSound.getLeft())));
+            entries.add(generateSoundEntry(itemId, SoundType.HOTBAR, def.hotbar, Sounds.aliased(pickupSound.getLeft())));
             return entries.stream();
         }).collect(Collectors.toMap(key -> key.getLeft().getId().getPath(), Pair::getRight));
     }
 
-    private static Pair<SoundEvent, SoundEntry> registerOrDefault(Identifier itemId, SoundType type, SoundEntry entry, SoundEntry defaultEntry)
+    private static Pair<SoundEvent, SoundEntry> generateSoundEntry(Identifier itemId, SoundType type, SoundEntry entry, SoundEntry defaultEntry)
     {
         var soundEntry = entry == null ? defaultEntry : entry;
-        return new Pair<>(registerIfNotExists(itemId, type), soundEntry);
+        Identifier id = new Identifier(ExtraSounds.MODID, ExtraSounds.getClickId(itemId, type, false));
+        SoundEvent event = SoundEvent.of(id);
+        CUSTOM_SOUND_EVENT.put(id, event);
+        return new Pair<>(event, soundEntry);
     }
 
-    private static SoundEvent registerIfNotExists(Identifier itemId, SoundType type)
-    {
-        var soundId = new Identifier(ExtraSounds.MODID, ExtraSounds.getClickId(itemId, type, false));
-        var event = SoundEvent.of(soundId);
-        if (!Registries.SOUND_EVENT.containsId(soundId))
-            Registry.register(Registries.SOUND_EVENT, soundId, event);
-        return event;
-    }
-
+    @Nullable
     private static String getCache()
     {
         if (Files.exists(cachePath) && !DebugUtils.noCache)
@@ -116,12 +113,11 @@ public class SoundPackLoader
                 var lines = Files.readAllLines(cachePath);
                 if (CacheInfo.fromString(lines.get(0)).equals(CacheInfo.getCurrent()))
                 {
-                    var cache = lines.get(1);
-                    var jsonObj = JsonParser.parseString(cache).getAsJsonObject();
+                    final String cache = lines.get(1);
+                    final JsonObject jsonObj = JsonParser.parseString(cache).getAsJsonObject();
                     jsonObj.keySet().forEach((it) -> {
-                        var identifier = new Identifier(ExtraSounds.MODID, it);
-                        if (!Registries.SOUND_EVENT.containsId(identifier))
-                            Registry.register(Registries.SOUND_EVENT, identifier, SoundEvent.of(identifier));
+                        Identifier identifier = new Identifier(ExtraSounds.MODID, it);
+                        CUSTOM_SOUND_EVENT.putIfAbsent(identifier, SoundEvent.of(identifier));
                     });
                     return cache;
                 }

@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.mixin;
+package dev.stashy.extrasounds.mixin.hotbar;
 
 import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.SoundManager;
@@ -22,7 +22,7 @@ public class HotbarSlotSound
     @Nullable
     public ClientPlayerEntity player;
 
-    @Inject(method = "handleInputEvents", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/entity/player/PlayerInventory;selectedSlot*:I"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    @Inject(method = "handleInputEvents", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/entity/player/PlayerInventory;selectedSlot:I"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void hotbarKeyboardSound(CallbackInfo info, int i)
     {
         if (this.player != null && this.player.getInventory().selectedSlot != i)

@@ -1,33 +1,40 @@
 package dev.stashy.extrasounds.mixin.action;
 
+import com.mojang.authlib.GameProfile;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(BowItem.class)
-public class BowPullSound
-{
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/util/TypedActionResult;consume(Ljava/lang/Object;)Lnet/minecraft/util/TypedActionResult;"), method = "use")
-    void pull(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir)
-    {
+@Mixin(ClientPlayerEntity.class)
+public abstract class BowPullSound extends AbstractClientPlayerEntity {
+    public BowPullSound(ClientWorld world, GameProfile profile) {
+        super(world, profile);
+    }
+
+    @Inject(method = "setCurrentHand", at = @At("HEAD"))
+    void pull(Hand hand, CallbackInfo ci) {
+        if (!this.getStackInHand(hand).isOf(Items.BOW)) {
+            return;
+        }
+
         SoundManager.playSound(Sounds.Actions.BOW_PULL, SoundType.ACTION);
     }
 
-    @Inject(at = @At(value = "RETURN"), method = "onStoppedUsing")
-    void shoot(ItemStack stack, World world, LivingEntity user, int remainingUseTicks, CallbackInfo ci)
-    {
+    @Inject(method = "clearActiveItem", at = @At(value = "HEAD"))
+    void shoot(CallbackInfo ci) {
+        if (!this.activeItemStack.isOf(Items.BOW)) {
+            return;
+        }
+
         SoundManager.stopSound(Sounds.Actions.BOW_PULL, SoundType.ACTION);
     }
 }
