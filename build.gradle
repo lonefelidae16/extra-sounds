@@ -1,5 +1,5 @@
 plugins {
-    id "fabric-loom" version "1.0-SNAPSHOT"
+    id "fabric-loom" version "1.1-SNAPSHOT"
     id "maven-publish"
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "com.modrinth.minotaur" version "2.2.0"
@@ -18,7 +18,7 @@ var versionTitle = "$modVersion for $project.minecraft_version"
 
 repositories {
     maven {
-        url = uri("https://storage.googleapis.com/devan-maven/")
+        url = uri("https://api.modrinth.com/maven/")
     }
     maven {
         name = "stashymane's repo"
@@ -32,7 +32,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    modImplementation include("net.devtech:arrp:${project.arrp_version}")
+    modImplementation include("maven.modrinth:arrp:${project.arrp_version}")
     // TODO: set the correct version of SoundCategories
     modImplementation include("dev.stashy:sound-categories:${project.soundcategories_version}")
 }
