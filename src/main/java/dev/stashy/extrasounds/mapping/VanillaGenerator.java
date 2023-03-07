@@ -87,6 +87,7 @@ public class VanillaGenerator
         map.put(SpawnEggItem.class, it -> aliased(WET_SLIPPERY));
         putMulti(it -> aliased(BOWL), StewItem.class, SuspiciousStewItem.class);
         map.put(GoatHornItem.class, it -> single(LOOSE_METAL.getId(), 0.6f, 0.9f, Sound.RegistrationType.SOUND_EVENT));
+        map.put(DiscFragmentItem.class, it -> single(METAL_BITS.getId(), 0.7f, 0.85f, Sound.RegistrationType.SOUND_EVENT));
         map.put(BlockItem.class, it -> {
             Block b = ((BlockItem) it).getBlock();
             Identifier blockSound = b.getSoundGroup(b.getDefaultState()).getPlaceSound().getId();

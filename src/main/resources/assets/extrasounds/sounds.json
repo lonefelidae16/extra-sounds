@@ -1719,10 +1719,10 @@
     "replace": true,
     "sounds": [
       {
-        "name": "minecraft:block.wood.place",
+        "name": "minecraft:block.chiseled_bookshelf.place",
         "pitch": 2,
         "type": "event",
-        "volume": 0.2
+        "volume": 0.4
       }
     ]
   },
