@@ -28,7 +28,7 @@ public final class VanillaGenerator {
     private static boolean isPaperItem(Item item) {
         return item instanceof BannerPatternItem || item instanceof BookItem || item instanceof WritableBookItem ||
                 item instanceof WrittenBookItem || item instanceof EnchantedBookItem || item instanceof EmptyMapItem ||
-                item instanceof FilledMapItem || item instanceof NameTagItem;
+                item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem;
     }
 
     public static SoundGenerator generator = SoundGenerator.of("minecraft", ExtraSounds.MODID, item -> {
