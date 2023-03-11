@@ -38,14 +38,7 @@ public class SoundManager
     public static void playSound(ItemStack stack, SoundType type)
     {
         var itemId = Registries.ITEM.getId(stack.getItem());
-        String idString = ExtraSounds.getClickId(itemId, type);
-        if (!Identifier.isValid(idString))
-        {
-            LOGGER.error("Unable to parse sound from ID: " + idString);
-            return;
-        }
-
-        Identifier id = Identifier.tryParse(idString);
+        Identifier id = ExtraSounds.getClickId(itemId, type);
         SoundEvent event = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
         if (event == null) {
             LOGGER.error("Sound cannot be found in packs: {}", id);

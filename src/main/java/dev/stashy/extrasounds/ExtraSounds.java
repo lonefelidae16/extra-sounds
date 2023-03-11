@@ -47,8 +47,8 @@ public class ExtraSounds implements ClientModInitializer {
     @Override
     public void onInitializeClient()
     {
-        SoundPackLoader.init();
         DebugUtils.init();
+        SoundPackLoader.init();
     }
 
     public static void hotbar(int i) {
@@ -167,11 +167,11 @@ public class ExtraSounds implements ClientModInitializer {
         inventoryClick(slotItem, cursorItem, actionType);
     }
 
-    public static String getClickId(Identifier id, SoundType type) {
-        return getClickId(id, type, true);
-    }
-
-    public static String getClickId(Identifier id, SoundType type, boolean includeNamespace) {
-        return (includeNamespace ? MODID + ":" : "") + type.prefix + "." + id.getNamespace() + "." + id.getPath();
+    @Nullable
+    public static Identifier getClickId(Identifier id, SoundType type) {
+        if (id == null || type == null) {
+            return null;
+        }
+        return new Identifier(MODID, String.format("%s.%s.%s", type.prefix, id.getNamespace(), id.getPath()));
     }
 }

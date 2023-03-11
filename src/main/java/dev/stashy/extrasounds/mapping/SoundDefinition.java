@@ -2,19 +2,22 @@ package dev.stashy.extrasounds.mapping;
 
 import net.minecraft.client.sound.SoundEntry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SoundDefinition
 {
-    public SoundEntry pickup;
-    public SoundEntry place = null;
-    public SoundEntry hotbar = null;
+    public final SoundEntry pickup;
+    @Nullable
+    public final SoundEntry place;
+    @Nullable
+    public final SoundEntry hotbar;
 
-    public SoundDefinition(SoundEntry sound)
+    private SoundDefinition(SoundEntry sound)
     {
         this(sound, null, null);
     }
 
-    public SoundDefinition(@NotNull SoundEntry pickup, SoundEntry place, SoundEntry hotbar)
+    private SoundDefinition(@NotNull SoundEntry pickup, @Nullable SoundEntry place, @Nullable SoundEntry hotbar)
     {
         this.pickup = pickup;
         this.place = place;
