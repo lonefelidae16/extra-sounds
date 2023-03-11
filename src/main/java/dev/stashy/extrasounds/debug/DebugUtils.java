@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.debug;
 
-import dev.stashy.extrasounds.mapping.SoundPackLoader;
+import dev.stashy.extrasounds.mapping.SoundGenerator;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.sound.SoundEvent;
@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DebugUtils
@@ -50,16 +51,16 @@ public class DebugUtils
         }
     }
 
-    public static void exportGenerators()
+    public static void exportGenerators(Map<String, SoundGenerator> generator)
     {
         if (!debug) return;
         Path p = Path.of(debugPath).resolve("generators.txt");
         createFile(p);
         try
         {
-            Files.write(p, SoundPackLoader.mappers.keySet().stream()
+            Files.write(p, generator.keySet().stream()
                                                   .map(it -> {
-                                                      var clazz = SoundPackLoader.mappers.get(it).itemSoundGenerator()
+                                                      var clazz = generator.get(it).itemSoundGenerator
                                                                                          .getClass();
                                                       return "namespace: " + it + "; class: " + (clazz == null ? "none" : clazz.getName());
                                                   })
