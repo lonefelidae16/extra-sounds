@@ -172,14 +172,14 @@ public class SoundPackLoader {
         /**
          * Parses to the {@link CacheInfo} from String.
          *
-         * @param s The String.
+         * @param string The String.
          * @return A new instance of {@link CacheInfo}.
          */
-        public static CacheInfo fromString(String s) {
+        public static CacheInfo fromString(String string) {
             try {
-                var arr = s.split(";");
+                var arr = string.split(";");
                 return new CacheInfo(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), arr[2].split(","));
-            } catch (Exception e) {
+            } catch (Throwable ignored) {
                 return new CacheInfo(0, 0, new String[0]);
             }
         }

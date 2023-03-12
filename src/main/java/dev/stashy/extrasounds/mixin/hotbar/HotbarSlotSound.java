@@ -1,6 +1,5 @@
 package dev.stashy.extrasounds.mixin.hotbar;
 
-import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
@@ -26,7 +25,7 @@ public class HotbarSlotSound
     private void hotbarKeyboardSound(CallbackInfo info, int i)
     {
         if (this.player != null && this.player.getInventory().selectedSlot != i)
-            ExtraSounds.hotbar(i);
+            SoundManager.hotbar(i);
     }
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/SpectatorHud;selectSlot(I)V"))
