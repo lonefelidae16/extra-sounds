@@ -1726,6 +1726,17 @@
       }
     ]
   },
+  "item.pickup.minecraft.debug_stick": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "minecraft:block.chiseled_bookshelf.place",
+        "pitch": 2,
+        "type": "event",
+        "volume": 0.4
+      }
+    ]
+  },
   "item.pickup.minecraft.string": {
     "replace": true,
     "sounds": [

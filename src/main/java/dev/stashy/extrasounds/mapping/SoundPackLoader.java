@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds.mapping;
 
+import com.google.common.collect.Lists;
 import com.google.gson.*;
 import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.debug.DebugUtils;
@@ -26,6 +27,8 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SoundPackLoader {
     private static final int CACHE_VERSION = 1;
@@ -89,6 +92,18 @@ public class SoundPackLoader {
 
     private static void processSounds(Map<String, SoundGenerator> soundGenerator, Map<String, SoundEntry> resource) {
         final SoundEntry fallbackSoundEntry = Sounds.aliased(Sounds.ITEM_PICK);
+        final List<String> inSoundsJsonIds = Lists.newArrayList();
+        final String fallbackSoundJson = GSON.toJson(fallbackSoundEntry);
+        if (DebugUtils.SEARCH_UNDEF_SOUND) {
+            try (InputStream stream = SoundPackLoader.class.getClassLoader().getResourceAsStream("assets/extrasounds/sounds.json")) {
+                Objects.requireNonNull(stream);
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+                final JsonObject jsonObject = JsonParser.parseString(reader.lines().collect(Collectors.joining())).getAsJsonObject();
+                inSoundsJsonIds.addAll(jsonObject.keySet());
+            } catch (Throwable ex) {
+                LOGGER.warn("cannot open ExtraSounds' sounds.json.", ex);
+            }
+        }
 
         for (Item item : Registries.ITEM) {
             final Identifier itemId = Registries.ITEM.getId(item);
@@ -113,6 +128,14 @@ public class SoundPackLoader {
             generateSoundEntry(itemId, SoundType.PICKUP, definition.pickup, pickupSoundEntry, resource);
             generateSoundEntry(itemId, SoundType.PLACE, definition.place, pickupSoundEntry, resource);
             generateSoundEntry(itemId, SoundType.HOTBAR, definition.hotbar, pickupSoundEntry, resource);
+
+            if (DebugUtils.SEARCH_UNDEF_SOUND) {
+                final boolean isFallbackSoundEntry = Objects.equals(GSON.toJson(definition.pickup), fallbackSoundJson);
+                final boolean notIncludeSoundsJson = !inSoundsJsonIds.contains(pickupSoundId.getPath());
+                if (isFallbackSoundEntry && notIncludeSoundsJson) {
+                    LOGGER.info("unregistered sound was found: '{}'", itemId);
+                }
+            }
         }
     }
 
