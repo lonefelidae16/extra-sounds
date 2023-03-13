@@ -31,7 +31,7 @@ public final class VanillaGenerator {
                 item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem;
     }
 
-    public static SoundGenerator generator = SoundGenerator.of("minecraft", ExtraSounds.MODID, item -> {
+    public static SoundGenerator generator = SoundGenerator.of(Identifier.DEFAULT_NAMESPACE, ExtraSounds.MODID, item -> {
         if (item instanceof MusicDiscItem) {
             return SoundDefinition.of(aliased(MUSIC_DISC));
         } else if (item instanceof BoatItem) {
