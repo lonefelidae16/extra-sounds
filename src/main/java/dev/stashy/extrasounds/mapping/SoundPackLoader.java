@@ -24,9 +24,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -60,7 +57,7 @@ public class SoundPackLoader {
             }
 
             if (DebugUtils.noCache) {
-                throw new RuntimeException(String.format("JVM arg '%s' is detected.", DebugUtils.noCacheVar));
+                throw new RuntimeException("JVM arg '%s' is detected.".formatted(DebugUtils.noCacheVar));
             }
 
             final CacheData cacheData = CacheData.read();
@@ -86,7 +83,7 @@ public class SoundPackLoader {
         EXTRA_SOUNDS_RESOURCE.addAsyncResource(ResourceType.CLIENT_RESOURCES, SOUNDS_JSON_ID, identifier -> CacheData.read().asJsonBytes());
         RRPCallback.BEFORE_VANILLA.register(packs -> packs.add(EXTRA_SOUNDS_RESOURCE));
         final long finish = System.currentTimeMillis();
-        DebugUtils.genericLog(String.format("%s init finished; took %dms.", SoundPackLoader.class.getSimpleName(), finish - start));
+        DebugUtils.genericLog("%s init finished; took %dms.".formatted(SoundPackLoader.class.getSimpleName(), finish - start));
         LOGGER.info("[{}] sound pack successfully loaded; {} entries.", ExtraSounds.class.getSimpleName(), CUSTOM_SOUND_EVENT.keySet().size());
     }
 
@@ -159,6 +156,9 @@ public class SoundPackLoader {
      * @param info      The mod id String array.
      */
     record CacheInfo(int version, int itemCount, String[] info) {
+        private static final String DELIMITER_MOD_INFO = ",";
+        private static final String DELIMITER_HEAD = ";";
+
         /**
          * Creates new cache info from generator version info.
          *
@@ -177,8 +177,8 @@ public class SoundPackLoader {
          */
         public static CacheInfo fromString(String string) {
             try {
-                var arr = string.split(";");
-                return new CacheInfo(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), arr[2].split(","));
+                var arr = string.split(DELIMITER_HEAD);
+                return new CacheInfo(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), arr[2].split(DELIMITER_MOD_INFO));
             } catch (Throwable ignored) {
                 return new CacheInfo(0, 0, new String[0]);
             }
@@ -194,7 +194,10 @@ public class SoundPackLoader {
         }
 
         public String toString() {
-            return "%d;%d;%s".formatted(version, itemCount, String.join(",", info));
+            final CharSequence[] data = new CharSequence[]{
+                    String.valueOf(version), String.valueOf(itemCount), String.join(DELIMITER_MOD_INFO, info)
+            };
+            return String.join(DELIMITER_HEAD, data);
         }
 
         /**
@@ -209,9 +212,14 @@ public class SoundPackLoader {
             }
 
             final String modId = generator.modId;
-            return FabricLoader.getInstance().getModContainer(modId)
-                    .map(modContainer -> modId + " " + modContainer.getMetadata().getVersion().getFriendlyString())
-                    .orElse("nope");
+            final String modVer = FabricLoader.getInstance().getModContainer(modId)
+                    .map(modContainer -> modContainer.getMetadata().getVersion().getFriendlyString())
+                    .orElse("unspecified");
+            return validate("%s %s".formatted(modId, modVer));
+        }
+
+        private static String validate(String in) {
+            return in.replaceAll("[%s%s]".formatted(DELIMITER_HEAD, DELIMITER_MOD_INFO), "_");
         }
     }
 
@@ -241,7 +249,7 @@ public class SoundPackLoader {
         static CacheData read() {
             try (Reader reader = new FileReader(CACHE_FILE)) {
                 final BufferedReader bufferedReader = new BufferedReader(reader);
-                final CacheInfo cacheInfo = CacheInfo.fromString(bufferedReader.readLine());
+                final CacheInfo cacheInfo = CacheInfo.fromString(bufferedReader.readLine().trim());
                 final StringBuilder builder = new StringBuilder();
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
@@ -249,8 +257,7 @@ public class SoundPackLoader {
                 }
                 return new CacheData(cacheInfo, builder);
             } catch (Throwable ex) {
-                final String message = String.format("[%s] Failed to load ExtraSounds cache.", ExtraSounds.class.getSimpleName());
-                LOGGER.error(message, ex);
+                LOGGER.error("[%s] Failed to load ExtraSounds cache.".formatted(ExtraSounds.class.getSimpleName()), ex);
             }
             return new CacheData(CacheInfo.of(new String[0]), "{}");
         }
@@ -269,8 +276,7 @@ public class SoundPackLoader {
                 writer.flush();
                 DebugUtils.genericLog("Cache saved.");
             } catch (Throwable ex) {
-                final String message = String.format("[%s] Failed to save the cache.", ExtraSounds.class.getSimpleName());
-                LOGGER.error(message, ex);
+                LOGGER.error("[%s] Failed to save the cache.".formatted(ExtraSounds.class.getSimpleName()), ex);
             }
         }
 

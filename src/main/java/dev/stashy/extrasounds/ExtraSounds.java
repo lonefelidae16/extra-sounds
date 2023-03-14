@@ -23,6 +23,6 @@ public class ExtraSounds implements ClientModInitializer {
         if (id == null || type == null) {
             return null;
         }
-        return new Identifier(MODID, String.format("%s.%s.%s", type.prefix, id.getNamespace(), id.getPath()));
+        return new Identifier(MODID, "%s.%s.%s".formatted(type.prefix, id.getNamespace(), id.getPath()));
     }
 }
