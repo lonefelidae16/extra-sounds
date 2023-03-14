@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.hotbar;
 
-import dev.stashy.extrasounds.ExtraSounds;
+import dev.stashy.extrasounds.SoundManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -32,6 +32,6 @@ public class HotbarScrollSound
             return;
         }
 
-        ExtraSounds.hotbar(player.getInventory().selectedSlot);
+        SoundManager.hotbar(player.getInventory().selectedSlot);
     }
 }

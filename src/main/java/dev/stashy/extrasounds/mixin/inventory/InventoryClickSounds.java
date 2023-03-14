@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.inventory;
 
-import dev.stashy.extrasounds.ExtraSounds;
+import dev.stashy.extrasounds.SoundManager;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenHandler;
@@ -26,6 +26,6 @@ public abstract class InventoryClickSounds
         }
 
         Slot slot = (slotIndex >= 0) ? screenHandler.slots.get(slotIndex) : null;
-        ExtraSounds.handleInventorySlot(player, slot, slotIndex, screenHandler.getCursorStack(), actionType, button);
+        SoundManager.handleInventorySlot(player, slot, slotIndex, screenHandler.getCursorStack(), actionType, button);
     }
 }

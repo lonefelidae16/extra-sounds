@@ -1,6 +1,5 @@
 package dev.stashy.extrasounds.mixin.inventory;
 
-import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
@@ -89,7 +88,7 @@ public abstract class CreativeInventoryClickSounds
             }
         }
 
-        ExtraSounds.handleInventorySlot(this.client.player, slot, slotId, cursorStack, actionType, button);
+        SoundManager.handleInventorySlot(this.client.player, slot, slotId, cursorStack, actionType, button);
     }
 
     @Inject(method = "mouseReleased", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/CreativeInventoryScreen;setSelectedTab(Lnet/minecraft/item/ItemGroup;)V"), locals = LocalCapture.CAPTURE_FAILSOFT)
