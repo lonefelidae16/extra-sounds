@@ -5,7 +5,6 @@ import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
@@ -69,6 +68,15 @@ public abstract class CreativeInventoryClickSounds
             return;
         }
 
+        if (actionType == SlotActionType.QUICK_MOVE &&
+                selectedTab != ItemGroups.INVENTORY &&
+                bOnHotbar &&
+                slot.hasStack()
+        ) {
+            SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
+            return;
+        }
+
         final ItemStack cursorStack = this.handler.getCursorStack().copy();
         if (!cursorStack.isEmpty()) {
             if (this.deleteItemSlot != null && slot == this.deleteItemSlot) {
@@ -97,15 +105,5 @@ public abstract class CreativeInventoryClickSounds
         if (selectedTab != itemGroup) {
             SoundManager.playSound(itemGroup.getIcon(), SoundType.PICKUP);
         }
-    }
-}
-
-@Mixin(CreativeInventoryScreen.CreativeScreenHandler.class)
-class CreativeScreenHandlerSounds
-{
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/slot/Slot;setStack(Lnet/minecraft/item/ItemStack;)V"), method = "quickMove")
-    void transfer(PlayerEntity player, int index, CallbackInfoReturnable<ItemStack> cir)
-    {
-        SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
     }
 }

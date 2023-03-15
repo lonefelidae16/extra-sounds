@@ -21,7 +21,6 @@
     "hotbar.HotbarSwapSound",
     "inventory.CreativeInventoryClickSounds",
     "inventory.CreativeListScroll",
-    "inventory.CreativeScreenHandlerSounds",
     "inventory.InventoryClickSounds",
     "inventory.InventoryDragSound",
     "inventory.InventoryScreenSounds"
