@@ -28,6 +28,7 @@ public class Categories
     public static final SoundEvent RAIL = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.category.rail"));
     public static final SoundEvent WET = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.category.wet"));
     public static final SoundEvent WET_SLIPPERY = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.category.wet_slippery"));
+    public static final SoundEvent BRICK = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.category.brick"));
 
     public static class Gear
     {
