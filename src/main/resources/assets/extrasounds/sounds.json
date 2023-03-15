@@ -399,6 +399,16 @@
     ],
     "replace": true
   },
+  "item.category.brick": {
+    "sounds": [
+      {
+        "name": "extrasounds:item.category.metal",
+        "pitch": 0.8,
+        "type": "event"
+      }
+    ],
+    "replace": true
+  },
   "action.bow": {
     "sounds": [
       {
@@ -645,15 +655,6 @@
       }
     ]
   },
-  "item.pickup.minecraft.beetroot_soup": {
-    "replace": true,
-    "sounds": [
-      {
-        "name": "extrasounds:item.category.bowl",
-        "type": "event"
-      }
-    ]
-  },
   "item.pickup.minecraft.bell": {
     "replace": true,
     "sounds": [
@@ -722,16 +723,6 @@
         "pitch": 1.8,
         "type": "event",
         "volume": 0.5
-      }
-    ]
-  },
-  "item.pickup.minecraft.brick": {
-    "replace": true,
-    "sounds": [
-      {
-        "name": "extrasounds:item.category.metal",
-        "pitch": 0.8,
-        "type": "event"
       }
     ]
   },
@@ -1840,6 +1831,15 @@
       {
         "name": "extrasounds:item.category.gear.generic",
         "pitch": 1.5,
+        "type": "event"
+      }
+    ]
+  },
+  "item.pickup.minecraft.brush": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extrasounds:item.category.gear.generic",
         "type": "event"
       }
     ]
