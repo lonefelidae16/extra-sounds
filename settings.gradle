@@ -1,4 +1,11 @@
 pluginManagement {
+    plugins {
+        id 'fabric-loom' version '1.1-SNAPSHOT'
+        id "maven-publish"
+        id "com.matthewprenger.cursegradle" version "1.4.0"
+        id "com.modrinth.minotaur" version "2.2.0"
+        id "org.jetbrains.changelog" version "1.3.1"
+    }
     repositories {
         maven {
             name = 'Fabric'
@@ -7,3 +14,6 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+rootProject.name = 'extra-sounds'
+include 'sound-categories'
