@@ -24,6 +24,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,7 +34,8 @@ public class SoundPackLoader {
     private static final RuntimeResourcePack EXTRA_SOUNDS_RESOURCE = RuntimeResourcePack.create(ExtraSounds.MODID);
     private static final Identifier SOUNDS_JSON_ID = new Identifier(ExtraSounds.MODID, "sounds.json");
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final File CACHE_FILE = FabricLoader.getInstance().getConfigDir().resolve("extrasounds.cache").toFile();
+    private static final String CACHE_FNAME = ExtraSounds.MODID + ".cache";
+    private static final Path CACHE_PATH = Path.of(System.getProperty("java.io.tmpdir"), ".minecraft_fabric", CACHE_FNAME);
 
     public static final Map<Identifier, SoundEvent> CUSTOM_SOUND_EVENT = new HashMap<>();
 
@@ -52,7 +55,9 @@ public class SoundPackLoader {
         final CacheInfo currentCacheInfo = CacheInfo.of(generatorVer);
 
         try {
-            if (!CACHE_FILE.exists()) {
+            Files.createDirectories(CACHE_PATH.getParent());
+
+            if (!Files.exists(CACHE_PATH)) {
                 throw new FileNotFoundException("Cache does not exist.");
             }
 
@@ -247,12 +252,11 @@ public class SoundPackLoader {
          * @return The instance of {@link CacheData}.
          */
         static CacheData read() {
-            try (Reader reader = new FileReader(CACHE_FILE)) {
-                final BufferedReader bufferedReader = new BufferedReader(reader);
-                final CacheInfo cacheInfo = CacheInfo.fromString(bufferedReader.readLine().trim());
+            try (BufferedReader reader = Files.newBufferedReader(CACHE_PATH)) {
+                final CacheInfo cacheInfo = CacheInfo.fromString(reader.readLine().trim());
                 final StringBuilder builder = new StringBuilder();
                 String line;
-                while ((line = bufferedReader.readLine()) != null) {
+                while ((line = reader.readLine()) != null) {
                     builder.append(line);
                 }
                 return new CacheData(cacheInfo, builder);
@@ -269,12 +273,12 @@ public class SoundPackLoader {
          * @param map  The cache data that will be converted to json.
          */
         static void create(CacheInfo info, Map<String, SoundEntry> map) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(CACHE_FILE))) {
-                writer.write(info.toString());
+            try (BufferedWriter writer = Files.newBufferedWriter(CACHE_PATH)) {
+                writer.write(info.toString().trim());
                 writer.newLine();
                 GSON.toJson(map, writer);
                 writer.flush();
-                DebugUtils.genericLog("Cache saved.");
+                DebugUtils.genericLog("Cache saved at %s".formatted(CACHE_PATH.toAbsolutePath()));
             } catch (Throwable ex) {
                 LOGGER.error("[%s] Failed to save the cache.".formatted(ExtraSounds.class.getSimpleName()), ex);
             }
