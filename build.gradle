@@ -35,7 +35,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     modImplementation include("maven.modrinth:arrp:${project.arrp_version}")
     compileOnly include(project(path: ':sound-categories'))
-    runtimeOnly fileTree(include: ["*${project.minecraft_version}*.jar"], exclude: ['*-sources.jar'], dir: 'sound-categories/build/devlibs')
+    runtimeOnly fileTree(include: ["*+${project.minecraft_version}-dev.jar"], exclude: ['*-sources.jar'], dir: 'sound-categories/build/devlibs')
 }
 
 processResources {
@@ -48,7 +48,7 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
-    it.options.release = Integer.parseInt(JavaVersion.current().getMajorVersion())
+    it.options.release = Integer.parseInt(targetCompatibility)
 }
 
 java {

@@ -19,9 +19,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
-import java.util.Iterator;
 
 @Mixin(CreativeInventoryScreen.class)
 public abstract class CreativeInventoryClickSounds
@@ -33,6 +30,9 @@ public abstract class CreativeInventoryClickSounds
     @Shadow
     @Nullable
     private Slot deleteItemSlot;
+
+    @Shadow
+    protected abstract boolean isClickInTab(ItemGroup group, double mouseX, double mouseY);
 
     public CreativeInventoryClickSounds(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text)
     {
@@ -99,11 +99,20 @@ public abstract class CreativeInventoryClickSounds
         SoundManager.handleInventorySlot(this.client.player, slot, slotId, cursorStack, actionType, button);
     }
 
-    @Inject(method = "mouseReleased", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/CreativeInventoryScreen;setSelectedTab(Lnet/minecraft/item/ItemGroup;)V"), locals = LocalCapture.CAPTURE_FAILSOFT)
-    void tabChange(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir, double offsetX, double offsetY, Iterator iterator, ItemGroup itemGroup)
+    @Inject(method = "mouseReleased", at = @At("HEAD"))
+    void tabChange(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir)
     {
-        if (selectedTab != itemGroup) {
-            SoundManager.playSound(itemGroup.getIcon(), SoundType.PICKUP);
+        if (button != 0) {
+            return;
+        }
+
+        final double screenX = mouseX - this.x;
+        final double screenY = mouseY - this.y;
+        for (ItemGroup itemGroup : ItemGroups.getGroupsToDisplay()) {
+            if (this.isClickInTab(itemGroup, screenX, screenY) && selectedTab != itemGroup) {
+                SoundManager.playSound(itemGroup.getIcon(), SoundType.PICKUP);
+                return;
+            }
         }
     }
 }
