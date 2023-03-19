@@ -31,8 +31,8 @@ public final class VanillaGenerator {
                 item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem;
     }
     private static boolean isBrickItem(Item item) {
-        return item == Items.BRICK || item == Items.POTTERY_SHARD_PRIZE || item == Items.POTTERY_SHARD_ARCHER ||
-                item == Items.POTTERY_SHARD_SKULL || item == Items.POTTERY_SHARD_ARMS_UP;
+        return item == Items.BRICK /*|| item == Items.POTTERY_SHARD_PRIZE || item == Items.POTTERY_SHARD_ARCHER ||
+                item == Items.POTTERY_SHARD_SKULL || item == Items.POTTERY_SHARD_ARMS_UP*/;
     }
 
     public static SoundGenerator generator = SoundGenerator.of(Identifier.DEFAULT_NAMESPACE, ExtraSounds.MODID, item -> {
@@ -90,8 +90,8 @@ public final class VanillaGenerator {
             return SoundDefinition.of(aliased(BOWL));
         } else if (item instanceof GoatHornItem) {
             return SoundDefinition.of(single(LOOSE_METAL.getId(), 0.6f, 0.9f, Sound.RegistrationType.SOUND_EVENT));
-        } else if (item instanceof SmithingTemplateItem) {
-            return SoundDefinition.of(aliased(LOOSE_METAL));
+//        } else if (item instanceof SmithingTemplateItem) {
+//            return SoundDefinition.of(aliased(LOOSE_METAL));
         } else if (item instanceof DiscFragmentItem) {
             return SoundDefinition.of(single(METAL_BITS.getId(), 0.7f, 0.85f, Sound.RegistrationType.SOUND_EVENT));
         } else if (isBrickItem(item)) {

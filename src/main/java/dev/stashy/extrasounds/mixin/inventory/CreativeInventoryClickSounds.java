@@ -7,7 +7,6 @@ import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
@@ -25,7 +24,7 @@ public abstract class CreativeInventoryClickSounds
         extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler>
 {
     @Shadow
-    private static ItemGroup selectedTab;
+    private static int selectedTab;
 
     @Shadow
     @Nullable
@@ -52,7 +51,7 @@ public abstract class CreativeInventoryClickSounds
         if (actionType == SlotActionType.THROW && slot != null && slotId >= 0) {
             // CreativeInventory can drop items while holding anything on cursor
             final ItemStack slotStack = slot.getStack().copy();
-            if (button == 1 && selectedTab != ItemGroups.INVENTORY) {
+            if (button == 1 && selectedTab != ItemGroup.INVENTORY.getIndex()) {
                 if (bOnHotbar) {
                     // Pressed Ctrl + Q on Hotbar to delete the stack only when not in Inventory tab
                     SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
@@ -69,7 +68,7 @@ public abstract class CreativeInventoryClickSounds
         }
 
         if (actionType == SlotActionType.QUICK_MOVE &&
-                selectedTab != ItemGroups.INVENTORY &&
+                selectedTab != ItemGroup.INVENTORY.getIndex() &&
                 bOnHotbar &&
                 slot.hasStack()
         ) {
@@ -108,8 +107,8 @@ public abstract class CreativeInventoryClickSounds
 
         final double screenX = mouseX - this.x;
         final double screenY = mouseY - this.y;
-        for (ItemGroup itemGroup : ItemGroups.getGroupsToDisplay()) {
-            if (this.isClickInTab(itemGroup, screenX, screenY) && selectedTab != itemGroup) {
+        for (ItemGroup itemGroup : ItemGroup.GROUPS) {
+            if (this.isClickInTab(itemGroup, screenX, screenY) && selectedTab != itemGroup.getIndex()) {
                 SoundManager.playSound(itemGroup.getIcon(), SoundType.PICKUP);
                 return;
             }

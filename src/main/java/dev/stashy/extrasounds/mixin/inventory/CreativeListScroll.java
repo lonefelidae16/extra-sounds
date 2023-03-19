@@ -4,6 +4,9 @@ import dev.stashy.extrasounds.Mixers;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -20,7 +23,12 @@ public abstract class CreativeListScroll
     private long lastTime = 0L;
 
     @Shadow
-    protected abstract int getRow(float scroll);
+    public @Final DefaultedList<ItemStack> itemList;
+
+    protected int getRow(float scroll) {
+        int i = (this.itemList.size() + 9 - 1) / 9 - 5;
+        return (int)((double)(scroll * (float)i) + 0.5);
+    }
 
     @Inject(method = "scrollItems", at = @At("HEAD"))
     void scroll(float position, CallbackInfo ci)

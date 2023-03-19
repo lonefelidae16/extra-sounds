@@ -11,33 +11,33 @@ import java.util.List;
 
 public class Sounds
 {
-    public static final SoundEvent CHAT = SoundEvent.of(new Identifier(ExtraSounds.MODID, "chat.message"));
-    public static final SoundEvent CHAT_MENTION = SoundEvent.of(new Identifier(ExtraSounds.MODID, "chat.mention"));
-    public static final SoundEvent HOTBAR_SCROLL = SoundEvent.of(new Identifier(ExtraSounds.MODID, "hotbar_scroll"));
-    public static final SoundEvent INVENTORY_OPEN = SoundEvent.of(new Identifier(ExtraSounds.MODID, "inventory.open"));
-    public static final SoundEvent INVENTORY_CLOSE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "inventory.close"));
-    public static final SoundEvent INVENTORY_SCROLL = SoundEvent.of(new Identifier(ExtraSounds.MODID, "inventory.scroll"));
-    public static final SoundEvent ITEM_DROP = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.drop"));
-    public static final SoundEvent ITEM_PICK = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.pickup"));
-    public static final SoundEvent ITEM_PICK_ALL = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.pickup_all"));
-    public static final SoundEvent ITEM_CLONE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.clone"));
-    public static final SoundEvent ITEM_DELETE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.delete"));
-    public static final SoundEvent ITEM_DRAG = SoundEvent.of(new Identifier(ExtraSounds.MODID, "item.drag"));
-    public static final SoundEvent EFFECT_ADD_POSITIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.add.positive"));
-    public static final SoundEvent EFFECT_ADD_NEGATIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.add.negative"));
-    public static final SoundEvent EFFECT_REMOVE_POSITIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.remove.positive"));
-    public static final SoundEvent EFFECT_REMOVE_NEGATIVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "effect.remove.negative"));
-    public static final SoundEvent KEYBOARD_TYPE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.type"));
-    public static final SoundEvent KEYBOARD_MOVE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.move"));
-    public static final SoundEvent KEYBOARD_ERASE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.erase"));
-    public static final SoundEvent KEYBOARD_CUT = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.cut"));
-    public static final SoundEvent KEYBOARD_PASTE = SoundEvent.of(new Identifier(ExtraSounds.MODID, "keyboard.paste"));
+    public static final SoundEvent CHAT = new SoundEvent(new Identifier(ExtraSounds.MODID, "chat.message"));
+    public static final SoundEvent CHAT_MENTION = new SoundEvent(new Identifier(ExtraSounds.MODID, "chat.mention"));
+    public static final SoundEvent HOTBAR_SCROLL = new SoundEvent(new Identifier(ExtraSounds.MODID, "hotbar_scroll"));
+    public static final SoundEvent INVENTORY_OPEN = new SoundEvent(new Identifier(ExtraSounds.MODID, "inventory.open"));
+    public static final SoundEvent INVENTORY_CLOSE = new SoundEvent(new Identifier(ExtraSounds.MODID, "inventory.close"));
+    public static final SoundEvent INVENTORY_SCROLL = new SoundEvent(new Identifier(ExtraSounds.MODID, "inventory.scroll"));
+    public static final SoundEvent ITEM_DROP = new SoundEvent(new Identifier(ExtraSounds.MODID, "item.drop"));
+    public static final SoundEvent ITEM_PICK = new SoundEvent(new Identifier(ExtraSounds.MODID, "item.pickup"));
+    public static final SoundEvent ITEM_PICK_ALL = new SoundEvent(new Identifier(ExtraSounds.MODID, "item.pickup_all"));
+    public static final SoundEvent ITEM_CLONE = new SoundEvent(new Identifier(ExtraSounds.MODID, "item.clone"));
+    public static final SoundEvent ITEM_DELETE = new SoundEvent(new Identifier(ExtraSounds.MODID, "item.delete"));
+    public static final SoundEvent ITEM_DRAG = new SoundEvent(new Identifier(ExtraSounds.MODID, "item.drag"));
+    public static final SoundEvent EFFECT_ADD_POSITIVE = new SoundEvent(new Identifier(ExtraSounds.MODID, "effect.add.positive"));
+    public static final SoundEvent EFFECT_ADD_NEGATIVE = new SoundEvent(new Identifier(ExtraSounds.MODID, "effect.add.negative"));
+    public static final SoundEvent EFFECT_REMOVE_POSITIVE = new SoundEvent(new Identifier(ExtraSounds.MODID, "effect.remove.positive"));
+    public static final SoundEvent EFFECT_REMOVE_NEGATIVE = new SoundEvent(new Identifier(ExtraSounds.MODID, "effect.remove.negative"));
+    public static final SoundEvent KEYBOARD_TYPE = new SoundEvent(new Identifier(ExtraSounds.MODID, "keyboard.type"));
+    public static final SoundEvent KEYBOARD_MOVE = new SoundEvent(new Identifier(ExtraSounds.MODID, "keyboard.move"));
+    public static final SoundEvent KEYBOARD_ERASE = new SoundEvent(new Identifier(ExtraSounds.MODID, "keyboard.erase"));
+    public static final SoundEvent KEYBOARD_CUT = new SoundEvent(new Identifier(ExtraSounds.MODID, "keyboard.cut"));
+    public static final SoundEvent KEYBOARD_PASTE = new SoundEvent(new Identifier(ExtraSounds.MODID, "keyboard.paste"));
 
     public static class Actions
     {
-        public static final SoundEvent BOW_PULL = SoundEvent.of(new Identifier(ExtraSounds.MODID, "action.bow"));
-        public static final SoundEvent REPEATER_ADD = SoundEvent.of(new Identifier(ExtraSounds.MODID, "action.repeater.add"));
-        public static final SoundEvent REPEATER_RESET = SoundEvent.of(new Identifier(ExtraSounds.MODID, "action.repeater.reset"));
+        public static final SoundEvent BOW_PULL = new SoundEvent(new Identifier(ExtraSounds.MODID, "action.bow"));
+        public static final SoundEvent REPEATER_ADD = new SoundEvent(new Identifier(ExtraSounds.MODID, "action.repeater.add"));
+        public static final SoundEvent REPEATER_RESET = new SoundEvent(new Identifier(ExtraSounds.MODID, "action.repeater.reset"));
     }
 
     public static SoundEntry aliased(SoundEvent e)
