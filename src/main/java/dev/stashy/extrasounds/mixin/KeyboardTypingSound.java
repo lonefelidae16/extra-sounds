@@ -155,8 +155,8 @@ class BookAndSignTypingSound {
         return this.cursorStart != this.selectionStart || this.cursorEnd != this.selectionEnd;
     }
 
-    @Inject(method = "delete(ILnet/minecraft/client/util/SelectionManager$SelectionType;)V", at = @At("HEAD"))
-    private void extrasounds$deleteStr(int offset, SelectionManager.SelectionType selectionType, CallbackInfo ci) {
+    @Inject(method = "delete(I)V", at = @At("HEAD"))
+    private void extrasounds$deleteStr(int offset, CallbackInfo ci) {
         final String text = this.stringGetter.get();
         final boolean bHeadBackspace = offset < 0 && this.selectionStart <= 0;
         final boolean bTailDelete = offset > 0 && this.selectionEnd >= text.length();

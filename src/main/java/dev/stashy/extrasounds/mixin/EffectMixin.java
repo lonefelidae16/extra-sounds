@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ClientPlayerEntity.class)
 public abstract class EffectMixin extends AbstractClientPlayerEntity
 {
-    public EffectMixin(ClientWorld world, GameProfile profile)
-    {
+
+    public EffectMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
     }
 

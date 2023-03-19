@@ -5,12 +5,10 @@ import dev.stashy.extrasounds.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.sounds.SoundType;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
 
 public class ExtraSounds implements ClientModInitializer {
     public static final String MODID = "extrasounds";
-    static final Random mcRandom = Random.create();
 
     @Override
     public void onInitializeClient() {

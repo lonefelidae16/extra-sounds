@@ -6,8 +6,8 @@ plugins {
     id "org.jetbrains.changelog"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_16
+targetCompatibility = JavaVersion.VERSION_16
 
 archivesBaseName = project.archives_base_name
 version = "${project.mod_version}+${project.minecraft_version}"
@@ -19,7 +19,7 @@ tasks.runClient.dependsOn(tasks.build)
 
 repositories {
     maven {
-        url = uri("https://api.modrinth.com/maven/")
+        url = uri("https://raw.githubusercontent.com/Devan-Kerman/Devan-Repo/master/")
     }
     maven {
         name = "stashymane's repo"
@@ -33,7 +33,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    modImplementation include("maven.modrinth:arrp:${project.arrp_version}")
+    modImplementation include("net.devtech:arrp:${project.arrp_version}")
     compileOnly include(project(path: ':sound-categories'))
     runtimeOnly fileTree(include: ["*+${project.minecraft_version}-dev.jar"], exclude: ['*-sources.jar'], dir: 'sound-categories/build/devlibs')
 }

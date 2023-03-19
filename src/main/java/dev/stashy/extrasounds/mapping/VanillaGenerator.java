@@ -1,10 +1,8 @@
 package dev.stashy.extrasounds.mapping;
 
 import dev.stashy.extrasounds.ExtraSounds;
-import dev.stashy.extrasounds.mixin.BlockMaterialAccessor;
 import dev.stashy.extrasounds.mixin.BucketFluidAccessor;
 import net.minecraft.block.*;
-import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
@@ -31,8 +29,8 @@ public final class VanillaGenerator {
                 item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem;
     }
     private static boolean isBrickItem(Item item) {
-        return item == Items.BRICK || item == Items.POTTERY_SHARD_PRIZE || item == Items.POTTERY_SHARD_ARCHER ||
-                item == Items.POTTERY_SHARD_SKULL || item == Items.POTTERY_SHARD_ARMS_UP;
+        return item == Items.BRICK /*|| item == Items.POTTERY_SHARD_PRIZE || item == Items.POTTERY_SHARD_ARCHER ||
+                item == Items.POTTERY_SHARD_SKULL || item == Items.POTTERY_SHARD_ARMS_UP*/;
     }
 
     public static SoundGenerator generator = SoundGenerator.of(Identifier.DEFAULT_NAMESPACE, ExtraSounds.MODID, item -> {
@@ -86,14 +84,14 @@ public final class VanillaGenerator {
             return SoundDefinition.of(aliased(DUST));
         } else if (item instanceof SpawnEggItem) {
             return SoundDefinition.of(aliased(WET_SLIPPERY));
-        } else if (item instanceof StewItem || item instanceof SuspiciousStewItem) {
+        } else if (item instanceof MushroomStewItem || item instanceof SuspiciousStewItem || item == Items.RABBIT_STEW) {
             return SoundDefinition.of(aliased(BOWL));
-        } else if (item instanceof GoatHornItem) {
-            return SoundDefinition.of(single(LOOSE_METAL.getId(), 0.6f, 0.9f, Sound.RegistrationType.SOUND_EVENT));
-        } else if (item instanceof SmithingTemplateItem) {
-            return SoundDefinition.of(aliased(LOOSE_METAL));
-        } else if (item instanceof DiscFragmentItem) {
-            return SoundDefinition.of(single(METAL_BITS.getId(), 0.7f, 0.85f, Sound.RegistrationType.SOUND_EVENT));
+//        } else if (item instanceof GoatHornItem) {
+//            return SoundDefinition.of(single(LOOSE_METAL.getId(), 0.6f, 0.9f, Sound.RegistrationType.SOUND_EVENT));
+//        } else if (item instanceof SmithingTemplateItem) {
+//            return SoundDefinition.of(aliased(LOOSE_METAL));
+//        } else if (item instanceof DiscFragmentItem) {
+//            return SoundDefinition.of(single(METAL_BITS.getId(), 0.7f, 0.85f, Sound.RegistrationType.SOUND_EVENT));
         } else if (isBrickItem(item)) {
             return SoundDefinition.of(aliased(BRICK));
         } else if (isGearGoldenItem(item)) {
@@ -121,8 +119,8 @@ public final class VanillaGenerator {
                 } else {
                     return SoundDefinition.of(event(soundId));
                 }
-            } else if (block instanceof PillarBlock && ((BlockMaterialAccessor) block).getMaterial().equals(Material.FROGLIGHT)) {
-                return SoundDefinition.of(event(blockSound, 0.3f));
+//            } else if (block instanceof PillarBlock && ((BlockMaterialAccessor) block).getMaterial().equals(Material.FROGLIGHT)) {
+//                return SoundDefinition.of(event(blockSound, 0.3f));
             }
 
             return SoundDefinition.of(event(blockSound));

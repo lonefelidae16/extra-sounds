@@ -14,7 +14,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
@@ -24,6 +23,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -183,7 +183,7 @@ public class SoundManager {
     }
 
     public static void playSound(ItemStack stack, SoundType type) {
-        var itemId = Registries.ITEM.getId(stack.getItem());
+        var itemId = Registry.ITEM.getId(stack.getItem());
         Identifier id = ExtraSounds.getClickId(itemId, type);
         SoundEvent event = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
         if (event == null) {
@@ -222,7 +222,7 @@ public class SoundManager {
     }
 
     public static void playSound(SoundEvent snd, float pitch, SoundCategory cat) {
-        playSound(new PositionedSoundInstance(snd.getId(), cat, getMasterVol(), pitch, ExtraSounds.mcRandom,
+        playSound(new PositionedSoundInstance(snd.getId(), cat, getMasterVol(), pitch,
                 false, 0, SoundInstance.AttenuationType.NONE, 0.0D, 0.0D, 0.0D,
                 true));
         if (DebugUtils.debug) {
@@ -232,7 +232,6 @@ public class SoundManager {
 
     public static void playSound(SoundEvent snd, SoundType type, BlockPos position) {
         playSound(new PositionedSoundInstance(snd, type.category, getMasterVol(), type.pitch,
-                ExtraSounds.mcRandom,
                 position.getX() + 0.5,
                 position.getY() + 0.5,
                 position.getZ() + 0.5));
