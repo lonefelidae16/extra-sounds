@@ -16,10 +16,10 @@ import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -107,8 +107,8 @@ public class SoundPackLoader {
             }
         }
 
-        for (Item item : Registries.ITEM) {
-            final Identifier itemId = Registries.ITEM.getId(item);
+        for (Item item : Registry.ITEM) {
+            final Identifier itemId = Registry.ITEM.getId(item);
             final SoundDefinition definition;
             if (soundGenerator.containsKey(itemId.getNamespace())) {
                 definition = soundGenerator.get(itemId.getNamespace()).itemSoundGenerator.apply(item);
@@ -126,7 +126,7 @@ public class SoundPackLoader {
             }
 
             final Identifier pickupSoundId = ExtraSounds.getClickId(itemId, SoundType.PICKUP);
-            final SoundEntry pickupSoundEntry = Sounds.aliased(SoundEvent.of(pickupSoundId));
+            final SoundEntry pickupSoundEntry = Sounds.aliased(new SoundEvent(pickupSoundId));
             generateSoundEntry(itemId, SoundType.PICKUP, definition.pickup, pickupSoundEntry, resource);
             generateSoundEntry(itemId, SoundType.PLACE, definition.place, pickupSoundEntry, resource);
             generateSoundEntry(itemId, SoundType.HOTBAR, definition.hotbar, pickupSoundEntry, resource);
@@ -149,7 +149,7 @@ public class SoundPackLoader {
     }
 
     private static void putSoundEvent(Identifier clickId) {
-        CUSTOM_SOUND_EVENT.put(clickId, SoundEvent.of(clickId));
+        CUSTOM_SOUND_EVENT.put(clickId, new SoundEvent(clickId));
     }
 
     /**
@@ -171,7 +171,7 @@ public class SoundPackLoader {
          * @return A new instance of {@link CacheInfo}.
          */
         public static CacheInfo of(String[] info) {
-            return new CacheInfo(CACHE_VERSION, Registries.ITEM.size(), info);
+            return new CacheInfo(CACHE_VERSION, Registry.ITEM.size(), info);
         }
 
         /**
