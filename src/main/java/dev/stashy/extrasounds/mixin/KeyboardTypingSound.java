@@ -2,6 +2,7 @@ package dev.stashy.extrasounds.mixin;
 
 import dev.stashy.extrasounds.SoundManager;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.SelectionManager;
 import org.spongepowered.asm.mixin.Final;
@@ -124,7 +125,7 @@ public abstract class KeyboardTypingSound {
 }
 
 @Mixin(SelectionManager.class)
-class BookAndSignTypingSound {
+abstract class BookAndSignTypingSound {
     /**
      * Requires to store the current position to prevent excessive sounds in method <code>extrasounds$moveCursor</code>.<br>
      * Injected into <code>updateSelectionRange(Z)V</code>.
@@ -137,6 +138,9 @@ class BookAndSignTypingSound {
     private int cursorEnd = 0;
     @Unique
     private boolean bPasteAction = false;
+
+    @Unique
+    private static final String METHOD_SIGN_DELETE = "delete(ILnet/minecraft/client/util/SelectionManager$SelectionType;)V";
 
     @Shadow
     private int selectionStart;
@@ -155,8 +159,8 @@ class BookAndSignTypingSound {
         return this.cursorStart != this.selectionStart || this.cursorEnd != this.selectionEnd;
     }
 
-    @Inject(method = "delete(ILnet/minecraft/client/util/SelectionManager$SelectionType;)V", at = @At("HEAD"))
-    private void extrasounds$deleteStr(int offset, SelectionManager.SelectionType selectionType, CallbackInfo ci) {
+    @Inject(method = METHOD_SIGN_DELETE, at = @At("HEAD"))
+    private void extrasounds$beforeDelete(int offset, SelectionManager.SelectionType selectionType, CallbackInfo ci) {
         final String text = this.stringGetter.get();
         final boolean bHeadBackspace = offset < 0 && this.selectionStart <= 0;
         final boolean bTailDelete = offset > 0 && this.selectionEnd >= text.length();
@@ -164,6 +168,9 @@ class BookAndSignTypingSound {
             return;
         }
         SoundManager.keyboard(SoundManager.KeyType.ERASE);
+    }
+    @Inject(method = METHOD_SIGN_DELETE, at = @At("RETURN"))
+    private void extrasounds$afterDelete(int offset, SelectionManager.SelectionType selectionType, CallbackInfo ci) {
         this.cursorStart = this.cursorEnd = this.selectionEnd;
     }
 
@@ -205,5 +212,22 @@ class BookAndSignTypingSound {
         SoundManager.keyboard(SoundManager.KeyType.CURSOR);
         this.cursorStart = this.selectionStart;
         this.cursorEnd = this.selectionEnd;
+    }
+}
+
+@Mixin(AbstractSignEditScreen.class)
+abstract class SignTypingSound {
+    @Unique
+    private int previousRow;
+
+    @Shadow
+    private int currentRow;
+
+    @Inject(method = "keyPressed", at = @At("RETURN"))
+    private void extrasounds$moveRow(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
+        if (this.currentRow != this.previousRow) {
+            SoundManager.keyboard(SoundManager.KeyType.CURSOR);
+            this.previousRow = this.currentRow;
+        }
     }
 }
