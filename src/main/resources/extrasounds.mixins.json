@@ -13,6 +13,7 @@
     "ItemPickSound",
     "KeyboardTypingSound",
     "BookAndSignTypingSound",
+    "SignTypingSound",
     "action.BowPullSound",
     "action.RepeaterSwitchSound",
     "hotbar.HotbarDropSound",
