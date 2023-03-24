@@ -14,8 +14,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * For Swap with Off-hand action.
+ */
 @Mixin(ClientPlayNetworkHandler.class)
-public class HotbarSwapSound {
+public abstract class ClientPlayNetworkHandlerMixin {
     @Shadow
     private @Final MinecraftClient client;
 
@@ -24,12 +27,9 @@ public class HotbarSwapSound {
         if (this.client.player == null) {
             return;
         }
-
-
         if (!(packet instanceof PlayerActionC2SPacket actionC2SPacket)) {
             return;
         }
-
         if (actionC2SPacket.getAction() != PlayerActionC2SPacket.Action.SWAP_ITEM_WITH_OFFHAND) {
             return;
         }

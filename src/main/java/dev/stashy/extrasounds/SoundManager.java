@@ -63,6 +63,11 @@ public class SoundManager {
         CURSOR
     }
 
+    public enum EffectType {
+        ADD,
+        REMOVE
+    }
+
     public static void hotbar(int i) {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) {
@@ -193,22 +198,25 @@ public class SoundManager {
         playSound(event, type);
     }
 
-    public static void playSound(StatusEffect effect, boolean add) {
+    public static void effectChanged(StatusEffect effect, EffectType type) {
         if (DebugUtils.debug) {
-            DebugUtils.effectLog(effect, add);
+            DebugUtils.effectLog(effect, type);
         }
 
         final SoundEvent event;
-        if (add) {
+        if (type == EffectType.ADD) {
             event = switch (effect.getCategory()) {
                 case HARMFUL -> Sounds.EFFECT_ADD_NEGATIVE;
                 case NEUTRAL, BENEFICIAL -> Sounds.EFFECT_ADD_POSITIVE;
             };
-        } else {
+        } else if (type == EffectType.REMOVE) {
             event = switch (effect.getCategory()) {
                 case HARMFUL -> Sounds.EFFECT_REMOVE_NEGATIVE;
                 case NEUTRAL, BENEFICIAL -> Sounds.EFFECT_REMOVE_POSITIVE;
             };
+        } else {
+            LOGGER.error("[{}] Unknown type of '{}' is approaching: '{}'", ExtraSounds.class.getSimpleName(), EffectType.class.getSimpleName(), type);
+            return;
         }
         playSound(event, SoundType.EFFECT);
     }

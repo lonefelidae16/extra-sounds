@@ -14,14 +14,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * For Bow pull sound.
+ */
 @Mixin(ClientPlayerEntity.class)
-public abstract class BowPullSound extends AbstractClientPlayerEntity {
-    public BowPullSound(ClientWorld world, GameProfile profile) {
+public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
+    public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
         super(world, profile);
     }
 
     @Inject(method = "setCurrentHand", at = @At("HEAD"))
-    void pull(Hand hand, CallbackInfo ci) {
+    private void extrasounds$bowPullSound(Hand hand, CallbackInfo ci) {
         if (!this.getStackInHand(hand).isOf(Items.BOW)) {
             return;
         }
@@ -30,7 +33,7 @@ public abstract class BowPullSound extends AbstractClientPlayerEntity {
     }
 
     @Inject(method = "clearActiveItem", at = @At(value = "HEAD"))
-    void shoot(CallbackInfo ci) {
+    private void extrasounds$cancelPullSound(CallbackInfo ci) {
         if (!this.activeItemStack.isOf(Items.BOW)) {
             return;
         }
