@@ -14,20 +14,21 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * For Screen open/close sound.
+ */
 @Mixin(MinecraftClient.class)
-public abstract class InventoryScreenSounds
-{
-
+public abstract class MinecraftClientMixin {
     @Shadow
     @Nullable
     public Screen currentScreen;
 
     @Inject(at = @At("HEAD"), method = "setScreen")
-    void open(@Nullable Screen screen, CallbackInfo ci)
-    {
-        if (currentScreen != screen && screen instanceof HandledScreen && !(screen instanceof CreativeInventoryScreen))
+    private void extrasounds$screenChange(@Nullable Screen screen, CallbackInfo ci) {
+        if (currentScreen != screen && screen instanceof HandledScreen && !(screen instanceof CreativeInventoryScreen)) {
             SoundManager.playSound(Sounds.INVENTORY_OPEN, 1f, Mixers.INVENTORY);
-        else if (screen == null && currentScreen instanceof HandledScreen)
+        } else if (screen == null && currentScreen instanceof HandledScreen) {
             SoundManager.playSound(Sounds.INVENTORY_CLOSE, 1f, Mixers.INVENTORY);
+        }
     }
 }

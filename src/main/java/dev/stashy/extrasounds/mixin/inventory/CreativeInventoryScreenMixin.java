@@ -20,10 +20,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * For Creative screen sound.
+ */
 @Mixin(CreativeInventoryScreen.class)
-public abstract class CreativeInventoryClickSounds
-        extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler>
-{
+public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler> {
     @Shadow
     private static ItemGroup selectedTab;
 
@@ -34,16 +35,13 @@ public abstract class CreativeInventoryClickSounds
     @Shadow
     protected abstract boolean isClickInTab(ItemGroup group, double mouseX, double mouseY);
 
-    public CreativeInventoryClickSounds(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text)
-    {
+    public CreativeInventoryScreenMixin(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
         super(screenHandler, playerInventory, text);
     }
 
     @Inject(method = "onMouseClick", at = @At("HEAD"))
-    private void extrasounds$creativeInventoryClickEvent(@Nullable Slot slot, int slotId, int button, SlotActionType actionType, CallbackInfo ci)
-    {
-        if (this.client == null || this.client.player == null)
-        {
+    private void extrasounds$creativeInventoryClickEvent(@Nullable Slot slot, int slotId, int button, SlotActionType actionType, CallbackInfo ci) {
+        if (this.client == null || this.client.player == null) {
             return;
         }
 
@@ -100,8 +98,7 @@ public abstract class CreativeInventoryClickSounds
     }
 
     @Inject(method = "mouseReleased", at = @At("HEAD"))
-    void tabChange(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir)
-    {
+    private void extrasounds$tabChange(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
         if (button != 0) {
             return;
         }

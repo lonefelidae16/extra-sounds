@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds.debug;
 
+import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.mapping.SoundGenerator;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -74,12 +75,9 @@ public class DebugUtils {
         LOGGER.info("Playing sound: " + snd.getId());
     }
 
-    public static void effectLog(StatusEffect effect, boolean add) {
+    public static void effectLog(StatusEffect effect, SoundManager.EffectType type) {
         if (!debug) return;
-        boolean positive = !effect.getCategory().equals(StatusEffectCategory.HARMFUL);
-        LOGGER.info(
-                (positive ? "Positive" : "Negative") + " effect " + (add ? "added" : "removed") + ": " + effect.getName()
-                        .getString());
+        LOGGER.info("EffectType = {}, Effect = {}", type, effect.getName().getString());
     }
 
     public static void genericLog(String message) {

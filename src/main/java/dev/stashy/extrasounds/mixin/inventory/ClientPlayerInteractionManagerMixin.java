@@ -11,12 +11,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * For Inventory screen sounds.
+ */
 @Mixin(ClientPlayerInteractionManager.class)
-public abstract class InventoryClickSounds
-{
+public abstract class ClientPlayerInteractionManagerMixin {
     @Inject(method = "clickSlot", at = @At("HEAD"))
-    void extrasounds$clickEvent(int syncId, int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci)
-    {
+    private void extrasounds$inventoryClickEvent(int syncId, int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
         if (player == null) {
             return;
         }

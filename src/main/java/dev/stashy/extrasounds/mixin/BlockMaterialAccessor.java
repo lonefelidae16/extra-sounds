@@ -6,8 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(AbstractBlock.class)
-public interface BlockMaterialAccessor
-{
+public interface BlockMaterialAccessor {
     @Accessor("material")
-    public Material getMaterial();
+    Material getMaterial();
 }

@@ -11,9 +11,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * For Hotbar scroll action.
+ */
 @Mixin(Mouse.class)
-public class HotbarScrollSound
-{
+public abstract class MouseMixin {
     @Shadow
     private @Final MinecraftClient client;
 
@@ -25,9 +27,8 @@ public class HotbarScrollSound
                     shift = At.Shift.AFTER
             )
     )
-    void hotbarSound(long window, double horizontal, double vertical, CallbackInfo ci)
-    {
-        ClientPlayerEntity player = this.client.player;
+    private void extrasounds$hotbarScroll(long window, double horizontal, double vertical, CallbackInfo ci) {
+        final ClientPlayerEntity player = this.client.player;
         if (player == null) {
             return;
         }
