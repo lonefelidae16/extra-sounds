@@ -7,7 +7,7 @@ public enum SoundType
 {
     PICKUP(1f, Mixers.INVENTORY, "item.pickup"),
     PLACE(0.9f, Mixers.INVENTORY, "item.place"),
-    HOTBAR(1f, Mixers.SCROLL, "item.select"),
+    HOTBAR(1f, Mixers.HOTBAR, "item.select"),
     EFFECT(1f, Mixers.EFFECTS, "effect"),
     CHAT(1f, Mixers.CHAT, "ui.chat"),
     CHAT_MENTION(1f, Mixers.CHAT_MENTION, "ui.chat"),

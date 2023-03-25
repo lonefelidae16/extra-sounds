@@ -5,6 +5,7 @@
   "soundCategory.chat": "Chat Messages",
   "soundCategory.chat_mention": "Chat Mention",
   "soundCategory.effects": "Effects/Potions",
-  "soundCategory.scroll": "Scrolling",
-  "soundCategory.typing": "Typing"
+  "soundCategory.hotbar": "Hotbar",
+  "soundCategory.typing": "Typing",
+  "soundCategory.item_drop": "Drop Actions"
 }

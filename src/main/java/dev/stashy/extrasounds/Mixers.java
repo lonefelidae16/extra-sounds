@@ -18,7 +18,9 @@ public class Mixers implements CategoryLoader
     @Register
     public static SoundCategory EFFECTS;
     @Register
-    public static SoundCategory SCROLL;
+    public static SoundCategory HOTBAR;
     @Register(defaultLevel = 0f)
     public static SoundCategory TYPING;
+    @Register(toggle = true)
+    public static SoundCategory ITEM_DROP;
 }

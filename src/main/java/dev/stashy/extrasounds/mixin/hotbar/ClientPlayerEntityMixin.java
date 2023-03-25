@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds.mixin.hotbar;
 
+import dev.stashy.extrasounds.Mixers;
 import dev.stashy.extrasounds.SoundManager;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,7 @@ public abstract class ClientPlayerEntityMixin {
     @Inject(method = "dropSelectedItem", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void extrasounds$hotbarItemDrop(boolean entireStack, CallbackInfoReturnable<Boolean> cir, PlayerActionC2SPacket.Action action, ItemStack itemStack) {
         if (!itemStack.isEmpty()) {
-            SoundManager.playThrow(itemStack);
+            SoundManager.playThrow(itemStack, Mixers.HOTBAR);
         }
     }
 }

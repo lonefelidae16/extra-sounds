@@ -33,7 +33,7 @@ public abstract class CreativeScreenHandlerMixin {
             SoundManager.playSound(
                     Sounds.INVENTORY_SCROLL,
                     (1f - 0.1f + 0.1f * Math.min(1, 50f / timeDiff)),
-                    Mixers.SCROLL);
+                    Mixers.INVENTORY);
             lastTime = now;
             lastPos = row;
         }
