@@ -229,8 +229,14 @@ public class SoundManager {
         playSound(snd, type.pitch, cat);
     }
 
-    public static void playSound(SoundEvent snd, float pitch, SoundCategory cat) {
-        playSound(new PositionedSoundInstance(snd.getId(), cat, getMasterVol(), pitch, ExtraSounds.mcRandom,
+    public static void playSound(SoundEvent snd, float pitch, SoundCategory category, SoundCategory... optionalVolumes) {
+        float volume = getSoundVolume(Mixers.MASTER);
+        if (optionalVolumes != null) {
+            for (SoundCategory cat : optionalVolumes) {
+                volume = Math.min(getSoundVolume(cat), volume);
+            }
+        }
+        playSound(new PositionedSoundInstance(snd.getId(), category, volume, pitch, ExtraSounds.mcRandom,
                 false, 0, SoundInstance.AttenuationType.NONE, 0.0D, 0.0D, 0.0D,
                 true));
         if (DebugUtils.debug) {
@@ -239,7 +245,7 @@ public class SoundManager {
     }
 
     public static void playSound(SoundEvent snd, SoundType type, BlockPos position) {
-        playSound(new PositionedSoundInstance(snd, type.category, getMasterVol(), type.pitch,
+        playSound(new PositionedSoundInstance(snd, type.category, getSoundVolume(Mixers.MASTER), type.pitch,
                 ExtraSounds.mcRandom,
                 position.getX() + 0.5,
                 position.getY() + 0.5,
@@ -256,24 +262,29 @@ public class SoundManager {
         });
     }
 
+    public static void playThrow(ItemStack itemStack) {
+        playThrow(itemStack, Mixers.INVENTORY);
+    }
+
     /**
      * Plays the weighted THROW sound.<br>
      * The pitch is clamped between 1.5 - 2.0. The smaller stack, the higher.<br>
      * If the ItemStack is not stackable, the pitch is maximum.
      *
      * @param itemStack target stack to adjust the pitch.
+     * @param category  SoundCategory to adjust the volume.
      * @see MathHelper#clampedLerp
      * @see net.minecraft.client.sound.SoundSystem#play
      * @see net.minecraft.client.sound.SoundSystem#getAdjustedPitch
      */
-    public static void playThrow(ItemStack itemStack) {
+    public static void playThrow(ItemStack itemStack, SoundCategory category) {
         if (itemStack.isEmpty()) {
             return;
         }
         final float maxPitch = 2f;
         final float pitch = (!itemStack.isStackable()) ? maxPitch :
                 MathHelper.clampedLerp(maxPitch, 1.5f, (float) itemStack.getCount() / itemStack.getItem().getMaxCount());
-        SoundManager.playSound(Sounds.ITEM_DROP, pitch, Mixers.INVENTORY);
+        SoundManager.playSound(Sounds.ITEM_DROP, pitch, category, Mixers.ITEM_DROP);
     }
 
     public static void stopSound(SoundEvent e, SoundType type) {
@@ -321,7 +332,7 @@ public class SoundManager {
         }
     }
 
-    private static float getMasterVol() {
-        return MinecraftClient.getInstance().options.getSoundVolume(Mixers.MASTER);
+    private static float getSoundVolume(SoundCategory category) {
+        return MinecraftClient.getInstance().options.getSoundVolume(category);
     }
 }
