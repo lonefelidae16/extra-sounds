@@ -22,7 +22,9 @@
     "inventory.HandledScreenMixin",
     "inventory.MinecraftClientMixin",
     "typing.AbstractSignEditScreenMixin",
+    "typing.ChatScreenMixin",
     "typing.SelectionManagerMixin",
+    "typing.SuggestionWindowMixin",
     "typing.TextFieldWidgetMixin"
   ],
   "injectors": {
