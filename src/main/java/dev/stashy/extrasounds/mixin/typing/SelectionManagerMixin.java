@@ -76,11 +76,11 @@ public abstract class SelectionManagerMixin {
         if (!this.extrasounds$isPosUpdated()) {
             return;
         }
-        if (insertion.equals("\n")) {
-            SoundManager.keyboard(SoundManager.KeyType.RETURN);
-        } else if (this.bPasteAction) {
+        if (this.bPasteAction) {
             SoundManager.keyboard(SoundManager.KeyType.PASTE);
             this.bPasteAction = false;
+        } else if (insertion.equals("\n")) {
+            SoundManager.keyboard(SoundManager.KeyType.RETURN);
         } else {
             SoundManager.keyboard(SoundManager.KeyType.INSERT);
         }
