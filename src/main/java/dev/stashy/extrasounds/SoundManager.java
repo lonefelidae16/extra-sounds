@@ -222,11 +222,7 @@ public class SoundManager {
     }
 
     public static void playSound(SoundEvent snd, SoundType type) {
-        playSound(snd, type, type.category);
-    }
-
-    public static void playSound(SoundEvent snd, SoundType type, SoundCategory cat) {
-        playSound(snd, type.pitch, cat);
+        playSound(snd, type.pitch, type.category);
     }
 
     public static void playSound(SoundEvent snd, float pitch, SoundCategory category, SoundCategory... optionalVolumes) {
@@ -239,27 +235,31 @@ public class SoundManager {
         playSound(new PositionedSoundInstance(snd.getId(), category, volume, pitch, ExtraSounds.mcRandom,
                 false, 0, SoundInstance.AttenuationType.NONE, 0.0D, 0.0D, 0.0D,
                 true));
-        if (DebugUtils.debug) {
-            DebugUtils.soundLog(snd);
-        }
     }
 
     public static void playSound(SoundEvent snd, SoundType type, BlockPos position) {
         playSound(new PositionedSoundInstance(snd, type.category, getSoundVolume(Mixers.MASTER), type.pitch,
-                ExtraSounds.mcRandom,
-                position.getX() + 0.5,
-                position.getY() + 0.5,
-                position.getZ() + 0.5));
-        if (DebugUtils.debug) {
-            DebugUtils.soundLog(snd);
-        }
+                ExtraSounds.mcRandom, position));
     }
 
-    public static void playSound(PositionedSoundInstance instance) {
-        throttle(() -> {
-            var client = MinecraftClient.getInstance();
-            client.send(() -> client.getSoundManager().play(instance));
-        });
+    public static void playSound(SoundInstance instance) {
+        try {
+            long now = System.currentTimeMillis();
+            if (now - lastPlayed > 5) {
+                final MinecraftClient client = MinecraftClient.getInstance();
+                client.send(() -> client.getSoundManager().play(instance));
+                lastPlayed = now;
+                if (DebugUtils.debug) {
+                    DebugUtils.soundLog(instance);
+                }
+            } else {
+                if (DebugUtils.debug) {
+                    LOGGER.warn("Sound suppressed due to the fast interval between method calls, was '{}'.", instance.getId());
+                }
+            }
+        } catch (Throwable e) {
+            LOGGER.error("Failed to play sound", e);
+        }
     }
 
     public static void playThrow(ItemStack itemStack) {
@@ -284,7 +284,7 @@ public class SoundManager {
         final float maxPitch = 2f;
         final float pitch = (!itemStack.isStackable()) ? maxPitch :
                 MathHelper.clampedLerp(maxPitch, 1.5f, (float) itemStack.getCount() / itemStack.getItem().getMaxCount());
-        SoundManager.playSound(Sounds.ITEM_DROP, pitch, category, Mixers.ITEM_DROP);
+        playSound(Sounds.ITEM_DROP, pitch, category, Mixers.ITEM_DROP);
     }
 
     public static void stopSound(SoundEvent e, SoundType type) {
@@ -317,18 +317,6 @@ public class SoundManager {
             case CURSOR, RETURN -> playSound(Sounds.KEYBOARD_MOVE, SoundType.TYPING);
             case INSERT -> playSound(Sounds.KEYBOARD_TYPE, SoundType.TYPING);
             case PASTE -> playSound(Sounds.KEYBOARD_PASTE, SoundType.TYPING);
-        }
-    }
-
-    private static void throttle(Runnable r) {
-        try {
-            long now = System.currentTimeMillis();
-            if (now - lastPlayed > 5) {
-                r.run();
-            }
-            lastPlayed = now;
-        } catch (Throwable e) {
-            LOGGER.error("Failed to play sound", e);
         }
     }
 

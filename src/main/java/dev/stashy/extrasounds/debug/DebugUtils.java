@@ -2,6 +2,8 @@ package dev.stashy.extrasounds.debug;
 
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.mapping.SoundGenerator;
+import net.minecraft.client.sound.Sound;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.sound.SoundEvent;
@@ -70,9 +72,9 @@ public class DebugUtils {
         }
     }
 
-    public static void soundLog(SoundEvent snd) {
+    public static void soundLog(SoundInstance instance) {
         if (!debug) return;
-        LOGGER.info("Playing sound: " + snd.getId());
+        LOGGER.info("Playing sound: {}", instance.getId());
     }
 
     public static void effectLog(StatusEffect effect, SoundManager.EffectType type) {
