@@ -9,7 +9,7 @@ public class Mixers implements CategoryLoader
     public static SoundCategory MASTER;
     @Register
     public static SoundCategory INVENTORY;
-    @Register
+    @Register(tooltip = "tooltip.soundCategory.action")
     public static SoundCategory ACTION;
     @Register
     public static SoundCategory CHAT;

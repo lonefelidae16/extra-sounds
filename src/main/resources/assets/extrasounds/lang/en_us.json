@@ -7,5 +7,7 @@
   "soundCategory.effects": "Effects/Potions",
   "soundCategory.hotbar": "Hotbar",
   "soundCategory.typing": "Typing",
-  "soundCategory.item_drop": "Drop Actions"
+  "soundCategory.item_drop": "Drop Actions",
+
+  "tooltip.soundCategory.action": "This volume is applied when the Bow is pulled or the Redstone Repeater block interacts."
 }
