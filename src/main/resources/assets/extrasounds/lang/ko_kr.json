@@ -1,10 +1,10 @@
 {
-  "soundCategory.extrasounds_master": "ExtraSounds",
-  "soundCategory.inventory": "목록",
-  "soundCategory.action": "아이템 액션",
-  "soundCategory.chat": "채팅 메시지",
-  "soundCategory.chat_mention": "채팅 언급",
-  "soundCategory.effects": "효과/포션",
+  "soundCategory.extrasounds$master": "ExtraSounds",
+  "soundCategory.extrasounds$inventory": "목록",
+  "soundCategory.extrasounds$action": "아이템 액션",
+  "soundCategory.extrasounds$chat": "채팅 메시지",
+  "soundCategory.extrasounds$chat_mention": "채팅 언급",
+  "soundCategory.extrasounds$effects": "효과/포션",
   "soundCategory.scroll": "스크롤링",
-  "soundCategory.typing": "타이핑"
+  "soundCategory.extrasounds$typing": "타이핑"
 }

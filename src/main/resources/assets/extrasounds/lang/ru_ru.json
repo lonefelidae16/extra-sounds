@@ -1,10 +1,10 @@
 {
-  "soundCategory.extrasounds_master": "ExtraSounds",
-  "soundCategory.inventory": "Инвентарь",
-  "soundCategory.action": "Действия с предметами",
-  "soundCategory.chat": "Сообщения в чате",
-  "soundCategory.chat_mention": "Упоминания в чате",
-  "soundCategory.effects": "Эффекты/Зелья",
+  "soundCategory.extrasounds$master": "ExtraSounds",
+  "soundCategory.extrasounds$inventory": "Инвентарь",
+  "soundCategory.extrasounds$action": "Действия с предметами",
+  "soundCategory.extrasounds$chat": "Сообщения в чате",
+  "soundCategory.extrasounds$chat_mention": "Упоминания в чате",
+  "soundCategory.extrasounds$effects": "Эффекты/Зелья",
   "soundCategory.scroll": "Прокрутка",
-  "soundCategory.typing": "Ввод текста"
+  "soundCategory.extrasounds$typing": "Ввод текста"
 }
