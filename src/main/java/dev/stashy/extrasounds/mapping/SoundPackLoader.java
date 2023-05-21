@@ -11,6 +11,8 @@ import dev.stashy.extrasounds.sounds.Sounds;
 import net.devtech.arrp.api.RRPCallback;
 import net.devtech.arrp.api.RuntimeResourcePack;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.block.Block;
 import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
@@ -44,16 +46,27 @@ public class SoundPackLoader {
             .registerTypeAdapter(Sound.class, new SoundSerializer())
             .create();
 
+    /**
+     * Initialization of customized sound event.<br>
+     * The cache file stored at {@link SoundPackLoader#CACHE_PATH} will be used.
+     * If it is absent or invalid, the file will be regenerated.<br>
+     * If the regeneration time over 1,000 milliseconds, it may be needed to refactor.
+     */
     public static void init() {
         final long start = System.currentTimeMillis();
         final Map<String, SoundGenerator> soundGenMappers = new HashMap<>();
 
-        FabricLoader.getInstance().getEntrypoints(ExtraSounds.MODID, SoundGenerator.class)
-                .forEach(it -> soundGenMappers.put(it.namespace, it));
+        final List<EntrypointContainer<SoundGenerator>> containers = FabricLoader.getInstance().getEntrypointContainers(ExtraSounds.MODID, SoundGenerator.class);
 
-        String[] generatorVer = soundGenMappers.values().stream().map(CacheInfo::getModVersion).toArray(String[]::new);
+        containers.forEach(container -> {
+            final SoundGenerator generator = container.getEntrypoint();
+            // FIXME: When duplicate namespace declared from 2 or more mods, the last mod takes priority.
+            soundGenMappers.put(generator.namespace, generator);
+        });
+        final String[] generatorVer = containers.stream().map(CacheInfo::getModVersion).toArray(String[]::new);
         final CacheInfo currentCacheInfo = CacheInfo.of(generatorVer);
 
+        // Read from cache.
         try {
             Files.createDirectories(CACHE_PATH.getParent());
 
@@ -73,6 +86,7 @@ public class SoundPackLoader {
             final JsonObject jsonObject = cacheData.asJsonObject();
             jsonObject.keySet().forEach(key -> putSoundEvent(new Identifier(ExtraSounds.MODID, key)));
         } catch (Throwable ex) {
+            // If there is an exception, regenerate and write the cache.
             DebugUtils.genericLog(ex.getMessage());
             LOGGER.info("[{}] Regenerating cache...", ExtraSounds.class.getSimpleName());
             final Map<String, SoundEntry> resourceMapper = new HashMap<>();
@@ -92,6 +106,14 @@ public class SoundPackLoader {
         LOGGER.info("[{}] sound pack successfully loaded; {} entries.", ExtraSounds.class.getSimpleName(), CUSTOM_SOUND_EVENT.keySet().size());
     }
 
+    /**
+     * Processes for the all items.<br>
+     * This method is "Memory Sensitive" as creates 3x {@link SoundEntry}s per item,
+     * and avoid using the Stream APIs in non-debug mode as much as possible.
+     *
+     * @param soundGenerator The information of generator including namespace and {@link SoundGenerator}.
+     * @param resource       The {@link Map} of resource that the SoundEntry will be stored.
+     */
     private static void processSounds(Map<String, SoundGenerator> soundGenerator, Map<String, SoundEntry> resource) {
         final SoundEntry fallbackSoundEntry = Sounds.aliased(Sounds.ITEM_PICK);
         final List<String> inSoundsJsonIds = Lists.newArrayList();
@@ -141,6 +163,15 @@ public class SoundPackLoader {
         }
     }
 
+    /**
+     * Generates the resource.
+     *
+     * @param itemId       Target item id.
+     * @param type         The {@link SoundType} which category of volume to play.
+     * @param entry        Target {@link SoundEntry}.
+     * @param defaultEntry The fallback SoundEntry.
+     * @param resource     The {@link Map} of resource that the SoundEntry will be stored.
+     */
     private static void generateSoundEntry(Identifier itemId, SoundType type, SoundEntry entry, SoundEntry defaultEntry, Map<String, SoundEntry> resource) {
         final SoundEntry soundEntry = (entry == null) ? defaultEntry : entry;
         final Identifier id = ExtraSounds.getClickId(itemId, type);
@@ -148,17 +179,22 @@ public class SoundPackLoader {
         putSoundEvent(id);
     }
 
+    /**
+     * Creates and Registers the {@link SoundEvent} from specified {@link Identifier}.
+     *
+     * @param clickId Target id.
+     */
     private static void putSoundEvent(Identifier clickId) {
         CUSTOM_SOUND_EVENT.put(clickId, SoundEvent.of(clickId));
     }
 
     /**
      * Shows the information of the cache.<br>
-     * This is used in the file <code>extrasounds.cache</code> at the first line.
+     * This is used at the first line in the file defined by {@link SoundPackLoader#CACHE_FNAME}.
      *
      * @param version   The cache version.
      * @param itemCount The number of the Item Registry.
-     * @param info      The mod id String array.
+     * @param info      The String array of mod ids.
      */
     record CacheInfo(int version, int itemCount, String[] info) {
         private static final String DELIMITER_MOD_INFO = ",";
@@ -206,20 +242,23 @@ public class SoundPackLoader {
         }
 
         /**
-         * Finds and Generates the version String from specified {@link SoundGenerator}.
+         * Generates the version String from specified {@link EntrypointContainer}.
          *
-         * @param generator Target.
+         * @param container Target.
          * @return Generated String.
          */
-        private static String getModVersion(SoundGenerator generator) {
-            if (generator == null) {
+        private static String getModVersion(EntrypointContainer<SoundGenerator> container) {
+            if (container == null) {
                 return "<NULL>";
             }
 
-            final String modId = generator.modId;
-            final String modVer = FabricLoader.getInstance().getModContainer(modId)
-                    .map(modContainer -> modContainer.getMetadata().getVersion().getFriendlyString())
-                    .orElse("unspecified");
+            final ModMetadata metadata = container.getProvider().getMetadata();
+            if (metadata == null) {
+                return "<NULL>";
+            }
+
+            final String modId = metadata.getId();
+            final String modVer = metadata.getVersion().getFriendlyString();
             return validate("%s %s".formatted(modId, modVer));
         }
 

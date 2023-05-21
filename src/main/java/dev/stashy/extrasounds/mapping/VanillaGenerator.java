@@ -1,6 +1,5 @@
 package dev.stashy.extrasounds.mapping;
 
-import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.mixin.BlockMaterialAccessor;
 import dev.stashy.extrasounds.mixin.BucketFluidAccessor;
 import net.minecraft.block.*;
@@ -35,7 +34,7 @@ public final class VanillaGenerator {
                 item == Items.POTTERY_SHARD_SKULL || item == Items.POTTERY_SHARD_ARMS_UP;
     }
 
-    public static SoundGenerator generator = SoundGenerator.of(Identifier.DEFAULT_NAMESPACE, ExtraSounds.MODID, item -> {
+    public static SoundGenerator generator = SoundGenerator.of(Identifier.DEFAULT_NAMESPACE, item -> {
         if (item instanceof MusicDiscItem) {
             return SoundDefinition.of(aliased(MUSIC_DISC));
         } else if (item instanceof BoatItem) {
