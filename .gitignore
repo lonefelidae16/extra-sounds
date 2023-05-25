@@ -5,6 +5,8 @@ build/
 out/
 classes/
 
+local.properties
+
 # eclipse
 
 *.launch
