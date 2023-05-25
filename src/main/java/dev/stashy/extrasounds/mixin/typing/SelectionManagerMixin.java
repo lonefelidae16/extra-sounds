@@ -62,12 +62,16 @@ public abstract class SelectionManagerMixin {
         this.cursorStart = this.cursorEnd = this.selectionEnd;
     }
 
-    @Inject(method = "cut", at = @At("RETURN"))
+    @Inject(method = "cut", at = @At("HEAD"))
     private void extrasounds$cutAction(CallbackInfo ci) {
         if (this.selectionStart == this.selectionEnd) {
             return;
         }
         SoundManager.keyboard(SoundManager.KeyType.CUT);
+    }
+
+    @Inject(method = "cut", at = @At("RETURN"))
+    private void extrasounds$afterCut(CallbackInfo ci) {
         this.cursorStart = this.cursorEnd = this.selectionEnd;
     }
 
