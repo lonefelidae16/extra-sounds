@@ -1,4 +1,110 @@
-## [2.3.2] - ????-??-??
+# Changelog
+
+## [Unreleased]
+### ⌛ Coming
+
+* Port to 1.20.
+
+### 💭 Bugs / Issues
+
+* Typing sounds are muted by default.
+* No Keyboard sound when Cut action.
+  - Signboard
+  - Book and Quill
+
+### 👷 Technical
+
+* Uses Gradle 8.1.1.
+* Uses fabric-loom 1.2.
+* Uses fabric-loader 0.14.20.
+* Updates the API specification.
+  - No longer required to specify the modId in `mapping.SoundGenerator`.
+
+## [2.3.1+1.19.4-build.4] - 2023-05-21
+### ✨ Added
+
+* Tooltip feature in settings screen.
+
+### 👷 Technical
+
+* Uses fabric-loader 0.14.19.
+* Produces helper method for creating `SoundEvent`.
+* Refactors Log output methods.
+
+## [2.3.1+1.19.4-build.3] - 2023-03-27
+### ✨ Added
+
+* Makes Drop Sound optional.
+* More Chat and Command input sounds.
+  - Suggestion select sound.
+  - Suggestion accept sound.
+  - Scroll sound for Chat log screen.
+
+### 🔧 Fixed
+
+* Changes working directory of the cache.
+
+### 👷 Technical
+
+* Refactors mixins.
+  - Changes the class name based on its mixin target class.
+  - Adds prefix `extrasounds$` to method names.
+
+## [2.3.1+1.19.4-build.2] - 2023-03-24
+### ✨ Added
+
+* Port to 1.19.4.
+* Includes [`SoundCategories`](https://github.com/lonefelidae16/sound-categories) project using Git-Submodule feature.
+
+### 🔧 Fixed
+
+* Changes working directory of the cache.
+
+### 👷 Technical
+
+* Uses Gradle 8.0.1.
+
+## [2.3.1+1.19.3-build.4] - 2023-03-14
+### ✨ Added
+
+* Port to 1.19.3.
+* More Keyboard sounds during editing.
+  - Book and Quill
+  - Signboard
+* More sounds.
+  - Swap-with-Offhand action (default <kbd>F</kbd> key).
+  - Swap-with-HotBar action (default <kbd>1</kbd>-<kbd>9</kbd> key).
+  - Drop sound from HotBar (default <kbd>Q</kbd> key).
+  - Pick item sound (default Mouse Wheel Click).
+* Changes Stick sound.
+* Supports Disc Fragment sound.
+
+### 🔧 Fixed
+
+* Prevents doubled-sounds.
+* Prevents inventory sound of other players.
+* Allows to join any players who don’t have ExtraSounds to a Singleplayer world opened on the LAN.
+* Pitch calculation of Drop sound.
+
+### 👷 Technical
+
+* Uses Gradle 7.6.
+* Uses fabric-loom 1.1.
+* Refactors `mapping.SoundPackLoader` to reduce memory usage.
+* Refactors handling the cache.
+* Supports JVM argument `extrasounds.searchundef` to find the sound that is not defined in `sounds.json`
+  or the class that uses `mapping.SoundGenerator`.
+* Validates the version string in the first line of the cache.
+
+### ❓ Known Issues
+
+* The sound is played regardless of whether the action succeeds or fails.
+  - e.g.) When both Chest and PlayerInventory are full and trying to move the stack with
+    <kbd>Shift</kbd> + Click. The stack will not be moved, but the sound will be played.
+  - e.g.2) Trying to place an item in a slot that doesn’t accept it, such as
+    placing in the Result slot on the Crafting, Furnace, Brewing screen, and so on.
+
+## [2.3.2]
 
 ### Added
 
