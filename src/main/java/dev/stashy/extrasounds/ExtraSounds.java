@@ -7,7 +7,6 @@ import dev.stashy.extrasounds.sounds.SoundType;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -15,7 +14,6 @@ public class ExtraSounds implements ClientModInitializer {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final String MODID = "extrasounds";
     public static final SoundEvent MISSING = SoundEvent.of(new Identifier(MODID, "missing"));
-    static final Random mcRandom = Random.create();
 
     @Override
     public void onInitializeClient() {

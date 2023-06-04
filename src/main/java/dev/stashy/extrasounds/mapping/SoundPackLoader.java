@@ -50,7 +50,7 @@ public class SoundPackLoader {
      * Initialization of customized sound event.<br>
      * The cache file stored at {@link SoundPackLoader#CACHE_PATH} will be used.
      * If it is absent or invalid, the file will be regenerated.<br>
-     * If the regeneration time over 1,000 milliseconds, it may be needed to refactor.
+     * If the regeneration time over 1000 milliseconds, it may be needed to refactor.
      */
     public static void init() {
         final long start = System.currentTimeMillis();
@@ -74,8 +74,8 @@ public class SoundPackLoader {
                 throw new FileNotFoundException("Cache does not exist.");
             }
 
-            if (DebugUtils.noCache) {
-                throw new RuntimeException("JVM arg '%s' is detected.".formatted(DebugUtils.noCacheVar));
+            if (DebugUtils.NO_CACHE) {
+                throw new RuntimeException("JVM arg '%s' is detected.".formatted(DebugUtils.NO_CACHE_VAR));
             }
 
             final CacheData cacheData = CacheData.read();
@@ -94,15 +94,19 @@ public class SoundPackLoader {
             CacheData.create(currentCacheInfo, resourceMapper);
         }
 
-        if (DebugUtils.debug) {
+        if (DebugUtils.DEBUG) {
             DebugUtils.exportSoundsJson(CacheData.read().asJsonBytes());
             DebugUtils.exportGenerators(soundGenMappers);
         }
 
         EXTRA_SOUNDS_RESOURCE.addAsyncResource(ResourceType.CLIENT_RESOURCES, SOUNDS_JSON_ID, identifier -> CacheData.read().asJsonBytes());
         RRPCallback.BEFORE_VANILLA.register(packs -> packs.add(EXTRA_SOUNDS_RESOURCE));
-        final long finish = System.currentTimeMillis();
-        DebugUtils.genericLog("%s init finished; took %dms.".formatted(SoundPackLoader.class.getSimpleName(), finish - start));
+        final long tookMillis = start - System.currentTimeMillis();
+        if (tookMillis >= 1000) {
+            LOGGER.warn("[{}] init took too long; {}ms.", ExtraSounds.class.getSimpleName(), tookMillis);
+        } else {
+            DebugUtils.genericLog("%s init finished; took %dms.".formatted(SoundPackLoader.class.getSimpleName(), tookMillis));
+        }
         LOGGER.info("[{}] sound pack successfully loaded; {} entries.", ExtraSounds.class.getSimpleName(), CUSTOM_SOUND_EVENT.keySet().size());
     }
 
@@ -157,7 +161,7 @@ public class SoundPackLoader {
                 final boolean isFallbackSoundEntry = Objects.equals(GSON.toJson(definition.pickup), fallbackSoundJson);
                 final boolean notIncludeSoundsJson = !inSoundsJsonIds.contains(pickupSoundId.getPath());
                 if (isFallbackSoundEntry && notIncludeSoundsJson) {
-                    LOGGER.info("unregistered sound was found: '{}'", itemId);
+                    LOGGER.warn("unregistered sound was found: '{}'", itemId);
                 }
             }
         }

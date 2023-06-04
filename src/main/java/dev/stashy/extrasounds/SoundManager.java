@@ -24,6 +24,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +34,7 @@ import java.util.function.BiPredicate;
 
 public class SoundManager {
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final Random MC_RANDOM = Random.create();
 
     /**
      * Predicate of Right Mouse Click.
@@ -157,7 +159,7 @@ public class SoundManager {
             cursorItem = cursor.copy();
         }
 
-        if (slotIndex == -999 && actionType != SlotActionType.QUICK_CRAFT) {
+        if (slotIndex == ScreenHandler.EMPTY_SPACE_SLOT_INDEX && actionType != SlotActionType.QUICK_CRAFT) {
             // out of screen area
             if (RIGHT_CLICK_PREDICATE.test(actionType, button)) {
                 cursorItem.setCount(1);
@@ -199,7 +201,7 @@ public class SoundManager {
     }
 
     public static void effectChanged(StatusEffect effect, EffectType type) {
-        if (DebugUtils.debug) {
+        if (DebugUtils.DEBUG) {
             DebugUtils.effectLog(effect, type);
         }
 
@@ -232,14 +234,14 @@ public class SoundManager {
                 volume = Math.min(getSoundVolume(cat), volume);
             }
         }
-        playSound(new PositionedSoundInstance(snd.getId(), category, volume, pitch, ExtraSounds.mcRandom,
+        playSound(new PositionedSoundInstance(snd.getId(), category, volume, pitch, MC_RANDOM,
                 false, 0, SoundInstance.AttenuationType.NONE, 0.0D, 0.0D, 0.0D,
                 true));
     }
 
     public static void playSound(SoundEvent snd, SoundType type, BlockPos position) {
         playSound(new PositionedSoundInstance(snd, type.category, getSoundVolume(Mixers.MASTER), type.pitch,
-                ExtraSounds.mcRandom, position));
+                MC_RANDOM, position));
     }
 
     public static void playSound(SoundInstance instance) {
@@ -249,11 +251,11 @@ public class SoundManager {
                 final MinecraftClient client = MinecraftClient.getInstance();
                 client.send(() -> client.getSoundManager().play(instance));
                 lastPlayed = now;
-                if (DebugUtils.debug) {
+                if (DebugUtils.DEBUG) {
                     DebugUtils.soundLog(instance);
                 }
             } else {
-                if (DebugUtils.debug) {
+                if (DebugUtils.DEBUG) {
                     LOGGER.warn("Sound suppressed due to the fast interval between method calls, was '{}'.", instance.getId());
                 }
             }

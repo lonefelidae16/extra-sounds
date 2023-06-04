@@ -4,7 +4,11 @@
 # against bad commits.
 
 name: Build project
-on: [ pull_request, push ]
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
 
 jobs:
   build:

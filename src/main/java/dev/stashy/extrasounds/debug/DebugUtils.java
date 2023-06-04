@@ -2,11 +2,8 @@ package dev.stashy.extrasounds.debug;
 
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.mapping.SoundGenerator;
-import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.sound.SoundEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,21 +15,23 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DebugUtils {
-    public static final String debugVar = "extrasounds.debug";
-    public static final String debugPathVar = "extrasounds.debug.path";
-    public static final String noCacheVar = "extrasounds.nocache";
+    public static final String DEBUG_VAR = "extrasounds.debug";
+    public static final String DEBUG_PATH_VAR = "extrasounds.debug.path";
+    public static final String NO_CACHE_VAR = "extrasounds.nocache";
     private static final String JVM_ARG_SEARCH_UNDEF_SND = "extrasounds.searchundef";
 
-    public static final boolean debug = System.getProperties().containsKey(debugVar)
-            && System.getProperty(debugVar).equals("true");
-    public static final String debugPath = System.getProperties().containsKey(debugPathVar)
-            ? System.getProperty(debugPathVar) : "debug/";
-    public static final boolean noCache = System.getProperties().containsKey(noCacheVar)
-            && System.getProperties().get(noCacheVar).equals("true");
+    public static final boolean DEBUG = System.getProperties().containsKey(DEBUG_VAR)
+            && System.getProperty(DEBUG_VAR).equals("true");
+    public static final String DEBUG_PATH = System.getProperties().containsKey(DEBUG_PATH_VAR)
+            ? System.getProperty(DEBUG_PATH_VAR) : "debug/";
+    public static final boolean NO_CACHE = System.getProperties().containsKey(NO_CACHE_VAR)
+            && System.getProperties().get(NO_CACHE_VAR).equals("true");
     /**
      * For debugging.<br>
-     * When run with a JVM argument {@link DebugUtils#JVM_ARG_SEARCH_UNDEF_SND}, the log shows a SoundEntry that plays the default {@link dev.stashy.extrasounds.sounds.Sounds#ITEM_PICK}.<br>
-     * To ensure that the debugging statements are executed, it is recommended that you also run with the {@link DebugUtils#noCacheVar} JVM argument.
+     * When run with a JVM argument {@link DebugUtils#JVM_ARG_SEARCH_UNDEF_SND}, the log shows a SoundEntry that plays
+     * the default {@link dev.stashy.extrasounds.sounds.Sounds#ITEM_PICK}.<br>
+     * To ensure that the debugging statements are executed, it is recommended that you also run with the
+     * {@link DebugUtils#NO_CACHE_VAR} JVM argument.
      */
     public static final boolean SEARCH_UNDEF_SOUND = System.getProperties().containsKey(JVM_ARG_SEARCH_UNDEF_SND)
             && System.getProperties().get(JVM_ARG_SEARCH_UNDEF_SND).equals("true");
@@ -40,15 +39,15 @@ public class DebugUtils {
     private static final Logger LOGGER = LogManager.getLogger();
 
     public static void init() {
-        if (!debug) return;
+        if (!DEBUG) return;
         LOGGER.info("ExtraSounds: DEBUG mode enabled.");
-        LOGGER.info("Debug path: " + Path.of(debugPath).toAbsolutePath());
+        LOGGER.info("Debug path: " + Path.of(DEBUG_PATH).toAbsolutePath());
     }
 
     public static void exportSoundsJson(byte[] jsonData) {
-        if (!debug) return;
+        if (!DEBUG) return;
         try {
-            Path p = Path.of(debugPath).resolve("sounds.json");
+            Path p = Path.of(DEBUG_PATH).resolve("sounds.json");
             createFile(p);
             Files.write(p, jsonData, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
@@ -57,8 +56,8 @@ public class DebugUtils {
     }
 
     public static void exportGenerators(Map<String, SoundGenerator> generator) {
-        if (!debug) return;
-        Path p = Path.of(debugPath).resolve("generators.txt");
+        if (!DEBUG) return;
+        Path p = Path.of(DEBUG_PATH).resolve("generators.txt");
         createFile(p);
         try {
             Files.write(p, generator.keySet().stream()
@@ -73,23 +72,23 @@ public class DebugUtils {
     }
 
     public static void soundLog(SoundInstance instance) {
-        if (!debug) return;
+        if (!DEBUG) return;
         LOGGER.info("Playing sound: {}", instance.getId());
     }
 
     public static void effectLog(StatusEffect effect, SoundManager.EffectType type) {
-        if (!debug) return;
+        if (!DEBUG) return;
         LOGGER.info("EffectType = {}, Effect = {}", type, effect.getName().getString());
     }
 
     public static void genericLog(String message) {
-        if (!debug) return;
+        if (!DEBUG) return;
         LOGGER.info(message);
     }
 
     private static void createFile(Path p) {
         try {
-            final Path debugPath = Path.of(DebugUtils.debugPath);
+            final Path debugPath = Path.of(DebugUtils.DEBUG_PATH);
             if (!Files.isDirectory(debugPath))
                 Files.createDirectory(debugPath);
             if (!Files.exists(p))
