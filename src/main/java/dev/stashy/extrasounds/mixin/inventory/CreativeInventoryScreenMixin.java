@@ -9,12 +9,14 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -25,15 +27,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(CreativeInventoryScreen.class)
 public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler> {
+    @Unique
+    private static final ItemGroup GROUP_INVENTORY = Registries.ITEM_GROUP.get(ItemGroups.INVENTORY);
+
     @Shadow
     private static ItemGroup selectedTab;
-
     @Shadow
     @Nullable
     private Slot deleteItemSlot;
 
     @Shadow
     protected abstract boolean isClickInTab(ItemGroup group, double mouseX, double mouseY);
+    @Shadow
+    abstract boolean isCreativeInventorySlot(@Nullable Slot slot);
 
     public CreativeInventoryScreenMixin(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
         super(screenHandler, playerInventory, text);
@@ -45,12 +51,12 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
             return;
         }
 
-        final boolean bOnHotbar = slot != null && slot.inventory instanceof PlayerInventory;
+        final boolean bOnHotbar = slot != null && !this.isCreativeInventorySlot(slot);
 
         if (actionType == SlotActionType.THROW && slot != null && slotId >= 0) {
             // CreativeInventory can drop items while holding anything on cursor
             final ItemStack slotStack = slot.getStack().copy();
-            if (button == 1 && selectedTab != ItemGroups.INVENTORY) {
+            if (button == 1 && selectedTab != GROUP_INVENTORY) {
                 if (bOnHotbar) {
                     // Pressed Ctrl + Q on Hotbar to delete the stack only when not in Inventory tab
                     SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
@@ -67,7 +73,7 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
         }
 
         if (actionType == SlotActionType.QUICK_MOVE &&
-                selectedTab != ItemGroups.INVENTORY &&
+                selectedTab != GROUP_INVENTORY &&
                 bOnHotbar &&
                 slot.hasStack()
         ) {

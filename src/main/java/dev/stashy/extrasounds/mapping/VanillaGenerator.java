@@ -1,12 +1,12 @@
 package dev.stashy.extrasounds.mapping;
 
-import dev.stashy.extrasounds.mixin.BlockMaterialAccessor;
 import dev.stashy.extrasounds.mixin.BucketFluidAccessor;
 import net.minecraft.block.*;
 import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.*;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
 import static dev.stashy.extrasounds.sounds.Categories.*;
@@ -30,8 +30,7 @@ public final class VanillaGenerator {
                 item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem;
     }
     private static boolean isBrickItem(Item item) {
-        return item == Items.BRICK || item == Items.POTTERY_SHARD_PRIZE || item == Items.POTTERY_SHARD_ARCHER ||
-                item == Items.POTTERY_SHARD_SKULL || item == Items.POTTERY_SHARD_ARMS_UP;
+        return item == Items.BRICK || item.getTranslationKey().endsWith("pottery_sherd");
     }
 
     public static SoundGenerator generator = SoundGenerator.of(Identifier.DEFAULT_NAMESPACE, item -> {
@@ -120,7 +119,7 @@ public final class VanillaGenerator {
                 } else {
                     return SoundDefinition.of(event(soundId));
                 }
-            } else if (block instanceof PillarBlock && ((BlockMaterialAccessor) block).getMaterial().equals(Material.FROGLIGHT)) {
+            } else if (block instanceof PillarBlock pillarBlock && pillarBlock.getSoundGroup(pillarBlock.getDefaultState()).equals(BlockSoundGroup.FROGLIGHT)) {
                 return SoundDefinition.of(event(blockSound, 0.3f));
             }
 

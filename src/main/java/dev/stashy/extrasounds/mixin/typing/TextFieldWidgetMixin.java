@@ -113,8 +113,8 @@ public abstract class TextFieldWidgetMixin {
         this.extrasounds$cursorChanged();
     }
 
-    @Inject(method = "mouseClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursor(I)V", shift = At.Shift.AFTER))
-    private void extrasounds$clickEvent(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "onClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursor(I)V", shift = At.Shift.AFTER))
+    private void extrasounds$clickEvent(double mouseX, double mouseY, CallbackInfo ci) {
         this.extrasounds$cursorChanged();
     }
 }
