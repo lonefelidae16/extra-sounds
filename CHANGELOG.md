@@ -3,20 +3,31 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-* Port to 1.20.
+* <small>_Exciting new features may be coming here._</small>
 
 ### 💭 Bugs / Issues
 
-* Typing sounds are muted by default.
-* No Keyboard sound when Cut action.
-  - Signboard
+* <small>_Caught bugs and known issues are written._</small>
+
+## [2.3.1+1.20-build.1] - 2023-06-08
+### ✨ Added
+
+* Port to 1.20.
+* Supports Pottery _Sherds_ sound (name has changed).
+
+### 🔧 Fixed
+
+* Typing sound turns on by default.
+* Keyboard’s Cut action sound on edit screen.
   - Book and Quill
+  - Signboard
 
 ### 👷 Technical
 
-* Uses Gradle 8.1.1.
-* Uses fabric-loom 1.2.
-* Uses fabric-loader 0.14.20.
+* Dependency updates:
+  - Gradle 8.1.1
+  - fabric-loom 1.2
+  - fabric-loader 0.14.21
 * Updates the API specification.
   - No longer required to specify the modId in `mapping.SoundGenerator`.
 
@@ -28,7 +39,7 @@
 ### 👷 Technical
 
 * Uses fabric-loader 0.14.19.
-* Produces helper method for creating `SoundEvent`.
+* Produces helper method for creating `SoundEvent` instance.
 * Refactors Log output methods.
 
 ## [2.3.1+1.19.4-build.3] - 2023-03-27
@@ -39,10 +50,6 @@
   - Suggestion select sound.
   - Suggestion accept sound.
   - Scroll sound for Chat log screen.
-
-### 🔧 Fixed
-
-* Changes working directory of the cache.
 
 ### 👷 Technical
 
@@ -55,14 +62,23 @@
 
 * Port to 1.19.4.
 * Includes [`SoundCategories`](https://github.com/lonefelidae16/sound-categories) project using Git-Submodule feature.
+* Supports some item sounds:
+  - Pottery Shards
+  - Smithing Templates
+  - Brush
 
 ### 🔧 Fixed
 
+* Keyboard’s Cursor sound when moving rows.
 * Changes working directory of the cache.
+* Item delete sound when moving a stack from HotBar to creative slot
+  on CreativeInventory screen.
 
 ### 👷 Technical
 
-* Uses Gradle 8.0.1.
+* Dependency updates:
+  - Java 17
+  - Gradle 8.0.1
 
 ## [2.3.1+1.19.3-build.4] - 2023-03-14
 ### ✨ Added
@@ -77,23 +93,27 @@
   - Drop sound from HotBar (default <kbd>Q</kbd> key).
   - Pick item sound (default Mouse Wheel Click).
 * Changes Stick sound.
-* Supports Disc Fragment sound.
+* Supports some item sounds:
+  - Disc Fragment
+  - Bundle
 
 ### 🔧 Fixed
 
 * Prevents doubled-sounds.
 * Prevents inventory sound of other players.
-* Allows to join any players who don’t have ExtraSounds to a Singleplayer world opened on the LAN.
+* Allows to join any players who don’t have ExtraSounds to a Singleplayer world
+  opened on the LAN.
 * Pitch calculation of Drop sound.
 
 ### 👷 Technical
 
-* Uses Gradle 7.6.
-* Uses fabric-loom 1.1.
+* Dependency updates:
+  - Gradle 7.6
+  - fabric-loom 1.1
 * Refactors `mapping.SoundPackLoader` to reduce memory usage.
 * Refactors handling the cache.
-* Supports JVM argument `extrasounds.searchundef` to find the sound that is not defined in `sounds.json`
-  or the class that uses `mapping.SoundGenerator`.
+* Supports JVM argument `extrasounds.searchundef` to find the sound that is not defined
+  in `sounds.json` or the class that uses `mapping.SoundGenerator`.
 * Validates the version string in the first line of the cache.
 
 ### ❓ Known Issues
