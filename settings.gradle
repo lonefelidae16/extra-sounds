@@ -15,5 +15,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'extra-sounds'
 include 'sound-categories'
