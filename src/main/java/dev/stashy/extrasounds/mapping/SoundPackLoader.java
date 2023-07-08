@@ -101,7 +101,7 @@ public class SoundPackLoader {
 
         EXTRA_SOUNDS_RESOURCE.addAsyncResource(ResourceType.CLIENT_RESOURCES, SOUNDS_JSON_ID, identifier -> CacheData.read().asJsonBytes());
         RRPCallback.BEFORE_VANILLA.register(packs -> packs.add(EXTRA_SOUNDS_RESOURCE));
-        final long tookMillis = start - System.currentTimeMillis();
+        final long tookMillis = System.currentTimeMillis() - start;
         if (tookMillis >= 1000) {
             LOGGER.warn("[{}] init took too long; {}ms.", ExtraSounds.class.getSimpleName(), tookMillis);
         } else {
