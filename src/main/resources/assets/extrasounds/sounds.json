@@ -532,6 +532,9 @@
       }
     ]
   },
+  "entity.poof": {
+    "sounds": [ "extrasounds:entity/poof" ]
+  },
   "keyboard.type": {
     "sounds": [
       {

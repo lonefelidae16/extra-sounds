@@ -38,6 +38,10 @@ public class Sounds {
         public static final SoundEvent REPEATER_RESET = ExtraSounds.createEvent("action.repeater.reset");
     }
 
+    public static class Entities {
+        public static final SoundEvent POOF = ExtraSounds.createEvent("entity.poof");
+    }
+
     public static SoundEntry aliased(SoundEvent e) {
         return aliased(e, 1f);
     }

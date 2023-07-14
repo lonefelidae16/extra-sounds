@@ -239,9 +239,13 @@ public class SoundManager {
                 true));
     }
 
-    public static void playSound(SoundEvent snd, SoundType type, BlockPos position) {
-        playSound(new PositionedSoundInstance(snd, type.category, getSoundVolume(Mixers.MASTER), type.pitch,
+    public static void playSound(SoundEvent snd, SoundType type, float volume, float pitch, BlockPos position) {
+        playSound(new PositionedSoundInstance(snd, type.category, getSoundVolume(Mixers.MASTER) * volume, pitch,
                 MC_RANDOM, position));
+    }
+
+    public static void playSound(SoundEvent snd, SoundType type, BlockPos position) {
+        playSound(snd, type, 1f, type.pitch, position);
     }
 
     public static void playSound(SoundInstance instance) {
@@ -322,7 +326,7 @@ public class SoundManager {
         }
     }
 
-    private static float getSoundVolume(SoundCategory category) {
+    public static float getSoundVolume(SoundCategory category) {
         return MinecraftClient.getInstance().options.getSoundVolume(category);
     }
 }

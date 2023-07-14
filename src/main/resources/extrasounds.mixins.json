@@ -9,6 +9,7 @@
     "BucketFluidAccessor",
     "action.ClientPlayerEntityMixin",
     "action.ClientPlayerInteractionManagerMixin",
+    "action.LivingEntityMixin",
     "chat.ChatHudMixin",
     "effect.ClientPlayerEntityMixin",
     "hotbar.ClientPlayerEntityMixin",

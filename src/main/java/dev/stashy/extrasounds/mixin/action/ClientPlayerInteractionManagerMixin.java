@@ -41,8 +41,8 @@ public abstract class ClientPlayerInteractionManagerMixin {
             return;
         }
 
-        final SoundEvent sound = blockState.get(RepeaterBlock.DELAY) == 1 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
         if (cir.getReturnValue().isAccepted()) {
+            final SoundEvent sound = blockState.get(RepeaterBlock.DELAY) == 1 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
             SoundManager.playSound(sound, SoundType.ACTION, blockPos);
         }
     }

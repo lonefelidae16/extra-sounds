@@ -1,13 +1,13 @@
 {
   "soundCategory.extrasounds$master": "ExtraSounds",
   "soundCategory.extrasounds$inventory": "Inventory",
-  "soundCategory.extrasounds$action": "Item Actions",
+  "soundCategory.extrasounds$action": "Actions",
   "soundCategory.extrasounds$chat": "Chat Messages",
   "soundCategory.extrasounds$chat_mention": "Chat Mention",
   "soundCategory.extrasounds$effects": "Effects/Potions",
   "soundCategory.extrasounds$hotbar": "Hotbar",
   "soundCategory.extrasounds$typing": "Typing",
-  "soundCategory.extrasounds$item_drop": "Drop Actions",
+  "soundCategory.extrasounds$item_drop": "Item Drop",
 
-  "tooltip.soundCategory.extrasounds_action": "This volume is applied when the Bow is pulled or the Redstone Repeater block interacts."
+  "tooltip.soundCategory.extrasounds_action": "This volume is applied when Item interactions, Block interactions and Entity events."
 }
