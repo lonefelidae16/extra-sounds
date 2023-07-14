@@ -9,6 +9,16 @@
 
 * <small>_Caught bugs and known issues are written._</small>
 
+## [2.3.1+1.20.1-build.1] - 2023-07-14
+### ✨ Added
+
+* Compatible with 1.20 - 1.20.1.
+* Entity Death sound.
+
+### 🔧 Fixed
+
+* Calculation of sound packs loading time.
+
 ## [2.3.1+1.20-build.1] - 2023-06-08
 ### ✨ Added
 
