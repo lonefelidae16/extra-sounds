@@ -152,7 +152,7 @@ public class SoundPackLoader {
             }
 
             final Identifier pickupSoundId = ExtraSounds.getClickId(itemId, SoundType.PICKUP);
-            final SoundEntry pickupSoundEntry = Sounds.aliased(SoundEvent.of(pickupSoundId));
+            final SoundEntry pickupSoundEntry = Sounds.aliased(ExtraSounds.createEvent(pickupSoundId));
             generateSoundEntry(itemId, SoundType.PICKUP, definition.pickup, pickupSoundEntry, resource);
             generateSoundEntry(itemId, SoundType.PLACE, definition.place, pickupSoundEntry, resource);
             generateSoundEntry(itemId, SoundType.HOTBAR, definition.hotbar, pickupSoundEntry, resource);
@@ -189,7 +189,7 @@ public class SoundPackLoader {
      * @param clickId Target id.
      */
     private static void putSoundEvent(Identifier clickId) {
-        CUSTOM_SOUND_EVENT.put(clickId, SoundEvent.of(clickId));
+        CUSTOM_SOUND_EVENT.put(clickId, ExtraSounds.createEvent(clickId));
     }
 
     /**

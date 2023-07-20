@@ -94,8 +94,7 @@ public class DebugUtils {
             if (!Files.exists(p))
                 Files.createFile(p);
         } catch (IOException e) {
-            LOGGER.error("Unable to create file: " + p);
-            e.printStackTrace();
+            LOGGER.error("Unable to create file: " + p, e);
         }
     }
 }

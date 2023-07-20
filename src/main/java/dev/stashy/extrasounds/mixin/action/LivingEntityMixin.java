@@ -3,8 +3,6 @@ package dev.stashy.extrasounds.mixin.action;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -27,12 +25,8 @@ public abstract class LivingEntityMixin extends Entity {
             return;
         }
 
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) {
-            return;
-        }
-
-        final float pitch = (float) MathHelper.clampedLerp(2f, 0.25f,  Math.sqrt(this.getHeight() * this.getWidth()) / 2.5f);
+        final float flu = (this.random.nextFloat() - 0.5f) * 0.333333f;
+        final float pitch = flu + (float) MathHelper.clampedLerp(2f, 0.5f,  Math.sqrt(this.getHeight() * this.getWidth()) * 0.4f);
         SoundManager.playSound(Sounds.Entities.POOF, SoundType.ACTION, .7f, pitch, this.getBlockPos());
     }
 }
