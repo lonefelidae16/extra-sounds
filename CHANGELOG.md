@@ -7,7 +7,14 @@
 
 ### 💭 Bugs / Issues
 
-* <small>_Caught bugs and known issues are written._</small>
+<!--* <small>_Caught bugs and known issues are written._</small>-->
+* Scheduled for refactoring:
+  - `ExtraSounds`
+  - `mapping.SoundPackLoader`
+  - `action.LivingEntityMixin`
+  - `debug.DebugUtils`
+* Pitch for Entity Death is always the same.
+* fabric-loom 1.3 is available.
 
 ## [2.3.1+1.20.1-build.1] - 2023-07-14
 ### ✨ Added
@@ -28,7 +35,7 @@
 ### 🔧 Fixed
 
 * Typing sound turns on by default.
-* Keyboard’s Cut action sound on edit screen.
+* Keyboard’s Cut action sound on edit screen:
   - Book and Quill
   - Signboard
 
@@ -56,14 +63,14 @@
 ### ✨ Added
 
 * Makes Drop Sound optional.
-* More Chat and Command input sounds.
+* More Chat and Command input sounds:
   - Suggestion select sound.
   - Suggestion accept sound.
   - Scroll sound for Chat log screen.
 
 ### 👷 Technical
 
-* Refactors mixins.
+* Refactors mixins:
   - Changes the class name based on its mixin target class.
   - Adds prefix `extrasounds$` to method names.
 
@@ -94,10 +101,10 @@
 ### ✨ Added
 
 * Port to 1.19.3.
-* More Keyboard sounds during editing.
+* More Keyboard sounds during editing:
   - Book and Quill
   - Signboard
-* More sounds.
+* More sounds:
   - Swap-with-Offhand action (default <kbd>F</kbd> key).
   - Swap-with-HotBar action (default <kbd>1</kbd>-<kbd>9</kbd> key).
   - Drop sound from HotBar (default <kbd>Q</kbd> key).
