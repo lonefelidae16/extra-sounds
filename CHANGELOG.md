@@ -3,7 +3,8 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-* <small>_Exciting new features may be coming here._</small>
+<!-- <small>_Exciting new features may be coming here._</small> -->
+* Port to 1.20.2.
 
 ### 💭 Bugs / Issues
 
@@ -14,7 +15,9 @@
   - `action.LivingEntityMixin`
   - `debug.DebugUtils`
 * Pitch for Entity Death is always the same.
-* fabric-loom 1.3 is available.
+* Build toolchain updates are available:
+  - Gradle 8.2.1
+  - fabric-loom 1.3
 
 ## [2.3.1+1.20.1-build.1] - 2023-07-14
 ### ✨ Added
