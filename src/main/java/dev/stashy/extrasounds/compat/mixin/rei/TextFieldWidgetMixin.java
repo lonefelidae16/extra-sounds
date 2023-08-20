@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Pseudo
-@Mixin(value = TextFieldWidget.class, remap = false)
+@Mixin(TextFieldWidget.class)
 public abstract class TextFieldWidgetMixin implements TextField {
     @Unique
     private final TextFieldContainer container = new TextFieldContainer();
@@ -28,13 +28,13 @@ public abstract class TextFieldWidgetMixin implements TextField {
     @Shadow
     public abstract String getText();
 
-    @Inject(method = "erase", at = @At("HEAD"))
+    @Inject(method = "erase", at = @At("HEAD"), remap = false)
     private void extrasounds$eraseStrHead(int offset, CallbackInfo ci) {
         if (this.container.canErase(offset, this.getText().length(), this.cursorPos, this.cursorPos)) {
             SoundManager.keyboard(SoundManager.KeyType.ERASE);
         }
     }
-    @Inject(method = "erase", at = @At("RETURN"))
+    @Inject(method = "erase", at = @At("RETURN"), remap = false)
     private void extrasounds$eraseStrReturn(int offset, CallbackInfo ci) {
         this.container.setCursor(this.cursorPos);
     }
