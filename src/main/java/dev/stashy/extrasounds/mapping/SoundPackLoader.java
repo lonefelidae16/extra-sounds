@@ -198,9 +198,9 @@ public class SoundPackLoader {
      *
      * @param version   The cache version.
      * @param itemCount The number of the Item Registry.
-     * @param info      The String array of mod ids.
+     * @param modInfo   The String array of mod ids.
      */
-    record CacheInfo(int version, int itemCount, String[] info) {
+    record CacheInfo(int version, int itemCount, String[] modInfo) {
         private static final String DELIMITER_MOD_INFO = ",";
         private static final String DELIMITER_HEAD = ";";
 
@@ -234,13 +234,13 @@ public class SoundPackLoader {
             if (obj instanceof CacheInfo comp)
                 return this.version == comp.version
                         && this.itemCount == comp.itemCount
-                        && Arrays.equals(this.info, comp.info);
+                        && Arrays.equals(this.modInfo, comp.modInfo);
             return false;
         }
 
         public String toString() {
             final CharSequence[] data = new CharSequence[]{
-                    String.valueOf(version), String.valueOf(itemCount), String.join(DELIMITER_MOD_INFO, info)
+                    String.valueOf(version), String.valueOf(itemCount), String.join(DELIMITER_MOD_INFO, modInfo)
             };
             return String.join(DELIMITER_HEAD, data);
         }
@@ -251,19 +251,16 @@ public class SoundPackLoader {
          * @param container Target.
          * @return Generated String.
          */
-        private static String getModVersion(EntrypointContainer<SoundGenerator> container) {
-            if (container == null) {
-                return "<NULL>";
+        private static String getModVersion(EntrypointContainer<?> container) {
+            try {
+                final ModMetadata metadata = container.getProvider().getMetadata();
+                final String modId = metadata.getId();
+                final String modVer = metadata.getVersion().getFriendlyString();
+                return validate("%s %s".formatted(modId, modVer));
+            } catch (Throwable ex) {
+                LOGGER.error("[%s] failed to obtain mod info.".formatted(ExtraSounds.class.getSimpleName()), ex);
             }
-
-            final ModMetadata metadata = container.getProvider().getMetadata();
-            if (metadata == null) {
-                return "<NULL>";
-            }
-
-            final String modId = metadata.getId();
-            final String modVer = metadata.getVersion().getFriendlyString();
-            return validate("%s %s".formatted(modId, modVer));
+            return "<NULL>";
         }
 
         private static String validate(String in) {
