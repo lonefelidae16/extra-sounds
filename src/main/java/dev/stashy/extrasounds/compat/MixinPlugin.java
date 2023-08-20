@@ -1,6 +1,5 @@
 package dev.stashy.extrasounds.compat;
 
-import dev.stashy.extrasounds.compat.mixin.rei.TextFieldWidgetMixin;
 import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
@@ -22,7 +21,7 @@ public final class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return mixinClassName.contains(TextFieldWidgetMixin.class.getCanonicalName()) && FabricLoader.getInstance().isModLoaded("roughlyenoughitems");
+        return mixinClassName.contains("dev.stashy.extrasounds.compat.mixin.rei") && FabricLoader.getInstance().isModLoaded("roughlyenoughitems");
     }
 
     @Override
