@@ -38,6 +38,7 @@ dependencies {
     modImplementation include("maven.modrinth:arrp:${project.arrp_version}")
     compileOnly include(project(path: ':sound-categories'))
     runtimeOnly fileTree(include: ["*+${project.minecraft_version}-dev.jar"], exclude: ['*-sources.jar'], dir: 'sound-categories/build/devlibs')
+    compileOnly 'maven.modrinth:rei:12.0.645+fabric'
 }
 
 processResources {

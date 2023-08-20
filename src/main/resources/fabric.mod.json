@@ -27,7 +27,8 @@
     ]
   },
   "mixins": [
-    "extrasounds.mixins.json"
+    "extrasounds.mixins.json",
+    "extrasounds.compat.mixins.json"
   ],
   "depends": {
     "fabricloader": "*",
