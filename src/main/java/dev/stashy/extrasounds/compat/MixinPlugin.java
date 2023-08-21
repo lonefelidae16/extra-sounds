@@ -1,6 +1,7 @@
 package dev.stashy.extrasounds.compat;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.util.Identifier;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -21,6 +22,9 @@ public final class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        if (isSnapshotVersion()) {
+            return false;
+        }
         return mixinClassName.contains("dev.stashy.extrasounds.compat.mixin.rei") && FabricLoader.getInstance().isModLoaded("roughlyenoughitems");
     }
 
@@ -42,5 +46,23 @@ public final class MixinPlugin implements IMixinConfigPlugin {
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
 
+    }
+
+    private static boolean isSnapshotVersion() {
+        try {
+            var minecraft = FabricLoader.getInstance().getModContainer(Identifier.DEFAULT_NAMESPACE);
+            minecraft.orElseThrow();
+            String gameVersion = minecraft.get().getMetadata().getVersion().toString();
+            if (gameVersion.contains("-alpha")) {
+                return true;
+            } else if (gameVersion.contains("-beta")) {
+                return true;
+            } else if (gameVersion.contains("-rc")) {
+                return true;
+            }
+        } catch (Throwable ignored) {
+            return true;
+        }
+        return false;
     }
 }

@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.mixin.typing;
 
 import dev.stashy.extrasounds.SoundManager;
-import dev.stashy.extrasounds.impl.TextFieldContainer;
+import dev.stashy.extrasounds.impl.TextFieldState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,14 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(TextFieldWidget.class)
 public abstract class TextFieldWidgetMixin {
     @Unique
-    private final TextFieldContainer container = new TextFieldContainer();
+    private final TextFieldState state = new TextFieldState();
 
     @Shadow
     private int selectionStart;
     @Shadow
     private int selectionEnd;
-    @Shadow
-    private int maxLength;
 
     @Shadow
     public abstract String getSelectedText();
@@ -32,13 +30,11 @@ public abstract class TextFieldWidgetMixin {
 
     @Inject(method = "erase", at = @At("HEAD"))
     private void extrasounds$eraseStrHead(int offset, CallbackInfo ci) {
-        if (this.container.canErase(offset, this.getText().length(), this.selectionStart, this.selectionEnd)) {
-            SoundManager.keyboard(SoundManager.KeyType.ERASE);
-        }
+        this.state.onErase(offset, this.getText().length(), this.selectionStart, this.selectionEnd);
     }
     @Inject(method = "erase", at = @At("RETURN"))
     private void extrasounds$eraseStrReturn(int offset, CallbackInfo ci) {
-        this.container.setCursor(this.selectionEnd);
+        this.state.setCursor(this.selectionEnd);
     }
 
     @Inject(
@@ -54,16 +50,16 @@ public abstract class TextFieldWidgetMixin {
             return;
         }
         SoundManager.keyboard(SoundManager.KeyType.CUT);
-        this.container.setCursor(this.selectionEnd);
+        this.state.setCursor(this.selectionEnd);
     }
 
     @Inject(method = "charTyped", at = @At("RETURN"))
     private void extrasounds$appendChar(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValue() || this.getText().length() >= this.maxLength) {
+        if (!cir.getReturnValue() || !this.state.isPosUpdated(this.selectionStart, this.selectionEnd)) {
             return;
         }
         SoundManager.keyboard(SoundManager.KeyType.INSERT);
-        this.container.setCursor(this.selectionEnd);
+        this.state.setCursor(this.selectionEnd);
     }
 
     @Inject(
@@ -75,11 +71,11 @@ public abstract class TextFieldWidgetMixin {
             )
     )
     private void extrasounds$pasteAction(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (!Screen.isPaste(keyCode) || this.getText().length() >= this.maxLength) {
+        if (!Screen.isPaste(keyCode) || !this.state.isPosUpdated(this.selectionStart, this.selectionEnd)) {
             return;
         }
         SoundManager.keyboard(SoundManager.KeyType.PASTE);
-        this.container.setCursor(this.selectionEnd);
+        this.state.setCursor(this.selectionEnd);
     }
 
     @Inject(method = "keyPressed",
@@ -91,11 +87,11 @@ public abstract class TextFieldWidgetMixin {
             }
     )
     private void extrasounds$cursorMoveKeyTyped(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        this.container.onCursorChanged(this.selectionStart, this.selectionEnd);
+        this.state.onCursorChanged(this.selectionStart, this.selectionEnd);
     }
 
     @Inject(method = "onClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursor(I)V", shift = At.Shift.AFTER))
     private void extrasounds$clickEvent(double mouseX, double mouseY, CallbackInfo ci) {
-        this.container.onCursorChanged(this.selectionStart, this.selectionEnd);
+        this.state.onCursorChanged(this.selectionStart, this.selectionEnd);
     }
 }

@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.mixin.typing;
 
 import dev.stashy.extrasounds.SoundManager;
-import dev.stashy.extrasounds.impl.TextFieldContainer;
+import dev.stashy.extrasounds.impl.TextFieldState;
 import net.minecraft.client.util.SelectionManager;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 @Mixin(SelectionManager.class)
 public abstract class SelectionManagerMixin {
     @Unique
-    private final TextFieldContainer container = new TextFieldContainer();
+    private final TextFieldState state = new TextFieldState();
     @Unique
     private boolean bPasteAction = false;
 
@@ -33,13 +33,11 @@ public abstract class SelectionManagerMixin {
     @Inject(method = METHOD_SIGN_DELETE, at = @At("HEAD"))
     private void extrasounds$beforeDelete(int offset, SelectionManager.SelectionType selectionType, CallbackInfo ci) {
         final String text = this.stringGetter.get();
-        if (this.container.canErase(offset, text.length(), this.selectionStart, this.selectionEnd)) {
-            SoundManager.keyboard(SoundManager.KeyType.ERASE);
-        }
+        this.state.onErase(offset, text.length(), this.selectionStart, this.selectionEnd);
     }
     @Inject(method = METHOD_SIGN_DELETE, at = @At("RETURN"))
     private void extrasounds$afterDelete(int offset, SelectionManager.SelectionType selectionType, CallbackInfo ci) {
-        this.container.setCursor(this.selectionEnd);
+        this.state.setCursor(this.selectionEnd);
     }
 
     @Inject(method = "cut", at = @At("HEAD"))
@@ -52,12 +50,12 @@ public abstract class SelectionManagerMixin {
 
     @Inject(method = "cut", at = @At("RETURN"))
     private void extrasounds$afterCut(CallbackInfo ci) {
-        this.container.setCursor(this.selectionEnd);
+        this.state.setCursor(this.selectionEnd);
     }
 
     @Inject(method = "insert(Ljava/lang/String;Ljava/lang/String;)V", at = @At("RETURN"))
     private void extrasounds$appendChar(String string, String insertion, CallbackInfo ci) {
-        if (!this.container.isPosUpdated(this.selectionStart, this.selectionEnd)) {
+        if (!this.state.isPosUpdated(this.selectionStart, this.selectionEnd)) {
             return;
         }
         if (this.bPasteAction) {
@@ -68,7 +66,7 @@ public abstract class SelectionManagerMixin {
         } else {
             SoundManager.keyboard(SoundManager.KeyType.INSERT);
         }
-        this.container.setCursor(this.selectionEnd);
+        this.state.setCursor(this.selectionEnd);
     }
 
     @Inject(method = "paste", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/SelectionManager;insert(Ljava/lang/String;Ljava/lang/String;)V"))
@@ -78,11 +76,11 @@ public abstract class SelectionManagerMixin {
 
     @Inject(method = "updateSelectionRange(Z)V", at = @At("RETURN"))
     private void extrasounds$moveCursor(boolean shiftDown, CallbackInfo ci) {
-        if (!this.container.isPosUpdated(this.selectionStart, this.selectionEnd)) {
+        if (!this.state.isPosUpdated(this.selectionStart, this.selectionEnd)) {
             return;
         }
         SoundManager.keyboard(SoundManager.KeyType.CURSOR);
-        this.container.setCursorStart(this.selectionStart);
-        this.container.setCursorEnd(this.selectionEnd);
+        this.state.setCursorStart(this.selectionStart);
+        this.state.setCursorEnd(this.selectionEnd);
     }
 }
