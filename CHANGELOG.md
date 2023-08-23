@@ -5,10 +5,13 @@
 
 <!-- <small>_Exciting new features may be coming here._</small> -->
 * Port to 1.20.2.
+* Supports Typing sound for the search input field of [RoughlyEnoughItems](https://modrinth.com/mod/rei).
+  (suggested by [#8](https://github.com/lonefelidae16/extra-sounds/issues/8))
 
 ### 💭 Bugs / Issues
 
 <!--* <small>_Caught bugs and known issues are written._</small>-->
+* Integration is always enabled regardless of whether Minecraft version is a snapshot or not.
 * Scheduled for refactoring:
   - `ExtraSounds`
   - `mapping.SoundPackLoader`
@@ -16,7 +19,7 @@
   - `debug.DebugUtils`
 * Pitch for Entity Death is always the same.
 * Build toolchain updates are available:
-  - Gradle 8.2.1
+  - Gradle 8.3
   - fabric-loom 1.3
 
 ## [2.3.1+1.20.1-build.1] - 2023-07-14
@@ -37,7 +40,7 @@
 
 ### 🔧 Fixed
 
-* Typing sound turns on by default.
+* Typing sound turns on by default. (suggested by [#3](https://github.com/lonefelidae16/extra-sounds/issues/3))
 * Keyboard’s Cut action sound on edit screen:
   - Book and Quill
   - Signboard
