@@ -7,7 +7,6 @@ import dev.stashy.extrasounds.sounds.SoundType;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 public class ExtraSounds implements ClientModInitializer {

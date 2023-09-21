@@ -13,7 +13,7 @@
     "chat.ChatHudMixin",
     "effect.ClientPlayerEntityMixin",
     "hotbar.ClientPlayerEntityMixin",
-    "hotbar.ClientPlayNetworkHandlerMixin",
+    "hotbar.ClientConnectionMixin",
     "hotbar.MinecraftClientMixin",
     "hotbar.MouseMixin",
     "inventory.ClientPlayerInteractionManagerMixin",

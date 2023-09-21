@@ -33,7 +33,7 @@
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "minecraft": "~1.20",
+    "minecraft": "~1.20.2",
     "advanced_runtime_resource_pack": "*",
     "fabric-resource-loader-v0": "*",
     "soundcategories": "*"

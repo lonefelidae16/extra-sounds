@@ -3,11 +3,12 @@ package dev.stashy.extrasounds.mixin.hotbar;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.sounds.SoundType;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.network.PacketCallbacks;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,14 +18,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * For Swap with Off-hand action.
  */
-@Mixin(ClientPlayNetworkHandler.class)
-public abstract class ClientPlayNetworkHandlerMixin {
+@Mixin(ClientConnection.class)
+public abstract class ClientConnectionMixin {
     @Shadow
-    private @Final MinecraftClient client;
+    public abstract boolean isOpen();
 
-    @Inject(method = "sendPacket", at = @At("HEAD"))
-    private void extrasounds$hotbarSwapEvent(Packet<?> packet, CallbackInfo ci) {
-        if (this.client.player == null) {
+    @Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;Z)V", at = @At("HEAD"))
+    private void extrasounds$hotbarSwapEvent(Packet<?> packet, PacketCallbacks callbacks, boolean flush, CallbackInfo ci) {
+        final ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        if (player == null) {
+            return;
+        }
+        if (!this.isOpen()) {
             return;
         }
         if (!(packet instanceof PlayerActionC2SPacket actionC2SPacket)) {
@@ -34,9 +39,9 @@ public abstract class ClientPlayNetworkHandlerMixin {
             return;
         }
 
-        ItemStack itemStack = this.client.player.getOffHandStack();
+        ItemStack itemStack = player.getOffHandStack();
         if (itemStack.isEmpty()) {
-            itemStack = this.client.player.getMainHandStack();
+            itemStack = player.getMainHandStack();
         }
         SoundManager.playSound(itemStack, SoundType.PICKUP);
     }
