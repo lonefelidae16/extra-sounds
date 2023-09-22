@@ -3,24 +3,31 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-<!-- <small>_Exciting new features may be coming here._</small> -->
+* <small>_Exciting new features may be coming here._</small>
+
+### 💭 Bugs / Issues
+
+* <small>_Caught bugs and known issues are written._</small>
+
+## [2.3.1+1.20.2-build.1] - 2023-09-22
+### ✨ Added
+
 * Port to 1.20.2.
 * Supports Typing sound for the search input field of [RoughlyEnoughItems](https://modrinth.com/mod/rei).
   (suggested by [#8](https://github.com/lonefelidae16/extra-sounds/issues/8))
 
-### 💭 Bugs / Issues
+### 🔧 Fixed
 
-<!--* <small>_Caught bugs and known issues are written._</small>-->
-* Integration is always enabled regardless of whether Minecraft version is a snapshot or not.
-* Scheduled for refactoring:
-  - `ExtraSounds`
-  - `mapping.SoundPackLoader`
-  - `action.LivingEntityMixin`
-  - `debug.DebugUtils`
-* Pitch for Entity Death is always the same.
-* Build toolchain updates are available:
+* Randomize pitch of Entity Death.
+
+### 👷 Technical
+
+* Some files were refactored.
+* Dependency updates:
   - Gradle 8.3
   - fabric-loom 1.3
+* New dependency:
+  - RoughlyEnoughItems 13.0.655
 
 ## [2.3.1+1.20.1-build.1] - 2023-07-14
 ### ✨ Added
