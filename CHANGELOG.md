@@ -7,7 +7,12 @@
 
 ### 💭 Bugs / Issues
 
-* <small>_Caught bugs and known issues are written._</small>
+<!-- <small>_Caught bugs and known issues are written._</small> -->
+* Effect sounds are played even when the icon is not shown.
+* Sounds don’t match actions on CreativeInventory screen when thrown or deleted.
+* Build toolchain updates are available:
+  - fabric-loom 1.4
+  - fabric-loader 0.14.23
 
 ## [2.3.1+1.20.2-build.1] - 2023-09-22
 ### ✨ Added
