@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 public final class MixinPlugin implements IMixinConfigPlugin {
+    private static final boolean B_SNAPSHOT = isSnapshotVersion();
+
     @Override
     public void onLoad(String mixinPackage) {
 
@@ -22,7 +24,7 @@ public final class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (isSnapshotVersion()) {
+        if (B_SNAPSHOT) {
             return false;
         }
         return mixinClassName.contains("dev.stashy.extrasounds.compat.mixin.rei") && FabricLoader.getInstance().isModLoaded("roughlyenoughitems");
@@ -50,9 +52,8 @@ public final class MixinPlugin implements IMixinConfigPlugin {
 
     private static boolean isSnapshotVersion() {
         try {
-            var minecraft = FabricLoader.getInstance().getModContainer(Identifier.DEFAULT_NAMESPACE);
-            minecraft.orElseThrow();
-            String gameVersion = minecraft.get().getMetadata().getVersion().toString();
+            var minecraft = FabricLoader.getInstance().getModContainer(Identifier.DEFAULT_NAMESPACE).orElseThrow();
+            String gameVersion = minecraft.getMetadata().getVersion().toString();
             if (gameVersion.contains("-alpha")) {
                 return true;
             } else if (gameVersion.contains("-beta")) {

@@ -9,7 +9,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
@@ -28,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CreativeInventoryScreen.class)
 public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler> {
     @Unique
-    private static final ItemGroup GROUP_INVENTORY = Registries.ITEM_GROUP.get(ItemGroups.INVENTORY);
+    private static final ItemGroup.Type TYPE_INVENTORY = ItemGroup.Type.INVENTORY;
 
     @Shadow
     private static ItemGroup selectedTab;
@@ -55,25 +54,23 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
 
         if (actionType == SlotActionType.THROW && slot != null && slotId >= 0) {
             // CreativeInventory can drop items while holding anything on cursor
+            final boolean bItemDelete = selectedTab.getType() != TYPE_INVENTORY && bOnHotbar && (slot.getStack().getMaxCount() == 1 || button == 1);
             final ItemStack slotStack = slot.getStack().copy();
-            if (button == 1 && selectedTab != GROUP_INVENTORY) {
-                if (bOnHotbar) {
-                    // Pressed Ctrl + Q on Hotbar to delete the stack only when not in Inventory tab
-                    SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
-                    return;
-                }
-                // If not, it pressed on the slot in CreativeInventory tab
-                slotStack.setCount(slotStack.getMaxCount());
-            } else if (button == 0) {
+            if (button == 0) {
                 // Pressed Q key only
                 slotStack.setCount(1);
+            }
+            if (bItemDelete) {
+                // Item will be deleted
+                SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
+                return;
             }
             SoundManager.playThrow(slotStack);
             return;
         }
 
         if (actionType == SlotActionType.QUICK_MOVE &&
-                selectedTab != GROUP_INVENTORY &&
+                selectedTab.getType() != TYPE_INVENTORY &&
                 bOnHotbar &&
                 slot.hasStack()
         ) {

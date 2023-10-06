@@ -26,12 +26,19 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Override
     protected void onStatusEffectApplied(StatusEffectInstance effect, @Nullable Entity source) {
         super.onStatusEffectApplied(effect, source);
+        if (!effect.shouldShowIcon()) {
+            return;
+        }
         SoundManager.effectChanged(effect.getEffectType(), SoundManager.EffectType.ADD);
     }
 
     @Inject(method = "removeStatusEffectInternal", at = @At("HEAD"))
     private void extrasounds$effectRemoved(StatusEffect type, CallbackInfoReturnable<StatusEffectInstance> cir) {
-        if (this.hasStatusEffect(type)) {
+        StatusEffectInstance effect = getActiveStatusEffects().get(type);
+        if (effect == null) {
+            return;
+        }
+        if (effect.shouldShowIcon()) {
             SoundManager.effectChanged(type, SoundManager.EffectType.REMOVE);
         }
     }
