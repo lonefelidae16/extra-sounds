@@ -39,7 +39,7 @@ public class SoundManager {
     /**
      * Predicate of Right Mouse Click.
      */
-    private static final BiPredicate<SlotActionType, Integer> RIGHT_CLICK_PREDICATE = (actionType, button) -> {
+    public static final BiPredicate<SlotActionType, Integer> RIGHT_CLICK_PREDICATE = (actionType, button) -> {
         return (actionType != SlotActionType.THROW && actionType != SlotActionType.SWAP) && button == 1 ||
                 actionType == SlotActionType.QUICK_CRAFT && ScreenHandler.unpackQuickCraftButton(button) == 1;
     };
@@ -83,7 +83,7 @@ public class SoundManager {
         }
     }
 
-    public static void inventoryClick(ItemStack inSlot, ItemStack onCursor, SlotActionType actionType) {
+    public static void inventoryClick(ItemStack inSlot, ItemStack onCursor, SlotActionType actionType, int button) {
         final boolean hasCursor = !onCursor.isEmpty();
         final boolean hasSlot = !inSlot.isEmpty();
         if (!hasCursor && !hasSlot) {
@@ -107,10 +107,10 @@ public class SoundManager {
                 }
             }
             default -> {
-                if (hasSlot) {
-                    playSound(inSlot, SoundType.PICKUP);
-                } else {
+                if (hasCursor || RIGHT_CLICK_PREDICATE.test(actionType, button)) {
                     playSound(onCursor, SoundType.PLACE);
+                } else {
+                    playSound(inSlot, SoundType.PICKUP);
                 }
             }
         }
@@ -186,7 +186,7 @@ public class SoundManager {
         } catch (Throwable ignore) {
         }
 
-        inventoryClick(slotItem, cursorItem, actionType);
+        inventoryClick(slotItem, cursorItem, actionType, button);
     }
 
     public static void playSound(ItemStack stack, SoundType type) {

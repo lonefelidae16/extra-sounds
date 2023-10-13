@@ -39,10 +39,12 @@ public abstract class ClientConnectionMixin {
             return;
         }
 
-        ItemStack itemStack = player.getOffHandStack();
-        if (itemStack.isEmpty()) {
-            itemStack = player.getMainHandStack();
+        final ItemStack offHandStack = player.getOffHandStack();
+        final ItemStack mainHandStack = player.getMainHandStack();
+        if (!offHandStack.isEmpty()) {
+            SoundManager.playSound(offHandStack, SoundType.PICKUP);
+        } else if (!mainHandStack.isEmpty()) {
+            SoundManager.playSound(mainHandStack, SoundType.PICKUP);
         }
-        SoundManager.playSound(itemStack, SoundType.PICKUP);
     }
 }

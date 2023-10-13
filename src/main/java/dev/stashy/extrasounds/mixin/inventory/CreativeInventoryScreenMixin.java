@@ -89,10 +89,16 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
             if (slotId > 0 &&
                     actionType != SlotActionType.QUICK_CRAFT &&
                     actionType != SlotActionType.PICKUP_ALL &&
-                    !bOnHotbar
+                    !bOnHotbar &&
+                    slot != null
             ) {
-                // Clicked on the slot in CreativeInventory tab except Hotbar
-                SoundManager.playSound(cursorStack, SoundType.PLACE);
+                if (ItemStack.canCombine(slot.getStack(), cursorStack) && !SoundManager.RIGHT_CLICK_PREDICATE.test(actionType, button)) {
+                    // Left Mouse Clicked on the same slot in CreativeInventory tab except Hotbar
+                    SoundManager.playSound(cursorStack, SoundType.PICKUP);
+                } else {
+                    // On another slot will delete the cursor stack
+                    SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
+                }
                 return;
             }
         }
