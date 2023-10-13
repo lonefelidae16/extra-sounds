@@ -10,7 +10,13 @@
 <!-- <small>_Caught bugs and known issues are written._</small> -->
 * Effect sounds are played even when the icon is not shown.
 * Sounds don’t match actions on CreativeInventory screen when thrown or deleted.
+* Scheduled for refactoring:
+  - `SoundManager`
+  - `mixin.effect.ClientPlayerEntityMixin`
+  - `mixin.inventory.HandledScreenMixin`
+* Swap-with-Offhand Sound plays when both Main-hand and Off-hand are empty.
 * Build toolchain updates are available:
+  - Gradle 8.4
   - fabric-loom 1.4
   - fabric-loader 0.14.23
 
