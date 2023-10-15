@@ -37,5 +37,6 @@
     "advanced_runtime_resource_pack": "*",
     "fabric-resource-loader-v0": "*",
     "soundcategories": "*"
-  }
+  },
+  "accessWidener": "extrasounds.accesswidener"
 }

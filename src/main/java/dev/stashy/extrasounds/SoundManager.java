@@ -5,6 +5,7 @@ import dev.stashy.extrasounds.debug.DebugUtils;
 import dev.stashy.extrasounds.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
+import dev.stashy.extrasounds.throwable.NoSuchSoundException;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
@@ -83,7 +84,7 @@ public class SoundManager {
         }
     }
 
-    public static void inventoryClick(ItemStack inSlot, ItemStack onCursor, SlotActionType actionType, int button) {
+    public static void inventoryClick(ItemStack inSlot, ItemStack onCursor, SlotActionType actionType) {
         final boolean hasCursor = !onCursor.isEmpty();
         final boolean hasSlot = !inSlot.isEmpty();
         if (!hasCursor && !hasSlot) {
@@ -107,7 +108,23 @@ public class SoundManager {
                 }
             }
             default -> {
-                if (hasCursor || RIGHT_CLICK_PREDICATE.test(actionType, button)) {
+                /*
+                 * hasCursor == true, hasSlot == true
+                 *  --> ItemStack#canCombine ? PLACE : EXCHANGE;
+                 *
+                 * hasCursor == true, hasSlot == false
+                 *  --> PLACE
+                 *
+                 * hasCursor == false, hasSlot == true
+                 *  --> PICKUP
+                 */
+                if (hasSlot && hasCursor) {
+                    if (ItemStack.canCombine(inSlot, onCursor)) {
+                        playSound(onCursor, SoundType.PLACE);
+                    } else {
+                        playSound(inSlot, SoundType.PICKUP);
+                    }
+                } else if (hasCursor) {
                     playSound(onCursor, SoundType.PLACE);
                 } else {
                     playSound(inSlot, SoundType.PICKUP);
@@ -174,7 +191,7 @@ public class SoundManager {
         }
 
         // Test if the item should not play sound
-        try {
+        {
             var predicateForCursor = IGNORE_SOUND_PREDICATE_MAP.getOrDefault(cursorItem.getItem(), null);
             if (predicateForCursor != null && predicateForCursor.test(actionType, button)) {
                 return;
@@ -183,21 +200,27 @@ public class SoundManager {
             if (predicateForSlot != null && predicateForSlot.test(actionType, button)) {
                 return;
             }
-        } catch (Throwable ignore) {
         }
 
-        inventoryClick(slotItem, cursorItem, actionType, button);
+        inventoryClick(slotItem, cursorItem, actionType);
     }
 
-    public static void playSound(ItemStack stack, SoundType type) {
+    public static SoundEvent getSoundOrThrow(ItemStack stack, SoundType type) throws NoSuchSoundException {
         var itemId = Registries.ITEM.getId(stack.getItem());
         Identifier id = ExtraSounds.getClickId(itemId, type);
         SoundEvent event = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
         if (event == null) {
-            LOGGER.error("Sound cannot be found in packs: {}", id);
-            return;
+            throw new NoSuchSoundException("Sound cannot be found in packs: " + id);
         }
-        playSound(event, type);
+        return event;
+    }
+
+    public static void playSound(ItemStack stack, SoundType type) {
+        try {
+            playSound(getSoundOrThrow(stack, type), type);
+        } catch (NoSuchSoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
     }
 
     public static void effectChanged(StatusEffect effect, EffectType type) {
@@ -244,8 +267,18 @@ public class SoundManager {
                 MC_RANDOM, position));
     }
 
-    public static void playSound(SoundEvent snd, SoundType type, BlockPos position) {
-        playSound(snd, type, 1f, type.pitch, position);
+    public static void actionSound(SoundEvent snd, BlockPos position) {
+        SoundType action = SoundType.ACTION;
+        playSound(snd, action, 1f, action.pitch, position);
+    }
+
+    public static void actionSound(ItemStack stack, BlockPos position) {
+        SoundType action = SoundType.ACTION;
+        try {
+            playSound(getSoundOrThrow(stack, SoundType.PICKUP), action, 1f, action.pitch, position);
+        } catch (NoSuchSoundException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
     }
 
     public static void playSound(SoundInstance instance) {
