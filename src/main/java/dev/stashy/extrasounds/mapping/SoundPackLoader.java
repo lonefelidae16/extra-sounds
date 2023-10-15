@@ -85,7 +85,7 @@ public class SoundPackLoader {
 
             final JsonObject jsonObject = cacheData.asJsonObject();
             jsonObject.keySet().forEach(key -> putSoundEvent(new Identifier(ExtraSounds.MODID, key)));
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             // If there is an exception, regenerate and write the cache.
             DebugUtils.genericLog(ex.getMessage());
             LOGGER.info("[{}] Regenerating cache...", ExtraSounds.class.getSimpleName());
@@ -128,7 +128,7 @@ public class SoundPackLoader {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
                 final JsonObject jsonObject = JsonParser.parseString(reader.lines().collect(Collectors.joining())).getAsJsonObject();
                 inSoundsJsonIds.addAll(jsonObject.keySet());
-            } catch (Throwable ex) {
+            } catch (Exception ex) {
                 LOGGER.warn("cannot open ExtraSounds' sounds.json.", ex);
             }
         }
@@ -144,7 +144,7 @@ public class SoundPackLoader {
                     final Block block = blockItem.getBlock();
                     final SoundEvent blockSound = block.getSoundGroup(block.getDefaultState()).getPlaceSound();
                     blockSoundDef = SoundDefinition.of(Sounds.aliased(blockSound));
-                } catch (Throwable ignored) {
+                } catch (Exception ignored) {
                 }
                 definition = blockSoundDef;
             } else {
@@ -224,7 +224,7 @@ public class SoundPackLoader {
             try {
                 var arr = string.split(DELIMITER_HEAD);
                 return new CacheInfo(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]), arr[2].split(DELIMITER_MOD_INFO));
-            } catch (Throwable ignored) {
+            } catch (Exception ignored) {
                 return new CacheInfo(0, 0, new String[0]);
             }
         }
@@ -257,7 +257,7 @@ public class SoundPackLoader {
                 final String modId = metadata.getId();
                 final String modVer = metadata.getVersion().getFriendlyString();
                 return validate("%s %s".formatted(modId, modVer));
-            } catch (Throwable ex) {
+            } catch (Exception ex) {
                 LOGGER.error("[%s] failed to obtain mod info.".formatted(ExtraSounds.class.getSimpleName()), ex);
             }
             return "<NULL>";
@@ -300,7 +300,7 @@ public class SoundPackLoader {
                     builder.append(line);
                 }
                 return new CacheData(cacheInfo, builder);
-            } catch (Throwable ex) {
+            } catch (IOException ex) {
                 LOGGER.error("[%s] Failed to load ExtraSounds cache.".formatted(ExtraSounds.class.getSimpleName()), ex);
             }
             return new CacheData(CacheInfo.of(new String[0]), "{}");
@@ -319,7 +319,7 @@ public class SoundPackLoader {
                 GSON.toJson(map, writer);
                 writer.flush();
                 DebugUtils.genericLog("Cache saved at %s".formatted(CACHE_PATH.toAbsolutePath()));
-            } catch (Throwable ex) {
+            } catch (IOException | JsonIOException ex) {
                 LOGGER.error("[%s] Failed to save the cache.".formatted(ExtraSounds.class.getSimpleName()), ex);
             }
         }

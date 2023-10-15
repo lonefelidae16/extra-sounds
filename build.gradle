@@ -41,6 +41,10 @@ dependencies {
     modCompileOnly "maven.modrinth:rei:${project.rei_version}+fabric"
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/extrasounds.accesswidener")
+}
+
 processResources {
     inputs.property "version", project.version
 

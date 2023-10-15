@@ -30,7 +30,7 @@ public class ExtraSounds implements ClientModInitializer {
     public static SoundEvent createEvent(String path) {
         try {
             return createEvent(new Identifier(MODID, path));
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             LOGGER.error("[%s] Failed to create SoundEvent".formatted(ExtraSounds.class.getSimpleName()), ex);
         }
         return createEvent(MISSING);
