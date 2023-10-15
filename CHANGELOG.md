@@ -3,19 +3,33 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-* <small>_Exciting new features may be coming here._</small>
+<!-- * <small>_Exciting new features may be coming here._</small> -->
+* Preparing compatibility with 1.20.3.
 
 ### 💭 Bugs / Issues
 
-<!-- <small>_Caught bugs and known issues are written._</small> -->
-* Effect sounds are played even when the icon is not shown.
-* Sounds don’t match actions on CreativeInventory screen when thrown or deleted.
-* Scheduled for refactoring:
-  - `SoundManager`
-  - `mixin.effect.ClientPlayerEntityMixin`
-  - `mixin.inventory.HandledScreenMixin`
-* Swap-with-Offhand Sound plays when both Main-hand and Off-hand are empty.
-* Build toolchain updates are available:
+<small>_Caught bugs and known issues are written._</small>
+
+## [2.3.1+1.20.2-build.2] - 2023-10-15
+### ✨ Added
+
+* Supports sound when items are placed on Campfire and Flower pot.
+
+### 🔧 Fixed
+
+* Mutes the Effect sound when the icon isn’t shown.
+* Mutes Swap-with-Offhand Sound when both Main-hand and Off-hand are empty.
+* Fixes some sounds on CreativeInventory screen:
+  - Supports deletion sound if the Creative Slot stack cannot be combined
+    on the Cursor stack.
+  - Supports deletion sound when one item is placed in a Creative Slot
+    from the Cursor stack with Right Mouse Click.
+  - Supports deletion sound when the stack is thrown and not popped as an item.
+
+### 👷 Technical
+
+* Some files were refactored.
+* Dependency updates:
   - Gradle 8.4
   - fabric-loom 1.4
   - fabric-loader 0.14.23
