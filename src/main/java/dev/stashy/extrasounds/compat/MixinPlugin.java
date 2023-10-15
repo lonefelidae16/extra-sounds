@@ -61,7 +61,7 @@ public final class MixinPlugin implements IMixinConfigPlugin {
             } else if (gameVersion.contains("-rc")) {
                 return true;
             }
-        } catch (Throwable ignored) {
+        } catch (Exception ignored) {
             return true;
         }
         return false;

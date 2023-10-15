@@ -296,7 +296,7 @@ public class SoundManager {
                     LOGGER.warn("Sound suppressed due to the fast interval between method calls, was '{}'.", instance.getId());
                 }
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             LOGGER.error("Failed to play sound", e);
         }
     }
