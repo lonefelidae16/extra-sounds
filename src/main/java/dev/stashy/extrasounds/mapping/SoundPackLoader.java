@@ -3,6 +3,7 @@ package dev.stashy.extrasounds.mapping;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import dev.stashy.extrasounds.ExtraSounds;
+import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.debug.DebugUtils;
 import dev.stashy.extrasounds.json.SoundEntrySerializer;
 import dev.stashy.extrasounds.json.SoundSerializer;
@@ -119,7 +120,7 @@ public class SoundPackLoader {
      * @param resource       The {@link Map} of resource that the SoundEntry will be stored.
      */
     private static void processSounds(Map<String, SoundGenerator> soundGenerator, Map<String, SoundEntry> resource) {
-        final SoundEntry fallbackSoundEntry = Sounds.aliased(Sounds.ITEM_PICK);
+        final SoundEntry fallbackSoundEntry = Sounds.aliased(SoundManager.FALLBACK_SOUND_EVENT);
         final List<String> inSoundsJsonIds = Lists.newArrayList();
         final String fallbackSoundJson = GSON.toJson(fallbackSoundEntry);
         if (DebugUtils.SEARCH_UNDEF_SOUND) {

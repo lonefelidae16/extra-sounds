@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import dev.stashy.extrasounds.debug.DebugUtils;
 import dev.stashy.extrasounds.mapping.SoundPackLoader;
@@ -30,6 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
 
@@ -45,6 +47,8 @@ public class SoundManager {
                 actionType == SlotActionType.QUICK_CRAFT && ScreenHandler.unpackQuickCraftButton(button) == 1;
     };
 
+    public static final SoundEvent FALLBACK_SOUND_EVENT = Sounds.ITEM_PICK;
+
     /**
      * Map of the item which should not play sounds.<br>
      * BiPredicate in this value will be passed <code>SlotActionType</code> and <code>int</code> of button ID.<br>
@@ -53,6 +57,7 @@ public class SoundManager {
     private static final Map<Item, BiPredicate<SlotActionType, Integer>> IGNORE_SOUND_PREDICATE_MAP = Util.make(Maps.newHashMap(), map -> {
         map.put(Items.BUNDLE, RIGHT_CLICK_PREDICATE);
     });
+    private static final List<Identifier> MISSING_SOUND_ID = Lists.newArrayList();
 
     private static long lastPlayed = 0;
     private static Item quickMovingItem = Items.AIR;
@@ -205,22 +210,22 @@ public class SoundManager {
         inventoryClick(slotItem, cursorItem, actionType);
     }
 
-    public static SoundEvent getSoundOrThrow(ItemStack stack, SoundType type) throws NoSuchSoundException {
+    public static SoundEvent getSoundByStack(ItemStack stack, SoundType type) {
         var itemId = Registries.ITEM.getId(stack.getItem());
         Identifier id = ExtraSounds.getClickId(itemId, type);
         SoundEvent event = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
         if (event == null) {
-            throw new NoSuchSoundException("Sound cannot be found in packs: " + id);
+            if (!MISSING_SOUND_ID.contains(id)) {
+                MISSING_SOUND_ID.add(id);
+                LOGGER.error("Sound cannot be found in packs: " + id, new NoSuchSoundException());
+            }
+            return FALLBACK_SOUND_EVENT;
         }
         return event;
     }
 
     public static void playSound(ItemStack stack, SoundType type) {
-        try {
-            playSound(getSoundOrThrow(stack, type), type);
-        } catch (NoSuchSoundException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
+        playSound(getSoundByStack(stack, type), type);
     }
 
     public static void effectChanged(StatusEffect effect, EffectType type) {
@@ -273,12 +278,7 @@ public class SoundManager {
     }
 
     public static void actionSound(ItemStack stack, BlockPos position) {
-        SoundType action = SoundType.ACTION;
-        try {
-            playSound(getSoundOrThrow(stack, SoundType.PICKUP), action, 1f, action.pitch, position);
-        } catch (NoSuchSoundException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
+        actionSound(getSoundByStack(stack, SoundType.PICKUP), position);
     }
 
     public static void playSound(SoundInstance instance) {
@@ -342,7 +342,7 @@ public class SoundManager {
             return;
         }
         long now = System.currentTimeMillis();
-        if (now - lastPlayed > 50 || !itemStack.isOf(quickMovingItem)) {
+        if (now - lastPlayed > 10 || !itemStack.isOf(quickMovingItem)) {
             playSound(itemStack, SoundType.PICKUP);
             lastPlayed = now;
             quickMovingItem = itemStack.getItem();

@@ -11,6 +11,7 @@
     "action.ClientPlayerInteractionManagerMixin",
     "action.LivingEntityMixin",
     "chat.ChatHudMixin",
+    "effect.ExtendLivingEntityMixin",
     "effect.ClientPlayerEntityMixin",
     "hotbar.ClientPlayerEntityMixin",
     "hotbar.ClientConnectionMixin",

@@ -51,21 +51,25 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
         }
 
         final boolean bOnHotbar = slot != null && !this.isCreativeInventorySlot(slot);
+        final ItemStack cursorStack = this.handler.getCursorStack().copy();
 
-        if (actionType == SlotActionType.THROW && slot != null && slotId >= 0) {
+        if (actionType == SlotActionType.THROW &&
+                slot != null &&
+                slotId >= 0
+        ) {
             // CreativeInventory can drop items while holding anything on cursor
-            final boolean bItemDelete = selectedTab.getType() != TYPE_INVENTORY && bOnHotbar && (slot.getStack().getMaxCount() == 1 || button == 1);
             final ItemStack slotStack = slot.getStack().copy();
-            if (button == 0) {
-                // Pressed Q key only
-                slotStack.setCount(1);
-            }
-            if (bItemDelete) {
+            if (selectedTab.getType() != TYPE_INVENTORY && (slotStack.getCount() == 1 || button == 1) && cursorStack.isEmpty() && bOnHotbar) {
                 // Item will be deleted
                 SoundManager.playSound(Sounds.ITEM_DELETE, SoundType.PICKUP);
-                return;
+            } else {
+                if (button == 0) {
+                    slotStack.setCount(1);
+                } else if (button == 1 && selectedTab.getType() != TYPE_INVENTORY) {
+                    slotStack.setCount(slotStack.getMaxCount());
+                }
+                SoundManager.playThrow(slotStack);
             }
-            SoundManager.playThrow(slotStack);
             return;
         }
 
@@ -78,7 +82,6 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
             return;
         }
 
-        final ItemStack cursorStack = this.handler.getCursorStack().copy();
         if (!cursorStack.isEmpty()) {
             if (this.deleteItemSlot != null && slot == this.deleteItemSlot) {
                 // Clicked deleteItemSlot
