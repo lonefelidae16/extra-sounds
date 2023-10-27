@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds.compat;
 
+import dev.stashy.extrasounds.ExtraSounds;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import org.objectweb.asm.tree.ClassNode;
@@ -61,7 +62,8 @@ public final class MixinPlugin implements IMixinConfigPlugin {
             } else if (gameVersion.contains("-rc")) {
                 return true;
             }
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            ExtraSounds.LOGGER.error("[%s/%s] cannot determine Minecraft version".formatted(ExtraSounds.class.getSimpleName(), MixinPlugin.class.getSimpleName()), ex);
             return true;
         }
         return false;
