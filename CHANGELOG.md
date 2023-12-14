@@ -4,11 +4,13 @@
 ### ⌛ Coming
 
 <!-- * <small>_Exciting new features may be coming here._</small> -->
-* Preparing compatibility with 1.20.3.
+* Preparing compatibility with 1.20.4.
 
 ### 💭 Bugs / Issues
 
-<small>_Caught bugs and known issues are written._</small>
+<!-- <small>_Caught bugs and known issues are written._</small> -->
+* Add a muted sound event `extrasounds.muted`;
+  Minecraft doesn’t allow zero-ed volume. (inspired by [#12](https://github.com/lonefelidae16/extra-sounds/issues/12))
 
 ## [2.3.1+1.20.2-build.2] - 2023-10-15
 ### ✨ Added
