@@ -1,4 +1,7 @@
 {
+  "muted": {
+    "sounds": [ "extrasounds:muted" ]
+  },
   "chat.mention": {
     "sounds": [
       {

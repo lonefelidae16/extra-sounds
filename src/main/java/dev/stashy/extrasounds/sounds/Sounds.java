@@ -10,6 +10,7 @@ import net.minecraft.util.math.floatprovider.ConstantFloatProvider;
 import java.util.List;
 
 public class Sounds {
+    public static final SoundEvent MUTED = ExtraSounds.createEvent("muted");
     public static final SoundEvent CHAT = ExtraSounds.createEvent("chat.message");
     public static final SoundEvent CHAT_MENTION = ExtraSounds.createEvent("chat.mention");
     public static final SoundEvent HOTBAR_SCROLL = ExtraSounds.createEvent("hotbar_scroll");
