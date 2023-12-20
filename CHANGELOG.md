@@ -22,7 +22,7 @@
 ### 👷 Technical
 
 * Some files were refactored.
-* Add a muted sound event `extrasounds.muted`. (inspired by [#12](https://github.com/lonefelidae16/extra-sounds/issues/12))
+* Add a muted sound event `extrasounds:muted`. (inspired by [#12](https://github.com/lonefelidae16/extra-sounds/issues/12))
 * Dependency updates:
   - ARRP 0.8.0
 
