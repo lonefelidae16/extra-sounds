@@ -4,13 +4,27 @@
 ### ⌛ Coming
 
 <!-- * <small>_Exciting new features may be coming here._</small> -->
-* Preparing compatibility with 1.20.4.
+* Preparing compatibility with 1.20.5.
 
 ### 💭 Bugs / Issues
 
-<!-- <small>_Caught bugs and known issues are written._</small> -->
-* Add a muted sound event `extrasounds.muted`;
-  Minecraft doesn’t allow zero-ed volume. (inspired by [#12](https://github.com/lonefelidae16/extra-sounds/issues/12))
+<small>_Caught bugs and known issues are written._</small>
+
+## [2.3.1+1.20.4-build.2] - 2023-12-20
+### ✨ Added
+
+* Port to 1.20.4.
+* Scroll sound on more Screens:
+  - Loom screen
+  - Merchant screen
+  - Stonecutter screen
+
+### 👷 Technical
+
+* Some files were refactored.
+* Add a muted sound event `extrasounds.muted`. (inspired by [#12](https://github.com/lonefelidae16/extra-sounds/issues/12))
+* Dependency updates:
+  - ARRP 0.8.0
 
 ## [2.3.1+1.20.2-build.2] - 2023-10-15
 ### ✨ Added
@@ -19,7 +33,7 @@
 
 ### 🔧 Fixed
 
-* Mutes the Effect sound when the icon isn’t shown.
+* Mutes the Effect Sound when its icon isn’t shown.
 * Mutes Swap-with-Offhand Sound when both Main-hand and Off-hand are empty.
 * Fixes some sounds on CreativeInventory screen:
   - Supports deletion sound if the Creative Slot stack cannot be combined
