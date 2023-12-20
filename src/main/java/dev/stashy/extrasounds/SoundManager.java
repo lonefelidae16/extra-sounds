@@ -61,6 +61,8 @@ public class SoundManager {
 
     private static long lastPlayed = 0;
     private static Item quickMovingItem = Items.AIR;
+    private static long lastScrollTime = 0L;
+    private static int lastScrollPos = 0;
 
     public enum KeyType {
         ERASE,
@@ -356,6 +358,24 @@ public class SoundManager {
             case CURSOR, RETURN -> playSound(Sounds.KEYBOARD_MOVE, SoundType.TYPING);
             case INSERT -> playSound(Sounds.KEYBOARD_TYPE, SoundType.TYPING);
             case PASTE -> playSound(Sounds.KEYBOARD_PASTE, SoundType.TYPING);
+        }
+    }
+
+    public static void resetScrollPos() {
+        lastScrollTime = 0;
+        lastScrollPos = 0;
+    }
+
+    public static void screenScroll(int row) {
+        final long now = System.currentTimeMillis();
+        final long timeDiff = now - lastScrollTime;
+        if (timeDiff > 20 && lastScrollPos != row) {
+            SoundManager.playSound(
+                    Sounds.INVENTORY_SCROLL,
+                    (1f - 0.1f + 0.1f * Math.min(1, 50f / timeDiff)),
+                    Mixers.INVENTORY);
+            lastScrollTime = now;
+            lastScrollPos = row;
         }
     }
 
