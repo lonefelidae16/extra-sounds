@@ -250,7 +250,7 @@ public class SoundManager {
             LOGGER.error("[{}] Unknown type of '{}' is approaching: '{}'", ExtraSounds.class.getSimpleName(), EffectType.class.getSimpleName(), type);
             return;
         }
-        playSound(event, SoundType.EFFECT);
+        playSound(event, SoundType.EFFECTS);
     }
 
     public static void playSound(SoundEvent snd, SoundType type) {
@@ -274,13 +274,8 @@ public class SoundManager {
                 MC_RANDOM, position));
     }
 
-    public static void actionSound(SoundEvent snd, BlockPos position) {
-        SoundType action = SoundType.ACTION;
-        playSound(snd, action, 1f, action.pitch, position);
-    }
-
     public static void actionSound(ItemStack stack, BlockPos position) {
-        actionSound(getSoundByStack(stack, SoundType.PICKUP), position);
+        playSound(getSoundByStack(stack, SoundType.PICKUP), SoundType.PICKUP, 1f, 1.0f, position);
     }
 
     public static void playSound(SoundInstance instance) {

@@ -1,6 +1,7 @@
 package dev.stashy.extrasounds.mixin.action;
 
 import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -67,7 +68,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
         if (this.blockState.isOf(Blocks.REPEATER) && this.blockState.contains(RepeaterBlock.DELAY)) {
             // Repeater
             final SoundEvent sound = this.blockState.get(RepeaterBlock.DELAY) == 4 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
-            SoundManager.actionSound(sound, blockPos);
+            SoundManager.playSound(sound, SoundType.REPEATER, 1f, 1f, blockPos);
         } else if (this.blockState.isIn(BlockTags.CAMPFIRES) && (this.blockEntity instanceof CampfireBlockEntity campfireBlockEntity)) {
             // Put item on Campfire
             var recipe = campfireBlockEntity.getRecipeFor(this.currentHandStack);

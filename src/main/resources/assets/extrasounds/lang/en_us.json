@@ -1,13 +1,13 @@
 {
   "soundCategory.extrasounds$master": "ExtraSounds",
   "soundCategory.extrasounds$inventory": "Inventory",
-  "soundCategory.extrasounds$action": "Actions",
+  "soundCategory.extrasounds$hotbar": "Hotbar",
   "soundCategory.extrasounds$chat": "Chat Messages",
   "soundCategory.extrasounds$chat_mention": "Chat Mention",
   "soundCategory.extrasounds$effects": "Effects/Potions",
-  "soundCategory.extrasounds$hotbar": "Hotbar",
   "soundCategory.extrasounds$typing": "Typing",
+  "soundCategory.extrasounds$bow_pull": "Bow Pull",
+  "soundCategory.extrasounds$entity_death": "Entity Dies",
   "soundCategory.extrasounds$item_drop": "Item Drop",
-
-  "tooltip.soundCategory.extrasounds_action": "This volume is applied when Item interactions, Block interactions and Entity events."
+  "soundCategory.extrasounds$repeater": "Repeater"
 }

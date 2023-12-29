@@ -8,18 +8,22 @@ public class Mixers implements CategoryLoader {
     public static SoundCategory MASTER;
     @Register
     public static SoundCategory INVENTORY;
-    @Register(tooltip = "tooltip.soundCategory.extrasounds_action")
-    public static SoundCategory ACTION;
+    @Register
+    public static SoundCategory HOTBAR;
     @Register
     public static SoundCategory CHAT;
     @Register
     public static SoundCategory CHAT_MENTION;
     @Register
+    public static SoundCategory TYPING;
+    @Register
     public static SoundCategory EFFECTS;
     @Register
-    public static SoundCategory HOTBAR;
+    public static SoundCategory BOW_PULL;
     @Register
-    public static SoundCategory TYPING;
+    public static SoundCategory ENTITY_DEATH;
+    @Register
+    public static SoundCategory REPEATER;
     @Register(toggle = true)
     public static SoundCategory ITEM_DROP;
 }

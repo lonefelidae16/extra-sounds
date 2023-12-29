@@ -1,10 +1,13 @@
 {
   "soundCategory.extrasounds$master": "ExtraSounds",
   "soundCategory.extrasounds$inventory": "Инвентарь",
-  "soundCategory.extrasounds$action": "Действия с предметами",
+  "soundCategory.extrasounds$hotbar": "Хотбар",
   "soundCategory.extrasounds$chat": "Сообщения в чате",
   "soundCategory.extrasounds$chat_mention": "Упоминания в чате",
+  "soundCategory.extrasounds$typing": "Ввод текста",
   "soundCategory.extrasounds$effects": "Эффекты/Зелья",
-  "soundCategory.scroll": "Прокрутка",
-  "soundCategory.extrasounds$typing": "Ввод текста"
+  "soundCategory.extrasounds$bow_pull": "Тетива лука",
+  "soundCategory.extrasounds$entity_death": "Сущность погибает",
+  "soundCategory.extrasounds$item_drop": "Выбросить предмет",
+  "soundCategory.extrasounds$repeater": "Повторитель"
 }
