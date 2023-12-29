@@ -27,6 +27,6 @@ public abstract class LivingEntityMixin extends Entity {
 
         final float flu = (this.random.nextFloat() - 0.5f) * 0.333333f;
         final float pitch = flu + (float) MathHelper.clampedLerp(2f, 0.5f,  Math.sqrt(this.getHeight() * this.getWidth()) * 0.4f);
-        SoundManager.playSound(Sounds.Entities.POOF, SoundType.ACTION, .7f, pitch, this.getBlockPos());
+        SoundManager.playSound(Sounds.Entities.POOF, SoundType.ENTITY_DEATH, .7f, pitch, this.getBlockPos());
     }
 }

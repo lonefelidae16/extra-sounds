@@ -29,7 +29,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             return;
         }
 
-        SoundManager.playSound(Sounds.Actions.BOW_PULL, SoundType.ACTION);
+        SoundManager.playSound(Sounds.Actions.BOW_PULL, SoundType.BOW_PULL);
     }
 
     @Inject(method = "clearActiveItem", at = @At(value = "HEAD"))
@@ -38,6 +38,6 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             return;
         }
 
-        SoundManager.stopSound(Sounds.Actions.BOW_PULL, SoundType.ACTION);
+        SoundManager.stopSound(Sounds.Actions.BOW_PULL, SoundType.BOW_PULL);
     }
 }
