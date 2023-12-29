@@ -274,8 +274,13 @@ public class SoundManager {
                 MC_RANDOM, position));
     }
 
-    public static void actionSound(ItemStack stack, BlockPos position) {
-        playSound(getSoundByStack(stack, SoundType.PICKUP), SoundType.PICKUP, 1f, 1.0f, position);
+    public static void blockInteract(SoundEvent snd, BlockPos position) {
+        SoundType blockIntr = SoundType.BLOCK_INTR;
+        playSound(snd, blockIntr, 1f, blockIntr.pitch, position);
+    }
+
+    public static void blockInteract(ItemStack stack, BlockPos position) {
+        blockInteract(getSoundByStack(stack, SoundType.PICKUP), position);
     }
 
     public static void playSound(SoundInstance instance) {

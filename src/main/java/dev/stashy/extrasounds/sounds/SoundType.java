@@ -9,11 +9,11 @@ public enum SoundType {
     HOTBAR(1f, Mixers.HOTBAR, "item.select"),
     CHAT(1f, Mixers.CHAT, "ui.chat"),
     CHAT_MENTION(1f, Mixers.CHAT_MENTION, "ui.chat"),
+    EFFECTS(1f, Mixers.EFFECTS, "effects"),
     TYPING(1f, Mixers.TYPING, "ui.typing"),
-    EFFECTS(1f, Mixers.EFFECTS, "effect"),
-    BOW_PULL(1f, Mixers.BOW_PULL, "bow_pull"),
-    ENTITY_DEATH(1f, Mixers.ENTITY_DEATH, "entity_death"),
-    REPEATER(1f, Mixers.REPEATER, "repeater");
+    ITEM_INTR(1f, Mixers.ITEM_INTR, "item.interact"),
+    BLOCK_INTR(1f, Mixers.BLOCK_INTR, "block.interact"),
+    ENTITY(1f, Mixers.ENTITY, "entity");
 
     public final float pitch;
     public final SoundCategory category;

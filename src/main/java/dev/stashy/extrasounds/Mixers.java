@@ -15,15 +15,15 @@ public class Mixers implements CategoryLoader {
     @Register
     public static SoundCategory CHAT_MENTION;
     @Register
-    public static SoundCategory TYPING;
-    @Register
     public static SoundCategory EFFECTS;
     @Register
-    public static SoundCategory BOW_PULL;
+    public static SoundCategory TYPING;
     @Register
-    public static SoundCategory ENTITY_DEATH;
+    public static SoundCategory ITEM_INTR;
     @Register
-    public static SoundCategory REPEATER;
+    public static SoundCategory BLOCK_INTR;
+    @Register(defaultLevel = 0.f)
+    public static SoundCategory ENTITY;
     @Register(toggle = true)
     public static SoundCategory ITEM_DROP;
 }

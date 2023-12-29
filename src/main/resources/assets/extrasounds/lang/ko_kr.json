@@ -4,10 +4,10 @@
   "soundCategory.extrasounds$hotbar": "단축바",
   "soundCategory.extrasounds$chat": "채팅 메시지",
   "soundCategory.extrasounds$chat_mention": "채팅 언급",
-  "soundCategory.extrasounds$typing": "타이핑",
   "soundCategory.extrasounds$effects": "효과/포션",
-  "soundCategory.extrasounds$bow_pull": "활 줄",
-  "soundCategory.extrasounds$entity_death": "엔터티가 죽다",
-  "soundCategory.extrasounds$item_drop": "선택한 아이템 떨어뜨리기",
-  "soundCategory.extrasounds$repeater": "레드스톤 중계기"
+  "soundCategory.extrasounds$typing": "타이핑",
+  "soundCategory.extrasounds$item_intr": "Item Interactions",
+  "soundCategory.extrasounds$block_intr": "Block Interactions",
+  "soundCategory.extrasounds$entity": "Entity Events",
+  "soundCategory.extrasounds$item_drop": "선택한 아이템 떨어뜨리기"
 }

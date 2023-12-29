@@ -6,8 +6,8 @@
   "soundCategory.extrasounds$chat_mention": "Chat Mention",
   "soundCategory.extrasounds$effects": "Effects/Potions",
   "soundCategory.extrasounds$typing": "Typing",
-  "soundCategory.extrasounds$bow_pull": "Bow Pull",
-  "soundCategory.extrasounds$entity_death": "Entity Dies",
-  "soundCategory.extrasounds$item_drop": "Item Drop",
-  "soundCategory.extrasounds$repeater": "Repeater"
+  "soundCategory.extrasounds$item_intr": "Item Interactions",
+  "soundCategory.extrasounds$block_intr": "Block Interactions",
+  "soundCategory.extrasounds$entity": "Entity Events",
+  "soundCategory.extrasounds$item_drop": "Item Drop"
 }
