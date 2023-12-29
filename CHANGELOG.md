@@ -3,12 +3,15 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-<!-- * <small>_Exciting new features may be coming here._</small> -->
+<!-- <small>_Exciting new features may be coming here._</small> -->
 * Preparing compatibility with 1.20.5.
 
 ### 💭 Bugs / Issues
 
-<small>_Caught bugs and known issues are written._</small>
+<!-- <small>_Caught bugs and known issues are written._</small> -->
+* The “Action” SoundCategory controls many sounds. (thanks to diskree! [#13](https://github.com/lonefelidae16/extra-sounds/pull/13))
+  - Remove “Action”
+  - Add “Item Interactions”, “Block Interactions” and “Entity Events” <sup>(default = 0%)</sup>
 
 ## [2.3.1+1.20.4-build.2] - 2023-12-20
 ### ✨ Added
