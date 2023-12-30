@@ -125,13 +125,7 @@ public class SoundManager {
                  * hasCursor == false, hasSlot == true
                  *  --> PICKUP
                  */
-                if (hasSlot && hasCursor) {
-                    if (ItemStack.canCombine(inSlot, onCursor)) {
-                        playSound(onCursor, SoundType.PLACE);
-                    } else {
-                        playSound(inSlot, SoundType.PICKUP);
-                    }
-                } else if (hasCursor) {
+                if (!hasSlot || hasCursor && ItemStack.canCombine(inSlot, onCursor)) {
                     playSound(onCursor, SoundType.PLACE);
                 } else {
                     playSound(inSlot, SoundType.PICKUP);
@@ -148,7 +142,7 @@ public class SoundManager {
      * @param slotIndex  slotIndex
      * @param cursor     item that held by cursor
      * @param actionType action type
-     * @param button     clicked mouse, pressed key or including QuickCraftStage
+     * @param button     clicked mouse, pressed key or including {@code QuickCraftStage}
      */
     public static void handleInventorySlot(PlayerEntity player, @Nullable Slot slot, int slotIndex, ItemStack cursor, SlotActionType actionType, int button) {
         if (actionType == SlotActionType.QUICK_CRAFT && ScreenHandler.unpackQuickCraftStage(button) < 2) {

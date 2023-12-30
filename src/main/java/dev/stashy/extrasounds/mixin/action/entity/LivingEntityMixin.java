@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.mixin.action;
+package dev.stashy.extrasounds.mixin.action.entity;
 
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.sounds.SoundType;

@@ -7,9 +7,9 @@
   ],
   "client": [
     "BucketFluidAccessor",
-    "action.ClientPlayerEntityMixin",
-    "action.ClientPlayerInteractionManagerMixin",
-    "action.LivingEntityMixin",
+    "action.block.ClientPlayerInteractionManagerMixin",
+    "action.entity.LivingEntityMixin",
+    "action.item.ClientPlayerEntityMixin",
     "chat.ChatHudMixin",
     "effect.ExtendLivingEntityMixin",
     "effect.ClientPlayerEntityMixin",
