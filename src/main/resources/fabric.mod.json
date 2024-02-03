@@ -5,12 +5,13 @@
   "name": "ExtraSounds",
   "description": "Adds more sounds to Minecraft UI.",
   "authors": [
-    "stashymane"
+    "stashymane",
+    "lonefelidae16"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/extrasounds",
-    "sources": "https://github.com/stashymane/extra-sounds",
-    "issues": "https://github.com/stashymane/extra-sounds/issues"
+    "homepage": "https://artifactory.kow08absty.com/ui/native/fabricmc/dev/stashy/extra-sounds/",
+    "sources": "https://github.com/lonefelidae16/extra-sounds",
+    "issues": "https://github.com/lonefelidae16/extra-sounds/issues"
   },
   "license": "CC0-1.0",
   "icon": "assets/extrasounds/icon.png",
