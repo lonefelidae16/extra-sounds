@@ -4,11 +4,12 @@ plugins {
     id "com.matthewprenger.cursegradle"
     id "com.modrinth.minotaur"
     id "org.jetbrains.changelog"
+    id 'com.palantir.git-version'
 }
 
 var targetJdk = 17
 
-version = "${project.mod_version}+${project.minecraft_version}"
+version = "${project.mod_version}+${project.minecraft_version}~lonefelidae16-git+${versionDetails().gitHash[0..7]}"
 group = project.maven_group
 
 base {
@@ -37,7 +38,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     modImplementation include("maven.modrinth:arrp:${project.arrp_version}")
     compileOnly include(project(path: ':sound-categories'))
-    runtimeOnly fileTree(include: ["*+${project.minecraft_version}-dev.jar"], exclude: ['*-sources.jar'], dir: 'sound-categories/build/devlibs')
+    runtimeOnly fileTree(include: ["*+${project.minecraft_version}~*-dev.jar"], exclude: ['*-sources.jar'], dir: 'sound-categories/build/devlibs')
     modCompileOnly "maven.modrinth:rei:${project.rei_version}+fabric"
 }
 
@@ -67,7 +68,7 @@ java {
 
 jar {
     from("LICENSE") {
-        rename { "${it}_${base.archivesName}" }
+        rename { "${it}_${project.archives_base_name}" }
     }
 }
 
