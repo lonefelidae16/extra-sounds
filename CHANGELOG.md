@@ -5,6 +5,8 @@
 
 <!-- <small>_Exciting new features may be coming here._</small> -->
 * Preparing compatibility with 1.20.5.
+* Append Git commit hash to dev version.
+* Resolve `SoundCategories` project internally instead of externally referencing the Jar.
 
 ### 💭 Bugs / Issues
 
