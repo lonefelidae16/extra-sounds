@@ -7,6 +7,15 @@
 * Preparing compatibility with 1.20.5.
 * Append Git commit hash to dev version.
 * Resolve `SoundCategories` project internally instead of externally referencing the Jar.
+  This affects when using APIs of this project by `modImplementation`/`modCompileOnly`
+  in other projects and Gradle sync is performed.
+  Download of `SoundCategories` artifacts will be skipped.
+* More block interaction sounds:
+  - Daylight Detector
+  - Redstone Wire
+  - Redstone Ores
+* More item sound:
+  - Trial Key
 
 ### 💭 Bugs / Issues
 
@@ -34,7 +43,9 @@
 ## [2.3.1+1.20.2-build.2] - 2023-10-15
 ### ✨ Added
 
-* Supports sound when items are placed on Campfire and Flower pot.
+* Supports block interaction sounds:
+  - Campfire
+  - Flower Pot
 
 ### 🔧 Fixed
 
