@@ -68,6 +68,16 @@ public abstract class ClientPlayerInteractionManagerMixin {
             // Repeater
             final SoundEvent sound = this.blockState.get(RepeaterBlock.DELAY) == 4 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
             SoundManager.blockInteract(sound, blockPos);
+        } else if (this.blockState.isOf(Blocks.DAYLIGHT_DETECTOR) && this.blockState.contains(DaylightDetectorBlock.INVERTED)) {
+            // Daylight Detector
+            final SoundEvent sound = this.blockState.get(DaylightDetectorBlock.INVERTED) ? Sounds.Actions.REDSTONE_COMPONENT_ON : Sounds.Actions.REDSTONE_COMPONENT_OFF;
+            SoundManager.blockInteract(sound, blockPos);
+        } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && cir.getReturnValue() == ActionResult.SUCCESS) {
+            // Redstone Wire
+            SoundManager.blockInteract(Sounds.Actions.REDSTONE_WIRE_CHANGE, blockPos);
+        } else if (this.blockState.isIn(BlockTags.REDSTONE_ORES) && this.blockState.contains(RedstoneOreBlock.LIT)) {
+            // Redstone Ores
+            SoundManager.blockInteract(this.block.asItem().getDefaultStack(), blockPos);
         } else if (this.blockState.isIn(BlockTags.CAMPFIRES) && (this.blockEntity instanceof CampfireBlockEntity campfireBlockEntity)) {
             // Put item on Campfire
             var recipe = campfireBlockEntity.getRecipeFor(this.currentHandStack);

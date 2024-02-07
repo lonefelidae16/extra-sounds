@@ -425,9 +425,7 @@
   "action.repeater.add": {
     "sounds": [
       {
-        "name": "minecraft:block.stone_button.click_on",
-        "volume": 0.3,
-        "pitch": 0.95,
+        "name": "extrasounds:action.redstone_component.on",
         "type": "event"
       }
     ]
@@ -435,9 +433,36 @@
   "action.repeater.reset": {
     "sounds": [
       {
+        "name": "extrasounds:action.redstone_component.off",
+        "type": "event"
+      }
+    ]
+  },
+  "action.redstone_component.on": {
+    "sounds": [
+      {
+        "name": "minecraft:block.stone_button.click_on",
+        "volume": 0.3,
+        "pitch": 0.95,
+        "type": "event"
+      }
+    ]
+  },
+  "action.redstone_component.off": {
+    "sounds": [
+      {
         "name": "minecraft:block.stone_button.click_off",
         "volume": 0.3,
         "pitch": 0.85,
+        "type": "event"
+      }
+    ]
+  },
+  "action.redstone_wire.change": {
+    "sounds": [
+      {
+        "name": "extrasounds:item.pickup.minecraft.redstone",
+        "volume": 0.45,
         "type": "event"
       }
     ]
