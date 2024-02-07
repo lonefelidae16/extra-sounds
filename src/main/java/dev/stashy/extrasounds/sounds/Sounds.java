@@ -37,6 +37,9 @@ public class Sounds {
         public static final SoundEvent BOW_PULL = ExtraSounds.createEvent("action.bow");
         public static final SoundEvent REPEATER_ADD = ExtraSounds.createEvent("action.repeater.add");
         public static final SoundEvent REPEATER_RESET = ExtraSounds.createEvent("action.repeater.reset");
+        public static final SoundEvent REDSTONE_COMPONENT_ON = ExtraSounds.createEvent("action.redstone_component.on");
+        public static final SoundEvent REDSTONE_COMPONENT_OFF = ExtraSounds.createEvent("action.redstone_component.off");
+        public static final SoundEvent REDSTONE_WIRE_CHANGE = ExtraSounds.createEvent("action.redstone_wire.change");
     }
 
     public static class Entities {
