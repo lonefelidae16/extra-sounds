@@ -18,10 +18,22 @@ public final class SoundGenerator {
     }
 
     /**
-     * Tells the sounds of your items and/or blocks to ExtraSounds.
+     * Shorthand of the method {@link SoundGenerator#of(String, Function)}.
      *
-     * @param namespace          The item namespace your mod uses.
+     * @see VanillaGenerator#generator
+     */
+    public static SoundGenerator of(@NotNull Function<Item, SoundDefinition> itemSoundGenerator) {
+        return new SoundGenerator("", itemSoundGenerator);
+    }
+
+    /**
+     * Tells the sounds of your items and/or blocks to ExtraSounds.<br>
+     * When the id you define in <code>fabric.mod.json</code> and the target item's namespace are the same,
+     * <code>namespace</code> parameter can be omitted.
+     *
+     * @param namespace          The item namespace your mod uses (can be omitted).
      * @param itemSoundGenerator The instance of the {@link Function} that converts from {@link Item} to {@link SoundDefinition}.
+     * @see SoundGenerator#of(Function)
      * @see VanillaGenerator#generator
      */
     public static SoundGenerator of(@NotNull String namespace, @NotNull Function<Item, SoundDefinition> itemSoundGenerator) {

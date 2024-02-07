@@ -1874,5 +1874,16 @@
         "type": "event"
       }
     ]
+  },
+  "item.pickup.minecraft.trial_key": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "minecraft:block.chain.step",
+        "volume": 0.4,
+        "pitch": 1.275,
+        "type": "event"
+      }
+    ]
   }
 }

@@ -91,49 +91,6 @@ public class SoundManager {
         }
     }
 
-    public static void inventoryClick(ItemStack inSlot, ItemStack onCursor, SlotActionType actionType) {
-        final boolean hasCursor = !onCursor.isEmpty();
-        final boolean hasSlot = !inSlot.isEmpty();
-        if (!hasCursor && !hasSlot) {
-            return;
-        }
-
-        switch (actionType) {
-            case PICKUP_ALL -> {
-                if (hasCursor) {
-                    playSound(Sounds.ITEM_PICK_ALL, SoundType.PICKUP);
-                }
-            }
-            case THROW -> {
-                if (!hasCursor) {
-                    playThrow(inSlot);
-                }
-            }
-            case QUICK_MOVE -> {
-                if (hasSlot) {
-                    handleQuickMoveSound(inSlot);
-                }
-            }
-            default -> {
-                /*
-                 * hasCursor == true, hasSlot == true
-                 *  --> ItemStack#canCombine ? PLACE : EXCHANGE;
-                 *
-                 * hasCursor == true, hasSlot == false
-                 *  --> PLACE
-                 *
-                 * hasCursor == false, hasSlot == true
-                 *  --> PICKUP
-                 */
-                if (!hasSlot || hasCursor && ItemStack.canCombine(inSlot, onCursor)) {
-                    playSound(onCursor, SoundType.PLACE);
-                } else {
-                    playSound(inSlot, SoundType.PICKUP);
-                }
-            }
-        }
-    }
-
     /**
      * Handles Click and KeyPress on inventory
      *
@@ -203,25 +160,60 @@ public class SoundManager {
             }
         }
 
-        inventoryClick(slotItem, cursorItem, actionType);
-    }
-
-    public static SoundEvent getSoundByStack(ItemStack stack, SoundType type) {
-        var itemId = Registries.ITEM.getId(stack.getItem());
-        Identifier id = ExtraSounds.getClickId(itemId, type);
-        SoundEvent event = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
-        if (event == null) {
-            if (!MISSING_SOUND_ID.contains(id)) {
-                MISSING_SOUND_ID.add(id);
-                LOGGER.error("Sound cannot be found in packs: " + id, new NoSuchSoundException());
-            }
-            return FALLBACK_SOUND_EVENT;
+        final boolean hasCursor = !cursorItem.isEmpty();
+        final boolean hasSlot = !slotItem.isEmpty();
+        if (!hasCursor && !hasSlot) {
+            return;
         }
-        return event;
+
+        switch (actionType) {
+            case PICKUP_ALL -> {
+                if (hasCursor) {
+                    playSound(Sounds.ITEM_PICK_ALL, SoundType.PICKUP);
+                }
+            }
+            case THROW -> {
+                if (!hasCursor) {
+                    playThrow(slotItem);
+                }
+            }
+            default -> {
+                /*
+                 * hasCursor == true, hasSlot == true
+                 *  --> ItemStack#canCombine ? PLACE : EXCHANGE;
+                 *
+                 * hasCursor == true, hasSlot == false
+                 *  --> PLACE
+                 *
+                 * hasCursor == false, hasSlot == true
+                 *  --> PICKUP
+                 */
+                if (!hasSlot || hasCursor && ItemStack.canCombine(slotItem, cursorItem)) {
+                    playSound(cursorItem, SoundType.PLACE);
+                } else {
+                    playSound(slotItem, SoundType.PICKUP);
+                }
+            }
+        }
     }
 
-    public static void playSound(ItemStack stack, SoundType type) {
-        playSound(getSoundByStack(stack, type), type);
+    /**
+     * SlotActionType.QUICK_MOVE is too many method calls
+     *
+     * @param itemStack target item to quickMove
+     * @see net.minecraft.client.network.ClientPlayerInteractionManager#clickSlot
+     * @see net.minecraft.screen.ScreenHandler#internalOnSlotClick
+     */
+    public static void handleQuickMoveSound(ItemStack itemStack) {
+        if (itemStack == null || itemStack.isEmpty()) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (now - lastPlayed > 10 || !itemStack.isOf(quickMovingItem)) {
+            playSound(itemStack, SoundType.PICKUP);
+            lastPlayed = now;
+            quickMovingItem = itemStack.getItem();
+        }
     }
 
     public static void effectChanged(StatusEffect effect, EffectType type) {
@@ -229,14 +221,14 @@ public class SoundManager {
             DebugUtils.effectLog(effect, type);
         }
 
-        final SoundEvent event;
+        final SoundEvent sound;
         if (type == EffectType.ADD) {
-            event = switch (effect.getCategory()) {
+            sound = switch (effect.getCategory()) {
                 case HARMFUL -> Sounds.EFFECT_ADD_NEGATIVE;
                 case NEUTRAL, BENEFICIAL -> Sounds.EFFECT_ADD_POSITIVE;
             };
         } else if (type == EffectType.REMOVE) {
-            event = switch (effect.getCategory()) {
+            sound = switch (effect.getCategory()) {
                 case HARMFUL -> Sounds.EFFECT_REMOVE_NEGATIVE;
                 case NEUTRAL, BENEFICIAL -> Sounds.EFFECT_REMOVE_POSITIVE;
             };
@@ -244,7 +236,20 @@ public class SoundManager {
             LOGGER.error("[{}] Unknown type of '{}' is approaching: '{}'", ExtraSounds.class.getSimpleName(), EffectType.class.getSimpleName(), type);
             return;
         }
-        playSound(event, SoundType.EFFECTS);
+        playSound(sound, SoundType.EFFECTS);
+    }
+
+    public static void blockInteract(SoundEvent snd, BlockPos position) {
+        SoundType blockIntr = SoundType.BLOCK_INTR;
+        playSound(snd, blockIntr, 1f, blockIntr.pitch, position);
+    }
+
+    public static void blockInteract(ItemStack stack, BlockPos position) {
+        blockInteract(getSoundByStack(stack, SoundType.PICKUP), position);
+    }
+
+    public static void playSound(ItemStack stack, SoundType type) {
+        playSound(getSoundByStack(stack, type), type.pitch, type.category);
     }
 
     public static void playSound(SoundEvent snd, SoundType type) {
@@ -266,15 +271,6 @@ public class SoundManager {
     public static void playSound(SoundEvent snd, SoundType type, float volume, float pitch, BlockPos position) {
         playSound(new PositionedSoundInstance(snd, type.category, getSoundVolume(Mixers.MASTER) * volume, pitch,
                 MC_RANDOM, position));
-    }
-
-    public static void blockInteract(SoundEvent snd, BlockPos position) {
-        SoundType blockIntr = SoundType.BLOCK_INTR;
-        playSound(snd, blockIntr, 1f, blockIntr.pitch, position);
-    }
-
-    public static void blockInteract(ItemStack stack, BlockPos position) {
-        blockInteract(getSoundByStack(stack, SoundType.PICKUP), position);
     }
 
     public static void playSound(SoundInstance instance) {
@@ -326,25 +322,6 @@ public class SoundManager {
         MinecraftClient.getInstance().getSoundManager().stopSounds(e.getId(), type.category);
     }
 
-    /**
-     * SlotActionType.QUICK_MOVE is too many method calls
-     *
-     * @param itemStack target item to quickMove
-     * @see net.minecraft.client.network.ClientPlayerInteractionManager#clickSlot
-     * @see net.minecraft.screen.ScreenHandler#internalOnSlotClick
-     */
-    public static void handleQuickMoveSound(ItemStack itemStack) {
-        if (itemStack == null || itemStack.isEmpty()) {
-            return;
-        }
-        long now = System.currentTimeMillis();
-        if (now - lastPlayed > 10 || !itemStack.isOf(quickMovingItem)) {
-            playSound(itemStack, SoundType.PICKUP);
-            lastPlayed = now;
-            quickMovingItem = itemStack.getItem();
-        }
-    }
-
     public static void keyboard(KeyType type) {
         switch (type) {
             case ERASE -> playSound(Sounds.KEYBOARD_ERASE, SoundType.TYPING);
@@ -375,5 +352,19 @@ public class SoundManager {
 
     public static float getSoundVolume(SoundCategory category) {
         return MinecraftClient.getInstance().options.getSoundVolume(category);
+    }
+
+    public static SoundEvent getSoundByStack(ItemStack stack, SoundType type) {
+        var itemId = Registries.ITEM.getId(stack.getItem());
+        Identifier id = ExtraSounds.getClickId(itemId, type);
+        SoundEvent sound = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
+        if (sound == null) {
+            if (!MISSING_SOUND_ID.contains(id)) {
+                MISSING_SOUND_ID.add(id);
+                LOGGER.error("Sound cannot be found in packs: " + id, new NoSuchSoundException());
+            }
+            return FALLBACK_SOUND_EVENT;
+        }
+        return sound;
     }
 }

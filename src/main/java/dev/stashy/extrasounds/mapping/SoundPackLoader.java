@@ -47,6 +47,8 @@ public class SoundPackLoader {
             .registerTypeAdapter(Sound.class, new SoundSerializer())
             .create();
 
+    private static final CharSequence LOG_PREFIX = "[%s/%s]".formatted(ExtraSounds.class.getSimpleName(), SoundPackLoader.class.getSimpleName());
+
     /**
      * Initialization of customized sound event.<br>
      * The cache file stored at {@link SoundPackLoader#CACHE_PATH} will be used.
@@ -61,8 +63,33 @@ public class SoundPackLoader {
 
         containers.forEach(container -> {
             final SoundGenerator generator = container.getEntrypoint();
-            // FIXME: When duplicate namespace declared from 2 or more mods, the last mod takes priority.
-            soundGenMappers.put(generator.namespace, generator);
+            if (generator == null || generator.namespace == null || generator.itemSoundGenerator == null) {
+                return;
+            }
+
+            final String namespace;
+            if (generator.namespace.isEmpty()) {
+                try {
+                    namespace = container.getProvider().getMetadata().getId();
+                    if (namespace == null || namespace.isBlank()) {
+                        throw new Exception("namespace is invalid: %s".formatted(namespace));
+                    }
+                } catch (Exception ex) {
+                    LOGGER.error("%s Failed to read mod metadata, ignoring.".formatted(LOG_PREFIX), ex);
+                    return;
+                }
+            } else {
+                // FIXME: When duplicate namespace declared from 2 or more mods, the last mod takes priority.
+                namespace = generator.namespace;
+            }
+            if (DebugUtils.DEBUG) {
+                DebugUtils.genericLog(
+                        "%s registering generator with namespace '%s'".formatted(
+                                LOG_PREFIX,
+                                namespace
+                        ));
+            }
+            soundGenMappers.put(namespace, generator);
         });
         final String[] generatorVer = containers.stream().map(CacheInfo::getModVersion).toArray(String[]::new);
         final CacheInfo currentCacheInfo = CacheInfo.of(generatorVer);
@@ -89,7 +116,7 @@ public class SoundPackLoader {
         } catch (Exception ex) {
             // If there is an exception, regenerate and write the cache.
             DebugUtils.genericLog(ex.getMessage());
-            LOGGER.info("[{}] Regenerating cache...", ExtraSounds.class.getSimpleName());
+            LOGGER.info("{} Regenerating cache...", LOG_PREFIX);
             final Map<String, SoundEntry> resourceMapper = new HashMap<>();
             processSounds(soundGenMappers, resourceMapper);
             CacheData.create(currentCacheInfo, resourceMapper);
@@ -104,11 +131,11 @@ public class SoundPackLoader {
         RRPCallback.BEFORE_VANILLA.register(packs -> packs.add(EXTRA_SOUNDS_RESOURCE));
         final long tookMillis = System.currentTimeMillis() - start;
         if (tookMillis >= 1000) {
-            LOGGER.warn("[{}] init took too long; {}ms.", ExtraSounds.class.getSimpleName(), tookMillis);
+            LOGGER.warn("{} init took too long; {}ms.", LOG_PREFIX, tookMillis);
         } else {
-            DebugUtils.genericLog("%s init finished; took %dms.".formatted(SoundPackLoader.class.getSimpleName(), tookMillis));
+            DebugUtils.genericLog("%s init finished; took %dms.".formatted(LOG_PREFIX, tookMillis));
         }
-        LOGGER.info("[{}] sound pack successfully loaded; {} entries.", ExtraSounds.class.getSimpleName(), CUSTOM_SOUND_EVENT.keySet().size());
+        LOGGER.info("{} sound pack successfully loaded; {} entries.", LOG_PREFIX, CUSTOM_SOUND_EVENT.keySet().size());
     }
 
     /**
@@ -259,7 +286,7 @@ public class SoundPackLoader {
                 final String modVer = metadata.getVersion().getFriendlyString();
                 return validate("%s %s".formatted(modId, modVer));
             } catch (Exception ex) {
-                LOGGER.error("[%s] failed to obtain mod info.".formatted(ExtraSounds.class.getSimpleName()), ex);
+                LOGGER.error("%s failed to obtain mod info.".formatted(LOG_PREFIX), ex);
             }
             return "<NULL>";
         }
@@ -302,7 +329,7 @@ public class SoundPackLoader {
                 }
                 return new CacheData(cacheInfo, builder);
             } catch (IOException ex) {
-                LOGGER.error("[%s] Failed to load ExtraSounds cache.".formatted(ExtraSounds.class.getSimpleName()), ex);
+                LOGGER.error("%s Failed to load ExtraSounds cache.".formatted(LOG_PREFIX), ex);
             }
             return new CacheData(CacheInfo.of(new String[0]), "{}");
         }
@@ -321,7 +348,7 @@ public class SoundPackLoader {
                 writer.flush();
                 DebugUtils.genericLog("Cache saved at %s".formatted(CACHE_PATH.toAbsolutePath()));
             } catch (IOException | JsonIOException ex) {
-                LOGGER.error("[%s] Failed to save the cache.".formatted(ExtraSounds.class.getSimpleName()), ex);
+                LOGGER.error("%s Failed to save the cache.".formatted(LOG_PREFIX), ex);
             }
         }
 
