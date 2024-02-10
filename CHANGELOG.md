@@ -16,6 +16,9 @@
   - Redstone Ores
 * More item sound:
   - Trial Key
+* Updates the API specification.
+  - Makes specifying a namespace in `mapping.SoundGenerator` optional
+    when modId and item’s namespace are the same.
 
 ### 💭 Bugs / Issues
 
@@ -28,7 +31,7 @@
 ### ✨ Added
 
 * Port to 1.20.4.
-* Scroll sound on more Screens:
+* Supports Scroll sound on more Screens:
   - Loom screen
   - Merchant screen
   - Stonecutter screen
@@ -105,7 +108,7 @@
 ### 🔧 Fixed
 
 * Typing sound turns on by default. (suggested by [#3](https://github.com/lonefelidae16/extra-sounds/issues/3))
-* Keyboard’s Cut action sound on edit screen:
+* Supports Keyboard’s Cut action sound on edit screen:
   - Book and Quill
   - Signboard
 
@@ -125,7 +128,8 @@
 
 ### 👷 Technical
 
-* Uses fabric-loader 0.14.19.
+* Dependency updates:
+  - fabric-loader 0.14.19
 * Produces helper method for creating `SoundEvent` instance.
 * Refactors Log output methods.
 
@@ -133,10 +137,10 @@
 ### ✨ Added
 
 * Makes Drop Sound optional.
-* More Chat and Command input sounds:
-  - Suggestion select sound.
-  - Suggestion accept sound.
-  - Scroll sound for Chat log screen.
+* Supports Chat and Command input sounds:
+  - Suggestion select sound
+  - Suggestion accept sound
+  - Scroll sound for Chat log screen
 
 ### 👷 Technical
 
