@@ -5,27 +5,35 @@
 
 <!-- <small>_Exciting new features may be coming here._</small> -->
 * Preparing compatibility with 1.20.5.
+
+### 💭 Bugs / Issues
+
+<small>_Caught bugs and known issues are written._</small>
+
+## [2.3.1+1.20.4-build.3] - 2024-02-10
+### ✨ Added
+
 * Append Git commit hash to dev version.
+* Supports block interaction sounds:
+  - Daylight Detector
+  - Redstone Wire
+  - Redstone Ores
+* Supports item sound:
+  - Trial Key
+
+### 🔧 Fixed
+
+* Split into some SoundCategories. (thanks to diskree! [#13](https://github.com/lonefelidae16/extra-sounds/pull/13))
+  - Remove “Action”
+  - Add “Item Interactions”, “Block Interactions” and “Entity Events” <sup>(default = 0%)</sup>
+
+### 👷 Technical
+* 
 * Resolve `SoundCategories` project internally instead of externally referencing the Jar.
   This affects when using APIs of this project by `modImplementation`/`modCompileOnly`
   in other projects and Gradle sync is performed.
   Download of `SoundCategories` artifacts will be skipped.
-* More block interaction sounds:
-  - Daylight Detector
-  - Redstone Wire
-  - Redstone Ores
-* More item sound:
-  - Trial Key
 * Updates the API specification.
-  - Makes specifying a namespace in `mapping.SoundGenerator` optional
-    when modId and item’s namespace are the same.
-
-### 💭 Bugs / Issues
-
-<!-- <small>_Caught bugs and known issues are written._</small> -->
-* The “Action” SoundCategory controls many sounds. (thanks to diskree! [#13](https://github.com/lonefelidae16/extra-sounds/pull/13))
-  - Remove “Action”
-  - Add “Item Interactions”, “Block Interactions” and “Entity Events” <sup>(default = 0%)</sup>
 
 ## [2.3.1+1.20.4-build.2] - 2023-12-20
 ### ✨ Added
