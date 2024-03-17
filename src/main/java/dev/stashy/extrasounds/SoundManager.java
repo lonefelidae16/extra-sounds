@@ -50,7 +50,7 @@ public class SoundManager {
     public static final SoundEvent FALLBACK_SOUND_EVENT = Sounds.ITEM_PICK;
 
     /**
-     * Map of the item which should not play sounds.<br>
+     * Map of an item which should not play sounds.<br>
      * BiPredicate in this value will be passed <code>SlotActionType</code> and <code>int</code> of button ID.<br>
      * Item -&gt; BiPredicate&lt;SlotActionType, Integer&gt;
      */
@@ -300,7 +300,7 @@ public class SoundManager {
     /**
      * Plays the weighted THROW sound.<br>
      * The pitch is clamped between 1.5 - 2.0. The smaller stack, the higher.<br>
-     * If the ItemStack is not stackable, the pitch is maximum.
+     * If an ItemStack is not stackable, the pitch is maximum.
      *
      * @param itemStack target stack to adjust the pitch.
      * @param category  SoundCategory to adjust the volume.

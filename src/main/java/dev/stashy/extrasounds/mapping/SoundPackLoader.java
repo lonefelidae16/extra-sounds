@@ -141,7 +141,7 @@ public class SoundPackLoader {
     /**
      * Processes for the all items.<br>
      * This method is "Memory Sensitive" as creates 3x {@link SoundEntry}s per item,
-     * and avoid using the Stream APIs in non-debug mode as much as possible.
+     * and avoid using Stream APIs in non-debug mode as much as possible.
      *
      * @param soundGenerator The information of generator including namespace and {@link SoundGenerator}.
      * @param resource       The {@link Map} of resource that the SoundEntry will be stored.
@@ -196,13 +196,13 @@ public class SoundPackLoader {
     }
 
     /**
-     * Generates the resource.
+     * Generates a resource.
      *
      * @param itemId       Target item id.
-     * @param type         The {@link SoundType} which category of volume to play.
+     * @param type         A {@link SoundType} which category of volume to play.
      * @param entry        Target {@link SoundEntry}.
-     * @param defaultEntry The fallback SoundEntry.
-     * @param resource     The {@link Map} of resource that the SoundEntry will be stored.
+     * @param defaultEntry A fallback SoundEntry.
+     * @param resource     {@link Map} of resource that the SoundEntry will be stored.
      */
     private static void generateSoundEntry(Identifier itemId, SoundType type, SoundEntry entry, SoundEntry defaultEntry, Map<String, SoundEntry> resource) {
         final SoundEntry soundEntry = (entry == null) ? defaultEntry : entry;

@@ -28,7 +28,7 @@ public class DebugUtils {
             && System.getProperties().get(NO_CACHE_VAR).equals("true");
     /**
      * For debugging.<br>
-     * When run with a JVM argument {@link DebugUtils#JVM_ARG_SEARCH_UNDEF_SND}, the log shows a SoundEntry that plays
+     * When run with the JVM argument {@link DebugUtils#JVM_ARG_SEARCH_UNDEF_SND}, the log shows a SoundEntry that plays
      * the default {@link dev.stashy.extrasounds.sounds.Sounds#ITEM_PICK}.<br>
      * To ensure that the debugging statements are executed, it is recommended that you also run with the
      * {@link DebugUtils#NO_CACHE_VAR} JVM argument.

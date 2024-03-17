@@ -19,7 +19,7 @@ public class TextFieldState {
      * Triggers the erase action.
      *
      * @param offset         -1 or +1
-     * @param length         The text length.
+     * @param length         A text length.
      * @param selectionStart Current position of the start of the selection.
      * @param selectionEnd   Current position of the end of the selection.
      */
