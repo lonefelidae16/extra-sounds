@@ -94,4 +94,9 @@ public abstract class TextFieldWidgetMixin {
     private void extrasounds$clickEvent(double mouseX, double mouseY, CallbackInfo ci) {
         this.state.onCursorChanged(this.selectionStart, this.selectionEnd);
     }
+
+    @Inject(method = "setText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursorToEnd(Z)V"))
+    private void extrasounds$autoComplete(String text, CallbackInfo ci) {
+        this.state.setCursor(this.getText().length());
+    }
 }
