@@ -8,7 +8,9 @@
 
 ### 💭 Bugs / Issues
 
-<small>_Caught bugs and known issues are written._</small>
+<!-- <small>_Caught bugs and known issues are written._</small> -->
+* Cursor Sound won’t hear when moving to first position (with <kbd>Home</kbd> key)
+  after accepting suggested chars.
 
 ## [2.3.1+1.20.4-build.3] - 2024-02-10
 ### ✨ Added
@@ -28,7 +30,7 @@
   - Add “Item Interactions”, “Block Interactions” and “Entity Events” <sup>(default = 0%)</sup>
 
 ### 👷 Technical
-* 
+
 * Resolve `SoundCategories` project internally instead of externally referencing the Jar.
   This affects when using APIs of this project by `modImplementation`/`modCompileOnly`
   in other projects and Gradle sync is performed.

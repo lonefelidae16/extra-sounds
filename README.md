@@ -30,6 +30,7 @@ Sign in to GitHub to get it.
   - Trading with villagers
 * Chat message sound
 * Chat @mention sound
+* Keyboard typing sound
 * Status effect/potion sounds
 * Item interaction sounds on Hotbar
   - Pulling bow sound
