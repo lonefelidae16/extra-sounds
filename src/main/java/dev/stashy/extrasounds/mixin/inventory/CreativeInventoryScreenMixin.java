@@ -89,7 +89,7 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
                 return;
             }
 
-            if (slotId > 0 &&
+            if (slotId >= 0 &&
                     actionType != SlotActionType.QUICK_CRAFT &&
                     actionType != SlotActionType.PICKUP_ALL &&
                     !bOnHotbar &&
