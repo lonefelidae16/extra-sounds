@@ -58,6 +58,7 @@ public class SoundPackLoader {
     public static void init() {
         final long start = System.currentTimeMillis();
         final Map<String, SoundGenerator> soundGenMappers = new HashMap<>();
+        final List<String> generatorVer = new ArrayList<>();
 
         final List<EntrypointContainer<SoundGenerator>> containers = FabricLoader.getInstance().getEntrypointContainers(ExtraSounds.MODID, SoundGenerator.class);
 
@@ -90,9 +91,9 @@ public class SoundPackLoader {
                         ));
             }
             soundGenMappers.put(namespace, generator);
+            generatorVer.add(CacheInfo.getModVersion(container));
         });
-        final String[] generatorVer = containers.stream().map(CacheInfo::getModVersion).toArray(String[]::new);
-        final CacheInfo currentCacheInfo = CacheInfo.of(generatorVer);
+        final CacheInfo currentCacheInfo = CacheInfo.of(generatorVer.toArray(new String[0]));
 
         // Read from cache.
         try {
@@ -284,14 +285,14 @@ public class SoundPackLoader {
                 final ModMetadata metadata = container.getProvider().getMetadata();
                 final String modId = metadata.getId();
                 final String modVer = metadata.getVersion().getFriendlyString();
-                return validate("%s %s".formatted(modId, modVer));
+                return sanitize("%s %s".formatted(modId, modVer));
             } catch (Exception ex) {
                 LOGGER.error("%s failed to obtain mod info.".formatted(LOG_PREFIX), ex);
             }
             return "<NULL>";
         }
 
-        private static String validate(String in) {
+        private static String sanitize(String in) {
             return in.replaceAll("[%s%s]".formatted(DELIMITER_HEAD, DELIMITER_MOD_INFO), "_");
         }
     }

@@ -55,17 +55,12 @@ public final class MixinPlugin implements IMixinConfigPlugin {
         try {
             var minecraft = FabricLoader.getInstance().getModContainer(Identifier.DEFAULT_NAMESPACE).orElseThrow();
             String gameVersion = minecraft.getMetadata().getVersion().toString();
-            if (gameVersion.contains("-alpha")) {
-                return true;
-            } else if (gameVersion.contains("-beta")) {
-                return true;
-            } else if (gameVersion.contains("-rc")) {
-                return true;
-            }
+            return gameVersion.contains("-alpha") ||
+                    gameVersion.contains("-beta") ||
+                    gameVersion.contains("-rc");
         } catch (Exception ex) {
-            ExtraSounds.LOGGER.error("[%s/%s] cannot determine Minecraft version".formatted(ExtraSounds.class.getSimpleName(), MixinPlugin.class.getSimpleName()), ex);
+            ExtraSounds.LOGGER.error("[{}/{}] cannot determine Minecraft version", ExtraSounds.class.getSimpleName(), MixinPlugin.class.getSimpleName(), ex);
             return true;
         }
-        return false;
     }
 }

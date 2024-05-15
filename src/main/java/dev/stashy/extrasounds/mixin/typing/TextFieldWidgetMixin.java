@@ -17,6 +17,19 @@ public abstract class TextFieldWidgetMixin {
     @Unique
     private final TextFieldState state = new TextFieldState();
 
+    // #region method signatures
+    // <editor-fold desc="method signatures">
+    @Unique
+    private static final String METHOD_SIGN_SET_CURSOR = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursor(IZ)V";
+    @Unique
+    private static final String METHOD_SIGN_MOVE_CURSOR = "Lnet/minecraft/client/gui/widget/TextFieldWidget;moveCursor(IZ)V";
+    @Unique
+    private static final String METHOD_SIGN_CURSOR_TO_START = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursorToStart(Z)V";
+    @Unique
+    private static final String METHOD_SIGN_CURSOR_TO_END = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursorToEnd(Z)V";
+    // </editor-fold>
+    // #endregion
+
     @Shadow
     private int selectionStart;
     @Shadow
@@ -80,22 +93,22 @@ public abstract class TextFieldWidgetMixin {
 
     @Inject(method = "keyPressed",
             at = {
-                    @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursor(IZ)V", shift = At.Shift.AFTER),
-                    @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;moveCursor(IZ)V", shift = At.Shift.AFTER),
-                    @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursorToStart(Z)V", shift = At.Shift.AFTER),
-                    @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursorToEnd(Z)V", shift = At.Shift.AFTER)
+                    @At(value = "INVOKE", target = METHOD_SIGN_SET_CURSOR, shift = At.Shift.AFTER),
+                    @At(value = "INVOKE", target = METHOD_SIGN_MOVE_CURSOR, shift = At.Shift.AFTER),
+                    @At(value = "INVOKE", target = METHOD_SIGN_CURSOR_TO_START, shift = At.Shift.AFTER),
+                    @At(value = "INVOKE", target = METHOD_SIGN_CURSOR_TO_END, shift = At.Shift.AFTER)
             }
     )
     private void extrasounds$cursorMoveKeyTyped(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         this.state.onCursorChanged(this.selectionStart, this.selectionEnd);
     }
 
-    @Inject(method = "onClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursor(IZ)V", shift = At.Shift.AFTER))
+    @Inject(method = "onClick", at = @At(value = "INVOKE", target = METHOD_SIGN_SET_CURSOR, shift = At.Shift.AFTER))
     private void extrasounds$clickEvent(double mouseX, double mouseY, CallbackInfo ci) {
         this.state.onCursorChanged(this.selectionStart, this.selectionEnd);
     }
 
-    @Inject(method = "setText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/widget/TextFieldWidget;setCursorToEnd(Z)V"))
+    @Inject(method = "setText", at = @At(value = "INVOKE", target = METHOD_SIGN_CURSOR_TO_END))
     private void extrasounds$autoComplete(String text, CallbackInfo ci) {
         this.state.setCursor(this.getText().length());
     }

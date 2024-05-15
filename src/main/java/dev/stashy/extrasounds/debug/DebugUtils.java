@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds.debug;
 
+import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.mapping.SoundGenerator;
 import net.minecraft.client.sound.SoundInstance;
@@ -36,12 +37,10 @@ public class DebugUtils {
     public static final boolean SEARCH_UNDEF_SOUND = System.getProperties().containsKey(JVM_ARG_SEARCH_UNDEF_SND)
             && System.getProperties().get(JVM_ARG_SEARCH_UNDEF_SND).equals("true");
 
-    private static final Logger LOGGER = LogManager.getLogger();
-
     public static void init() {
         if (!DEBUG) return;
-        LOGGER.info("ExtraSounds: DEBUG mode enabled.");
-        LOGGER.info("Debug path: " + Path.of(DEBUG_PATH).toAbsolutePath());
+        ExtraSounds.LOGGER.info("ExtraSounds: DEBUG mode enabled.");
+        ExtraSounds.LOGGER.info("Debug path: {}", Path.of(DEBUG_PATH).toAbsolutePath());
     }
 
     public static void exportSoundsJson(byte[] jsonData) {
@@ -51,7 +50,7 @@ public class DebugUtils {
             createFile(p);
             Files.write(p, jsonData, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            e.printStackTrace();
+            ExtraSounds.LOGGER.error("Failed to export JSON", e);
         }
     }
 
@@ -63,27 +62,27 @@ public class DebugUtils {
             Files.write(p, generator.keySet().stream()
                     .map(it -> {
                         var clazz = generator.get(it).itemSoundGenerator.getClass();
-                        return "namespace: " + it + "; class: " + (clazz == null ? "none" : clazz.getName());
+                        return "namespace: %s; class: %s".formatted(it, clazz.getName());
                     })
                     .collect(Collectors.toList()));
         } catch (IOException e) {
-            e.printStackTrace();
+            ExtraSounds.LOGGER.error("Failed to export generators", e);
         }
     }
 
     public static void soundLog(SoundInstance instance) {
         if (!DEBUG) return;
-        LOGGER.info("Playing sound: {}", instance.getId());
+        ExtraSounds.LOGGER.info("Playing sound: {}", instance.getId());
     }
 
     public static void effectLog(StatusEffect effect, SoundManager.EffectType type) {
         if (!DEBUG) return;
-        LOGGER.info("EffectType = {}, Effect = {}", type, effect.getName().getString());
+        ExtraSounds.LOGGER.info("EffectType = {}, Effect = {}", type, effect.getName().getString());
     }
 
     public static void genericLog(String message) {
         if (!DEBUG) return;
-        LOGGER.info(message);
+        ExtraSounds.LOGGER.info(message);
     }
 
     private static void createFile(Path p) {
@@ -94,7 +93,7 @@ public class DebugUtils {
             if (!Files.exists(p))
                 Files.createFile(p);
         } catch (IOException e) {
-            LOGGER.error("Unable to create file: " + p, e);
+            ExtraSounds.LOGGER.error("Unable to create file: {}", p, e);
         }
     }
 }

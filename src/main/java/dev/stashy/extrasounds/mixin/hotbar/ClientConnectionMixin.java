@@ -26,10 +26,7 @@ public abstract class ClientConnectionMixin {
     @Inject(method = "send(Lnet/minecraft/network/packet/Packet;Lnet/minecraft/network/PacketCallbacks;Z)V", at = @At("HEAD"))
     private void extrasounds$hotbarSwapEvent(Packet<?> packet, PacketCallbacks callbacks, boolean flush, CallbackInfo ci) {
         final ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) {
-            return;
-        }
-        if (!this.isOpen()) {
+        if (player == null || !this.isOpen()) {
             return;
         }
         if (!(packet instanceof PlayerActionC2SPacket actionC2SPacket)) {
