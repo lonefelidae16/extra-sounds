@@ -9,13 +9,14 @@ on:
     branches:
       - dev
       - 'port/**'
+      - 'workflow/**'
   pull_request:
 
 jobs:
   build:
     strategy:
       matrix:
-        java: [ 17 ]
+        java: [ 21 ]
         os: [ ubuntu-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -35,10 +36,11 @@ jobs:
         if: runner.os == 'Linux'
         run: chmod +x ./gradlew
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
       - name: Gradle build
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: build
+        run: ./gradlew build
 
       - name: Capture build artifacts
         if: ${{ runner.os == 'Linux' && matrix.java == '17' }} # Only upload artifacts built from LTS java on one OS
