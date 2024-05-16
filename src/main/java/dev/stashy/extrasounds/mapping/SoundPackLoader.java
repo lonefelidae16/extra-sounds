@@ -5,22 +5,21 @@ import com.google.gson.*;
 import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.debug.DebugUtils;
+import dev.stashy.extrasounds.impl.CustomizedLog4jMessageFactory;
 import dev.stashy.extrasounds.json.SoundEntrySerializer;
 import dev.stashy.extrasounds.json.SoundSerializer;
+import dev.stashy.extrasounds.runtime.ClientResource;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
-import net.devtech.arrp.api.RRPCallback;
-import net.devtech.arrp.api.RuntimeResourcePack;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -34,20 +33,24 @@ import java.util.stream.Collectors;
 
 public class SoundPackLoader {
     private static final int CACHE_VERSION = 1;
-    private static final RuntimeResourcePack EXTRA_SOUNDS_RESOURCE = RuntimeResourcePack.create(ExtraSounds.MODID);
     private static final Identifier SOUNDS_JSON_ID = new Identifier(ExtraSounds.MODID, "sounds.json");
-    private static final Logger LOGGER = LogManager.getLogger();
     private static final String CACHE_FNAME = ExtraSounds.MODID + ".cache";
     private static final Path CACHE_PATH = Path.of(System.getProperty("java.io.tmpdir"), ".minecraft_fabric", CACHE_FNAME);
 
     public static final Map<Identifier, SoundEvent> CUSTOM_SOUND_EVENT = new HashMap<>();
+    public static final ClientResource EXTRA_SOUNDS_RESOURCE = new ClientResource(ExtraSounds.MODID);
+    public static final Logger LOGGER = LogManager.getLogger(
+            SoundPackLoader.class,
+            new CustomizedLog4jMessageFactory("%s/%s".formatted(
+                    ExtraSounds.class.getSimpleName(),
+                    SoundPackLoader.class.getSimpleName()
+            ))
+    );
 
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(SoundEntry.class, new SoundEntrySerializer())
             .registerTypeAdapter(Sound.class, new SoundSerializer())
             .create();
-
-    private static final CharSequence LOG_PREFIX = "[%s/%s]".formatted(ExtraSounds.class.getSimpleName(), SoundPackLoader.class.getSimpleName());
 
     /**
      * Initialization of customized sound event.<br>
@@ -76,7 +79,7 @@ public class SoundPackLoader {
                         throw new Exception("namespace is invalid: %s".formatted(namespace));
                     }
                 } catch (Exception ex) {
-                    LOGGER.error("%s Failed to read mod metadata, ignoring.".formatted(LOG_PREFIX), ex);
+                    LOGGER.error("Failed to read mod metadata, ignoring.", ex);
                     return;
                 }
             } else {
@@ -85,8 +88,7 @@ public class SoundPackLoader {
             }
             if (DebugUtils.DEBUG) {
                 DebugUtils.genericLog(
-                        "%s registering generator with namespace '%s'".formatted(
-                                LOG_PREFIX,
+                        "registering generator with namespace '%s'".formatted(
                                 namespace
                         ));
             }
@@ -117,7 +119,7 @@ public class SoundPackLoader {
         } catch (Exception ex) {
             // If there is an exception, regenerate and write the cache.
             DebugUtils.genericLog(ex.getMessage());
-            LOGGER.info("{} Regenerating cache...", LOG_PREFIX);
+            LOGGER.info("Regenerating cache...");
             final Map<String, SoundEntry> resourceMapper = new HashMap<>();
             processSounds(soundGenMappers, resourceMapper);
             CacheData.create(currentCacheInfo, resourceMapper);
@@ -128,15 +130,14 @@ public class SoundPackLoader {
             DebugUtils.exportGenerators(soundGenMappers);
         }
 
-        EXTRA_SOUNDS_RESOURCE.addAsyncResource(ResourceType.CLIENT_RESOURCES, SOUNDS_JSON_ID, identifier -> CacheData.read().asJsonBytes());
-        RRPCallback.BEFORE_VANILLA.register(packs -> packs.add(EXTRA_SOUNDS_RESOURCE));
+        EXTRA_SOUNDS_RESOURCE.addResourceAsync(SOUNDS_JSON_ID, identifier -> CacheData.read().asJsonBytes());
         final long tookMillis = System.currentTimeMillis() - start;
         if (tookMillis >= 1000) {
-            LOGGER.warn("{} init took too long; {}ms.", LOG_PREFIX, tookMillis);
+            LOGGER.warn("init took too long; {}ms.", tookMillis);
         } else {
-            DebugUtils.genericLog("%s init finished; took %dms.".formatted(LOG_PREFIX, tookMillis));
+            DebugUtils.genericLog("init finished; took %dms.".formatted(tookMillis));
         }
-        LOGGER.info("{} sound pack successfully loaded; {} entries.", LOG_PREFIX, CUSTOM_SOUND_EVENT.keySet().size());
+        LOGGER.info("sound pack successfully loaded; {} entries.", CUSTOM_SOUND_EVENT.keySet().size());
     }
 
     /**
@@ -170,8 +171,8 @@ public class SoundPackLoader {
             } else if (item instanceof BlockItem blockItem) {
                 SoundDefinition blockSoundDef = SoundDefinition.of(fallbackSoundEntry);
                 try {
-                    final Block block = blockItem.getBlock();
-                    final SoundEvent blockSound = block.getSoundGroup(block.getDefaultState()).getPlaceSound();
+                    final BlockState blockState = blockItem.getBlock().getDefaultState();
+                    final SoundEvent blockSound = blockState.getSoundGroup().getPlaceSound();
                     blockSoundDef = SoundDefinition.of(Sounds.aliased(blockSound));
                 } catch (Exception ignored) {
                 }
@@ -287,7 +288,7 @@ public class SoundPackLoader {
                 final String modVer = metadata.getVersion().getFriendlyString();
                 return sanitize("%s %s".formatted(modId, modVer));
             } catch (Exception ex) {
-                LOGGER.error("%s failed to obtain mod info.".formatted(LOG_PREFIX), ex);
+                LOGGER.error("Failed to obtain mod info.", ex);
             }
             return "<NULL>";
         }
@@ -330,7 +331,7 @@ public class SoundPackLoader {
                 }
                 return new CacheData(cacheInfo, builder);
             } catch (IOException ex) {
-                LOGGER.error("%s Failed to load ExtraSounds cache.".formatted(LOG_PREFIX), ex);
+                LOGGER.error("Failed to load ExtraSounds cache.", ex);
             }
             return new CacheData(CacheInfo.of(new String[0]), "{}");
         }
@@ -349,7 +350,7 @@ public class SoundPackLoader {
                 writer.flush();
                 DebugUtils.genericLog("Cache saved at %s".formatted(CACHE_PATH.toAbsolutePath()));
             } catch (IOException | JsonIOException ex) {
-                LOGGER.error("%s Failed to save the cache.".formatted(LOG_PREFIX), ex);
+                LOGGER.error("Failed to save the cache.", ex);
             }
         }
 

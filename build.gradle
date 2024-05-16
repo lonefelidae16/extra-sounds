@@ -7,7 +7,7 @@ plugins {
     id 'com.palantir.git-version'
 }
 
-var targetJdk = 17
+var targetJdk = 21
 
 version = "${project.mod_version}+${project.minecraft_version}~lonefelidae16-git+${versionDetails().gitHash[0..7]}"
 group = project.maven_group
@@ -36,7 +36,6 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    modImplementation include("maven.modrinth:arrp:${project.arrp_version}")
     compileOnly include(project(path: ':sound-categories'))
     runtimeOnly fileTree(include: ["*+${project.minecraft_version}~*-dev.jar"], exclude: ['*-sources.jar'], dir: 'sound-categories/build/devlibs')
     modCompileOnly "maven.modrinth:rei:${project.rei_version}+fabric"

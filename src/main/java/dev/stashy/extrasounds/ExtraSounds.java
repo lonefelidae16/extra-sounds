@@ -1,17 +1,21 @@
 package dev.stashy.extrasounds;
 
-import com.mojang.logging.LogUtils;
 import dev.stashy.extrasounds.debug.DebugUtils;
+import dev.stashy.extrasounds.impl.CustomizedLog4jMessageFactory;
 import dev.stashy.extrasounds.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ExtraSounds implements ClientModInitializer {
-    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger(
+            ExtraSounds.class,
+            new CustomizedLog4jMessageFactory(ExtraSounds.class.getSimpleName())
+    );
     public static final String MODID = "extrasounds";
     public static final SoundEvent MUTED = Sounds.MUTED;
 

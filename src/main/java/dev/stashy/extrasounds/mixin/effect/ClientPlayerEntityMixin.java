@@ -5,6 +5,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,15 +24,15 @@ public abstract class ClientPlayerEntityMixin extends ExtendLivingEntityMixin {
         if (!effect.shouldShowIcon()) {
             return;
         }
-        SoundManager.effectChanged(effect.getEffectType(), SoundManager.EffectType.ADD);
+        SoundManager.effectChanged(effect.getEffectType().value(), SoundManager.EffectType.ADD);
     }
 
     @Inject(method = "removeStatusEffectInternal", at = @At("HEAD"))
-    private void extrasounds$effectRemoved(StatusEffect type, CallbackInfoReturnable<StatusEffectInstance> cir) {
-        StatusEffectInstance effect = getActiveStatusEffects().get(type);
+    private void extrasounds$effectRemoved(RegistryEntry<StatusEffect> registryEntry, CallbackInfoReturnable<StatusEffectInstance> cir) {
+        StatusEffectInstance effect = getActiveStatusEffects().get(registryEntry);
         if (effect == null || !effect.shouldShowIcon()) {
             return;
         }
-        SoundManager.effectChanged(type, SoundManager.EffectType.REMOVE);
+        SoundManager.effectChanged(effect.getEffectType().value(), SoundManager.EffectType.REMOVE);
     }
 }

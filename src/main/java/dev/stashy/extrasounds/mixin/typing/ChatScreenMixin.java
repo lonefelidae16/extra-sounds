@@ -12,14 +12,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChatScreen.class)
 public abstract class ChatScreenMixin {
     @Shadow
-    private int messageHistorySize;
+    private int messageHistoryIndex;
 
     @Unique
     private int currentHistoryPos;
 
     @Unique
     private void extrasounds$updateHistoryPos() {
-        this.currentHistoryPos = this.messageHistorySize;
+        this.currentHistoryPos = this.messageHistoryIndex;
     }
 
     @Inject(method = "init", at = @At("RETURN"))
@@ -29,7 +29,7 @@ public abstract class ChatScreenMixin {
 
     @Inject(method = "setChatFromHistory", at = @At("RETURN"))
     private void extrasounds$selectHistory(int offset, CallbackInfo ci) {
-        if (this.messageHistorySize != this.currentHistoryPos) {
+        if (this.messageHistoryIndex != this.currentHistoryPos) {
             SoundManager.keyboard(SoundManager.KeyType.CURSOR);
             this.extrasounds$updateHistoryPos();
         }

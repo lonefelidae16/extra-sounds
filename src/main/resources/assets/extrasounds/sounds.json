@@ -246,6 +246,16 @@
       }
     ]
   },
+  "item.category.gear.armadillo": {
+    "sounds": [
+      {
+        "name": "minecraft:item.armor.equip_wolf",
+        "volume": 0.4,
+        "pitch": 1.6,
+        "type": "event"
+      }
+    ]
+  },
   "item.category.gear.wood": {
     "sounds": [
       {
@@ -407,6 +417,17 @@
       {
         "name": "extrasounds:item.category.metal",
         "pitch": 0.8,
+        "type": "event"
+      }
+    ],
+    "replace": true
+  },
+  "item.category.keys": {
+    "sounds": [
+      {
+        "name": "minecraft:block.chain.step",
+        "volume": 0.4,
+        "pitch": 1.275,
         "type": "event"
       }
     ],
@@ -707,6 +728,15 @@
     ]
   },
   "item.pickup.minecraft.blaze_rod": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extrasounds:item.category.wet_slippery",
+        "type": "event"
+      }
+    ]
+  },
+  "item.pickup.minecraft.breeze_rod": {
     "replace": true,
     "sounds": [
       {
@@ -1675,7 +1705,16 @@
       }
     ]
   },
-  "item.pickup.minecraft.scute": {
+  "item.pickup.minecraft.turtle_scute": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extrasounds:item.category.wet_slippery",
+        "type": "event"
+      }
+    ]
+  },
+  "item.pickup.minecraft.armadillo_scute": {
     "replace": true,
     "sounds": [
       {
@@ -1808,6 +1847,17 @@
       }
     ]
   },
+  "item.pickup.minecraft.mace": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "minecraft:item.armor.equip_diamond",
+        "pitch": 0.95,
+        "type": "event",
+        "volume": 0.4
+      }
+    ]
+  },
   "item.pickup.minecraft.tropical_fish": {
     "replace": true,
     "sounds": [
@@ -1879,9 +1929,27 @@
     "replace": true,
     "sounds": [
       {
-        "name": "minecraft:block.chain.step",
+        "name": "extrasounds:item.category.keys",
+        "type": "event"
+      }
+    ]
+  },
+  "item.pickup.minecraft.ominous_trial_key": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extrasounds:item.category.keys",
+        "type": "event"
+      }
+    ]
+  },
+  "item.pickup.minecraft.wind_charge": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "minecraft:block.soul_sand.step",
         "volume": 0.4,
-        "pitch": 1.275,
+        "pitch": 2,
         "type": "event"
       }
     ]

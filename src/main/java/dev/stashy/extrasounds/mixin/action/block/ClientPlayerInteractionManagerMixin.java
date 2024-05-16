@@ -16,6 +16,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.mutable.MutableObject;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 /**
  * For Block Interaction sound.
@@ -55,10 +57,18 @@ public abstract class ClientPlayerInteractionManagerMixin {
         this.currentHandStack = player.getStackInHand(hand).copy();
     }
 
-    @Inject(method = "interactBlockInternal", at = @At(value = "RETURN", ordinal = 2))
-    private void extrasounds$afterOnUse(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
+    @Inject(
+            method = "interactBlock",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;sendSequencedPacket(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/network/SequencedPacketCreator;)V",
+                    shift = At.Shift.AFTER
+            ),
+            locals = LocalCapture.CAPTURE_FAILSOFT
+    )
+    private void extrasounds$afterOnUse(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir, MutableObject<ActionResult> mutableObject) {
         final World world = this.client.world;
-        if (world == null) {
+        if (world == null || player.isSpectator()) {
             return;
         }
 
@@ -72,7 +82,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
             // Daylight Detector
             final SoundEvent sound = this.blockState.get(DaylightDetectorBlock.INVERTED) ? Sounds.Actions.REDSTONE_COMPONENT_ON : Sounds.Actions.REDSTONE_COMPONENT_OFF;
             SoundManager.blockInteract(sound, blockPos);
-        } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && cir.getReturnValue() == ActionResult.SUCCESS) {
+        } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && mutableObject.getValue() == ActionResult.SUCCESS) {
             // Redstone Wire
             SoundManager.blockInteract(Sounds.Actions.REDSTONE_WIRE_CHANGE, blockPos);
         } else if (this.blockState.isIn(BlockTags.REDSTONE_ORES) && this.blockState.contains(RedstoneOreBlock.LIT)) {
@@ -86,7 +96,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
             }
         } else if (this.blockState.isIn(BlockTags.FLOWER_POTS) &&
                 (this.block instanceof FlowerPotBlock potBlock) &&
-                cir.getReturnValue() == ActionResult.SUCCESS
+                mutableObject.getValue() == ActionResult.SUCCESS
         ) {
             if (!potBlock.isEmpty()) {
                 // Take from pot

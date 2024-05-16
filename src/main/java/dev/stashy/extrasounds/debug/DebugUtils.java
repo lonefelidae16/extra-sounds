@@ -5,8 +5,6 @@ import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.mapping.SoundGenerator;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.effect.StatusEffect;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -3,6 +3,7 @@ package dev.stashy.extrasounds;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import dev.stashy.extrasounds.debug.DebugUtils;
+import dev.stashy.extrasounds.impl.CustomizedLog4jMessageFactory;
 import dev.stashy.extrasounds.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
@@ -36,7 +37,13 @@ import java.util.Map;
 import java.util.function.BiPredicate;
 
 public class SoundManager {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(
+            SoundManager.class,
+            new CustomizedLog4jMessageFactory("%s/%s".formatted(
+                    ExtraSounds.class.getSimpleName(),
+                    SoundManager.class.getSimpleName()
+            ))
+    );
     private static final Random MC_RANDOM = Random.create();
 
     /**
@@ -188,7 +195,7 @@ public class SoundManager {
                  * hasCursor == false, hasSlot == true
                  *  --> PICKUP
                  */
-                if (!hasSlot || hasCursor && ItemStack.canCombine(slotItem, cursorItem)) {
+                if (!hasSlot || hasCursor && ItemStack.areItemsAndComponentsEqual(slotItem, cursorItem)) {
                     playSound(cursorItem, SoundType.PLACE);
                 } else {
                     playSound(slotItem, SoundType.PICKUP);
@@ -361,7 +368,7 @@ public class SoundManager {
         if (sound == null) {
             if (!MISSING_SOUND_ID.contains(id)) {
                 MISSING_SOUND_ID.add(id);
-                LOGGER.error("Sound cannot be found in packs: " + id, new NoSuchSoundException());
+                LOGGER.error("Sound cannot be found in packs: {}", id, new NoSuchSoundException());
             }
             return FALLBACK_SOUND_EVENT;
         }

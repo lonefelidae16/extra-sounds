@@ -27,6 +27,7 @@ public class Categories {
     public static final SoundEvent WET = ExtraSounds.createEvent("item.category.wet");
     public static final SoundEvent WET_SLIPPERY = ExtraSounds.createEvent("item.category.wet_slippery");
     public static final SoundEvent BRICK = ExtraSounds.createEvent("item.category.brick");
+    public static final SoundEvent KEYS = ExtraSounds.createEvent("item.category.keys");
 
     public static class Gear {
         public static final SoundEvent CHAIN = ExtraSounds.createEvent("item.category.gear.chain");
@@ -38,6 +39,7 @@ public class Categories {
         public static final SoundEvent NETHERITE = ExtraSounds.createEvent("item.category.gear.netherite");
         public static final SoundEvent STONE = ExtraSounds.createEvent("item.category.gear.stone");
         public static final SoundEvent TURTLE = ExtraSounds.createEvent("item.category.gear.turtle");
+        public static final SoundEvent ARMADILLO = ExtraSounds.createEvent("item.category.gear.armadillo");
         public static final SoundEvent WOOD = ExtraSounds.createEvent("item.category.gear.wood");
     }
 }

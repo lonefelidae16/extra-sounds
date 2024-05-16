@@ -30,10 +30,10 @@ public abstract class ChatHudMixin {
     @Unique
     private int currentLines;
 
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V", at = @At("RETURN"))
-    private void extrasounds$receiveMessage(Text message, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh, CallbackInfo ci) {
+    @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V", at = @At("RETURN"))
+    private void extrasounds$receiveMessage(Text message, @Nullable MessageSignatureData signature, @Nullable MessageIndicator indicator, CallbackInfo ci) {
         final ClientPlayerEntity player = this.client.player;
-        if (player == null || message == null || refresh) {
+        if (player == null || message == null) {
             return;
         }
 

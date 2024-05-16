@@ -95,7 +95,7 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
                     !bOnHotbar &&
                     slot != null
             ) {
-                if (ItemStack.canCombine(slot.getStack(), cursorStack) && !SoundManager.RIGHT_CLICK_PREDICATE.test(actionType, button)) {
+                if (ItemStack.areItemsAndComponentsEqual(slot.getStack(), cursorStack) && !SoundManager.RIGHT_CLICK_PREDICATE.test(actionType, button)) {
                     // Left Mouse Clicked on the same slot in CreativeInventory tab except Hotbar
                     SoundManager.playSound(cursorStack, SoundType.PICKUP);
                 } else {

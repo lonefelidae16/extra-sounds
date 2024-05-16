@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "dev.stashy.extrasounds.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],
   "client": [
@@ -29,7 +29,9 @@
     "typing.ChatScreenMixin",
     "typing.SelectionManagerMixin",
     "typing.SuggestionWindowMixin",
-    "typing.TextFieldWidgetMixin"
+    "typing.TextFieldWidgetMixin",
+
+    "resource.ReloadableResourceManagerImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1
