@@ -4,13 +4,42 @@
 ### ⌛ Coming
 
 <!-- <small>_Exciting new features may be coming here._</small> -->
-* Preparing compatibility with 1.20.5.
+* Preparing compatibility with 1.21.
 
 ### 💭 Bugs / Issues
 
-<!-- <small>_Caught bugs and known issues are written._</small> -->
-* Cursor Sound won’t hear when moving to first position (with <kbd>Home</kbd> key)
-  after accepting suggested chars.
+<small>_Caught bugs and known issues are written._</small>
+
+## [2.3.1+1.20.6-build.1] - 2024-05-16
+### ✨ Added
+
+* New item sounds:
+  - Armadillo Scute
+  - Wolf Armor
+  - Mace
+  - Ominous Trial Key
+  - Ominous Bottle
+  - Breeze Rod
+  - Wind Charge
+
+### 🔧 Fixed
+
+* Cursor Sound when accepting suggested chars.
+* Sound of the first slot in CreativeInventory.
+
+### 👷 Technical
+
+* Some files were refactored.
+* Dependency updates:
+  -  yarn mappings 1.20.6+build.1
+  - fabric api 0.97.8+1.20.6
+  - fabric loader 0.15.10
+  - fabric loom 1.6
+  - SoundCategories
+  - Java 21
+  - Gradle 8.7
+* Removed dependency:
+  - ARRP
 
 ## [2.3.1+1.20.4-build.3] - 2024-02-10
 ### ✨ Added
