@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds;
 
 import dev.stashy.extrasounds.debug.DebugUtils;
-import dev.stashy.extrasounds.impl.CustomizedLog4jMessageFactory;
+import dev.stashy.extrasounds.impl.PrefixableMessageFactory;
 import dev.stashy.extrasounds.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class ExtraSounds implements ClientModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(
             ExtraSounds.class,
-            new CustomizedLog4jMessageFactory(ExtraSounds.class.getSimpleName())
+            new PrefixableMessageFactory(ExtraSounds.class.getSimpleName())
     );
     public static final String MODID = "extrasounds";
     public static final SoundEvent MUTED = Sounds.MUTED;
@@ -36,7 +36,7 @@ public class ExtraSounds implements ClientModInitializer {
         try {
             return createEvent(new Identifier(MODID, path));
         } catch (Exception ex) {
-            LOGGER.error("[{}] Failed to create SoundEvent", ExtraSounds.class.getSimpleName(), ex);
+            LOGGER.error("Failed to create SoundEvent", ex);
         }
         return MUTED;
     }

@@ -2,16 +2,16 @@ package dev.stashy.extrasounds.impl;
 
 import org.apache.logging.log4j.message.*;
 
-public class CustomizedLog4jMessageFactory implements MessageFactory {
+public class PrefixableMessageFactory implements MessageFactory {
     private final String prefix;
 
-    public CustomizedLog4jMessageFactory(String prefix) {
+    public PrefixableMessageFactory(String prefix) {
         this.prefix = prefix;
     }
 
     @Override
     public Message newMessage(Object message) {
-        return new ObjectMessage(this.appendPrefix(message == null ? "null" : message.toString()));
+        return this.newMessage(message == null ? "null" : message.toString());
     }
 
     @Override

@@ -3,7 +3,7 @@ package dev.stashy.extrasounds;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import dev.stashy.extrasounds.debug.DebugUtils;
-import dev.stashy.extrasounds.impl.CustomizedLog4jMessageFactory;
+import dev.stashy.extrasounds.impl.PrefixableMessageFactory;
 import dev.stashy.extrasounds.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
@@ -39,7 +39,7 @@ import java.util.function.BiPredicate;
 public class SoundManager {
     private static final Logger LOGGER = LogManager.getLogger(
             SoundManager.class,
-            new CustomizedLog4jMessageFactory("%s/%s".formatted(
+            new PrefixableMessageFactory("%s/%s".formatted(
                     ExtraSounds.class.getSimpleName(),
                     SoundManager.class.getSimpleName()
             ))
@@ -240,7 +240,7 @@ public class SoundManager {
                 case NEUTRAL, BENEFICIAL -> Sounds.EFFECT_REMOVE_POSITIVE;
             };
         } else {
-            LOGGER.error("[{}] Unknown type of '{}' is approaching: '{}'", ExtraSounds.class.getSimpleName(), EffectType.class.getSimpleName(), type);
+            LOGGER.error("Unknown type of '{}' is approaching: '{}'", EffectType.class.getSimpleName(), type);
             return;
         }
         playSound(sound, SoundType.EFFECTS);

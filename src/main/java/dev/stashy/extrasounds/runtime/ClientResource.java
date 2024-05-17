@@ -3,7 +3,7 @@ package dev.stashy.extrasounds.runtime;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.JsonObject;
 import dev.stashy.extrasounds.ExtraSounds;
-import dev.stashy.extrasounds.impl.CustomizedLog4jMessageFactory;
+import dev.stashy.extrasounds.impl.PrefixableMessageFactory;
 import net.minecraft.registry.VersionedIdentifier;
 import net.minecraft.resource.*;
 import net.minecraft.resource.metadata.ResourceMetadataReader;
@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.*;
@@ -23,6 +22,7 @@ import java.util.function.Supplier;
 
 public class ClientResource implements ResourcePack {
     private final int packVersion;
+    private final CharSequence name;
     private final Map<Identifier, Supplier<byte[]>> assets;
     private final ResourcePackInfo info;
 
@@ -33,17 +33,18 @@ public class ClientResource implements ResourcePack {
         int proc = Math.max(Runtime.getRuntime().availableProcessors() / 2 - 1, 1);
         LOGGER = LogManager.getLogger(
                 ClientResource.class,
-                new CustomizedLog4jMessageFactory(
+                new PrefixableMessageFactory(
                         "%s/ResourcePack".formatted(ExtraSounds.class.getSimpleName())
                 )
         );
         EXECUTOR_SERVICE = Executors.newFixedThreadPool(proc, new ThreadFactoryBuilder().setDaemon(true).setNameFormat("ResPack-Workers-%s").build());
     }
 
-    public ClientResource(String modId) {
+    public ClientResource(String modId, String packName) {
         this.packVersion = 5;
         this.assets = new ConcurrentHashMap<>();
-        this.info = new ResourcePackInfo(modId, Text.literal(this.getName()), new ResourcePackSource() {
+        this.name = packName;
+        this.info = new ResourcePackInfo(modId, Text.literal(packName), new ResourcePackSource() {
             @Override
             public Text decorate(Text packDisplayName) {
                 return packDisplayName;
@@ -69,8 +70,8 @@ public class ClientResource implements ResourcePack {
             return null;
         }
 
-        Supplier<byte[]> supplier = this.assets.get(id);
-        if(supplier == null) {
+        var supplier = this.assets.get(id);
+        if (supplier == null) {
             return null;
         }
         return () -> new ByteArrayInputStream(supplier.get());
@@ -82,8 +83,8 @@ public class ClientResource implements ResourcePack {
             return;
         }
 
-        for (Identifier id : this.assets.keySet()) {
-            Supplier<byte[]> supplier = this.assets.get(id);
+        for (var id : this.assets.keySet()) {
+            var supplier = this.assets.get(id);
             if (supplier == null) {
                 continue;
             }
@@ -101,30 +102,27 @@ public class ClientResource implements ResourcePack {
         }
 
         Set<String> namespaces = new HashSet<>();
-        for (Identifier identifier : this.assets.keySet()) {
-            namespaces.add(identifier.getNamespace());
+        for (var id : this.assets.keySet()) {
+            namespaces.add(id.getNamespace());
         }
         return namespaces;
     }
 
     @Nullable
     @Override
-    public <T> T parseMetadata(ResourceMetadataReader<T> metaReader) throws IOException {
-        InputStream stream = null;
-        var supplier = this.openRoot("pack.mcmeta");
-        if (supplier != null) {
-            stream = supplier.get();
-        }
-        if (stream != null) {
-            return AbstractFileResourcePack.parseMetadata(metaReader, stream);
-        } else {
+    public <T> T parseMetadata(ResourceMetadataReader<T> metaReader) {
+        try {
+            var stream = Objects.requireNonNull(this.openRoot("pack.mcmeta")).get();
+            return AbstractFileResourcePack.parseMetadata(metaReader, Objects.requireNonNull(stream));
+        } catch (Exception ignored) {
             if (metaReader.getKey().equals("pack")) {
                 JsonObject object = new JsonObject();
                 object.addProperty("pack_format", this.packVersion);
                 object.addProperty("description", "%s Runtime ResPack".formatted(ExtraSounds.class.getSimpleName()));
                 return metaReader.fromJson(object);
+            } else {
+                return null;
             }
-            return null;
         }
     }
 
@@ -135,15 +133,11 @@ public class ClientResource implements ResourcePack {
 
     @Override
     public void close() {
-        LOGGER.info("closing pack: {}", this.getName());
-    }
-
-    public String getName() {
-        return "%s Runtime Resource".formatted(ExtraSounds.class.getSimpleName());
+        LOGGER.info("closing pack: {}", this.name);
     }
 
     public void addResourceAsync(Identifier location, Function<Identifier, byte[]> supplier) {
-        Future<byte[]> future = EXECUTOR_SERVICE.submit(() -> supplier.apply(location));
+        var future = EXECUTOR_SERVICE.submit(() -> supplier.apply(location));
         this.assets.put(location, () -> {
             try {
                 return future.get();

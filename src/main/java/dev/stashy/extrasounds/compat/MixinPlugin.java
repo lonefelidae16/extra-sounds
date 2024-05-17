@@ -1,8 +1,11 @@
 package dev.stashy.extrasounds.compat;
 
 import dev.stashy.extrasounds.ExtraSounds;
+import dev.stashy.extrasounds.impl.PrefixableMessageFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -11,7 +14,19 @@ import java.util.List;
 import java.util.Set;
 
 public final class MixinPlugin implements IMixinConfigPlugin {
-    private static final boolean B_SNAPSHOT = isSnapshotVersion();
+    private static final boolean B_SNAPSHOT;
+    private static final Logger LOGGER;
+
+    static {
+        LOGGER = LogManager.getLogger(
+                MixinPlugin.class,
+                new PrefixableMessageFactory("%s/%s".formatted(
+                        ExtraSounds.class.getSimpleName(),
+                        MixinPlugin.class.getSimpleName()
+                ))
+        );
+        B_SNAPSHOT = isSnapshotVersion();
+    }
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -59,7 +74,7 @@ public final class MixinPlugin implements IMixinConfigPlugin {
                     gameVersion.contains("-beta") ||
                     gameVersion.contains("-rc");
         } catch (Exception ex) {
-            ExtraSounds.LOGGER.error("[{}/{}] cannot determine Minecraft version", ExtraSounds.class.getSimpleName(), MixinPlugin.class.getSimpleName(), ex);
+            LOGGER.error("Cannot determine Minecraft version", ex);
             return true;
         }
     }

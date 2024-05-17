@@ -5,7 +5,7 @@ import com.google.gson.*;
 import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.debug.DebugUtils;
-import dev.stashy.extrasounds.impl.CustomizedLog4jMessageFactory;
+import dev.stashy.extrasounds.impl.PrefixableMessageFactory;
 import dev.stashy.extrasounds.json.SoundEntrySerializer;
 import dev.stashy.extrasounds.json.SoundSerializer;
 import dev.stashy.extrasounds.runtime.ClientResource;
@@ -38,10 +38,10 @@ public class SoundPackLoader {
     private static final Path CACHE_PATH = Path.of(System.getProperty("java.io.tmpdir"), ".minecraft_fabric", CACHE_FNAME);
 
     public static final Map<Identifier, SoundEvent> CUSTOM_SOUND_EVENT = new HashMap<>();
-    public static final ClientResource EXTRA_SOUNDS_RESOURCE = new ClientResource(ExtraSounds.MODID);
+    public static final ClientResource EXTRA_SOUNDS_RESOURCE = new ClientResource(ExtraSounds.MODID, "%s Runtime Resources".formatted(ExtraSounds.class.getSimpleName()));
     public static final Logger LOGGER = LogManager.getLogger(
             SoundPackLoader.class,
-            new CustomizedLog4jMessageFactory("%s/%s".formatted(
+            new PrefixableMessageFactory("%s/%s".formatted(
                     ExtraSounds.class.getSimpleName(),
                     SoundPackLoader.class.getSimpleName()
             ))
@@ -86,12 +86,7 @@ public class SoundPackLoader {
                 // FIXME: When duplicate namespace declared from 2 or more mods, the last mod takes priority.
                 namespace = generator.namespace;
             }
-            if (DebugUtils.DEBUG) {
-                DebugUtils.genericLog(
-                        "registering generator with namespace '%s'".formatted(
-                                namespace
-                        ));
-            }
+            DebugUtils.genericLog("registering generator with namespace '%s'".formatted(namespace));
             soundGenMappers.put(namespace, generator);
             generatorVer.add(CacheInfo.getModVersion(container));
         });

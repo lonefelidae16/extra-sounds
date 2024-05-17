@@ -37,7 +37,7 @@ public class DebugUtils {
 
     public static void init() {
         if (!DEBUG) return;
-        ExtraSounds.LOGGER.info("ExtraSounds: DEBUG mode enabled.");
+        ExtraSounds.LOGGER.info("DEBUG mode enabled.");
         ExtraSounds.LOGGER.info("Debug path: {}", Path.of(DEBUG_PATH).toAbsolutePath());
     }
 

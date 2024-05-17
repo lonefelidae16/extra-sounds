@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Mixin(ReloadableResourceManagerImpl.class)
@@ -19,14 +19,14 @@ public abstract class ReloadableResourceManagerImplMixin {
     @Shadow
     private @Final ResourceType type;
 
-    @ModifyVariable(method = "reload", at = @At("HEAD"))
+    @ModifyVariable(method = "reload", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/LifecycledResourceManager;close()V", shift = At.Shift.AFTER), ordinal = 0)
     private List<ResourcePack> extrasounds$registerResPack(List<ResourcePack> arg3) {
         if (this.type != ResourceType.CLIENT_RESOURCES) {
             return arg3;
         }
 
         ExtraSounds.LOGGER.info("registering Runtime ResPack");
-        List<ResourcePack> modifiable = new ArrayList<>(arg3);
+        List<ResourcePack> modifiable = new LinkedList<>(arg3);
         modifiable.addFirst(SoundPackLoader.EXTRA_SOUNDS_RESOURCE);
         return modifiable;
     }
