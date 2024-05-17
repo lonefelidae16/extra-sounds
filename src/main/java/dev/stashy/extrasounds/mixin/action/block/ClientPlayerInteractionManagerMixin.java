@@ -8,13 +8,19 @@ import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.spongepowered.asm.mixin.Final;
@@ -104,6 +110,26 @@ public abstract class ClientPlayerInteractionManagerMixin {
             } else {
                 // Place into pot
                 SoundManager.blockInteract(this.currentHandStack, blockPos);
+            }
+        }
+    }
+
+    @Inject(method = "interactEntityAtLocation", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    private void extrasounds$interactEntityAt(PlayerEntity player, Entity entity, EntityHitResult hitResult, Hand hand, CallbackInfoReturnable<ActionResult> cir, Vec3d target) {
+        if (player == null || hitResult == null) {
+            return;
+        }
+
+        final ItemStack currentStack = player.getStackInHand(hand);
+        if (entity instanceof ArmorStandEntity armorStandEntity) {
+            final EquipmentSlot slot = armorStandEntity.getSlotFromPosition(target);
+            if (!armorStandEntity.hasStackEquipped(slot)) {
+                return;
+            }
+
+            final ItemStack equipped = armorStandEntity.getEquippedStack(slot);
+            if (currentStack.isEmpty() || ItemStack.areItemsAndComponentsEqual(currentStack, equipped)) {
+                SoundManager.blockInteract(equipped, BlockPos.ofFloored(hitResult.getPos()));
             }
         }
     }

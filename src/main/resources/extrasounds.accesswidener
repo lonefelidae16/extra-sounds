@@ -1,2 +1,3 @@
 accessWidener	v2	named
 accessible method net/minecraft/block/FlowerPotBlock isEmpty ()Z
+accessible method net/minecraft/entity/decoration/ArmorStandEntity getSlotFromPosition (Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/entity/EquipmentSlot;
