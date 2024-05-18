@@ -5,6 +5,8 @@
 
 <!-- <small>_Exciting new features may be coming here._</small> -->
 * Preparing compatibility with 1.21.
+* New interaction sound:
+  - Armor Stand
 
 ### 💭 Bugs / Issues
 
