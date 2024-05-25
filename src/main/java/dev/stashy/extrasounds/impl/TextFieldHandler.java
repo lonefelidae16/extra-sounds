@@ -1,19 +1,27 @@
 package dev.stashy.extrasounds.impl;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.ExtraSounds;
+import dev.stashy.extrasounds.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.Sounds;
 
-/**
- * Helper class for managing {@link net.minecraft.client.gui.widget.TextFieldWidget} and its inherited class.
- */
-public class TextFieldState {
+public class TextFieldHandler {
+    public enum KeyType {
+        ERASE,
+        CUT,
+        INSERT,
+        PASTE,
+        RETURN,
+        CURSOR
+    }
+
     /**
-     * Position of the start.
+     * Text position of the start.
      */
-    public int cursorStart = 0;
+    private int cursorStart = 0;
     /**
-     * Position of the end.
+     * Text position of the end.
      */
-    public int cursorEnd = 0;
+    private int cursorEnd = 0;
 
     /**
      * Triggers the erase action.
@@ -23,13 +31,13 @@ public class TextFieldState {
      * @param selectionStart Current position of the start of the selection.
      * @param selectionEnd   Current position of the end of the selection.
      */
-    public void onErase(int offset, int length, int selectionStart, int selectionEnd) {
+    public void onCharErase(int offset, int length, int selectionStart, int selectionEnd) {
         final boolean bHeadBackspace = offset < 0 && selectionStart <= 0;
         final boolean bTailDelete = offset > 0 && selectionEnd >= length;
         if ((bHeadBackspace || bTailDelete) && selectionStart == selectionEnd) {
             return;
         }
-        SoundManager.keyboard(SoundManager.KeyType.ERASE);
+        this.onKey(KeyType.ERASE);
     }
 
     /**
@@ -42,7 +50,7 @@ public class TextFieldState {
         if (!isPosUpdated(selectionStart, selectionEnd)) {
             return;
         }
-        SoundManager.keyboard(SoundManager.KeyType.CURSOR);
+        this.onKey(KeyType.CURSOR);
         this.cursorStart = selectionStart;
         this.cursorEnd = selectionEnd;
     }
@@ -68,5 +76,23 @@ public class TextFieldState {
 
     public void setCursorEnd(int cursorEnd) {
         this.cursorEnd = cursorEnd;
+    }
+
+    public void onKey(KeyType type) {
+        if (type == null) {
+            ExtraSounds.LOGGER.error("Null argument of type '{}' was passed!",
+                    KeyType.class.getSimpleName(),
+                    new IllegalArgumentException("'type' must be non-null.")
+            );
+            return;
+        }
+
+        switch (type) {
+            case ERASE -> ExtraSounds.MANAGER.playSound(Sounds.KEYBOARD_ERASE, SoundType.TYPING);
+            case CUT -> ExtraSounds.MANAGER.playSound(Sounds.KEYBOARD_CUT, SoundType.TYPING);
+            case CURSOR, RETURN -> ExtraSounds.MANAGER.playSound(Sounds.KEYBOARD_MOVE, SoundType.TYPING);
+            case INSERT -> ExtraSounds.MANAGER.playSound(Sounds.KEYBOARD_TYPE, SoundType.TYPING);
+            case PASTE -> ExtraSounds.MANAGER.playSound(Sounds.KEYBOARD_PASTE, SoundType.TYPING);
+        }
     }
 }

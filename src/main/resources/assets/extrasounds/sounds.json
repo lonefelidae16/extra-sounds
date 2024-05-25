@@ -497,12 +497,21 @@
       }
     ]
   },
-  "item.delete": {
+  "item.delete_all": {
     "sounds": [
       {
         "name": "minecraft:random/fizz",
         "volume": 0.25,
         "pitch": 1.6
+      }
+    ]
+  },
+  "item.delete_partial": {
+    "sounds": [
+      {
+        "name": "extrasounds:item.delete_all",
+        "volume": 0.45,
+        "type": "event"
       }
     ]
   },

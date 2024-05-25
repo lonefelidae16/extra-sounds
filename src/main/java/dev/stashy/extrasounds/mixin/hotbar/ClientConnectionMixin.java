@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.hotbar;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.sounds.SoundType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -39,9 +39,9 @@ public abstract class ClientConnectionMixin {
         final ItemStack offHandStack = player.getOffHandStack();
         final ItemStack mainHandStack = player.getMainHandStack();
         if (!offHandStack.isEmpty()) {
-            SoundManager.playSound(offHandStack, SoundType.PICKUP);
+            ExtraSounds.MANAGER.playSound(offHandStack.getItem(), SoundType.PICKUP);
         } else if (!mainHandStack.isEmpty()) {
-            SoundManager.playSound(mainHandStack, SoundType.PICKUP);
+            ExtraSounds.MANAGER.playSound(mainHandStack.getItem(), SoundType.PICKUP);
         }
     }
 }

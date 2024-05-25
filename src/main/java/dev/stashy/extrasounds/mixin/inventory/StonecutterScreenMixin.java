@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.inventory;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.impl.ScreenScrollHandler;
 import net.minecraft.client.gui.screen.ingame.StonecutterScreen;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,6 +19,9 @@ public abstract class StonecutterScreenMixin {
     @Unique
     private static final String FIELD_ID_SCROLL_OFFSET = "Lnet/minecraft/client/gui/screen/ingame/StonecutterScreen;scrollOffset:I";
 
+    @Unique
+    private final ScreenScrollHandler soundHandler = new ScreenScrollHandler();
+
     @Shadow
     private int scrollOffset;
 
@@ -31,7 +34,7 @@ public abstract class StonecutterScreenMixin {
             )
     )
     private void extrasounds$stonecutterScreenReset(CallbackInfo ci) {
-        SoundManager.resetScrollPos();
+        this.soundHandler.resetScrollPos();
     }
 
     @Inject(
@@ -44,6 +47,6 @@ public abstract class StonecutterScreenMixin {
             )
     )
     private void extrasounds$stonecuttorScreenScroll(CallbackInfoReturnable<Boolean> cir) {
-        SoundManager.screenScroll(this.scrollOffset);
+        this.soundHandler.onScroll(this.scrollOffset);
     }
 }

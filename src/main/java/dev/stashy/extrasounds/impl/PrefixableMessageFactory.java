@@ -1,12 +1,19 @@
 package dev.stashy.extrasounds.impl;
 
 import org.apache.logging.log4j.message.*;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class PrefixableMessageFactory implements MessageFactory {
-    private final String prefix;
+    private final CharSequence prefix;
 
-    public PrefixableMessageFactory(String prefix) {
-        this.prefix = prefix;
+    public PrefixableMessageFactory() {
+        this(null);
+    }
+
+    public PrefixableMessageFactory(@Nullable CharSequence prefix) {
+        this.prefix = Objects.requireNonNullElse(prefix, "");
     }
 
     @Override
@@ -24,7 +31,7 @@ public class PrefixableMessageFactory implements MessageFactory {
         return new FormattedMessage(this.appendPrefix(message), params);
     }
 
-    private String appendPrefix(CharSequence message) {
-        return "[%s] %s".formatted(this.prefix, message);
+    private String appendPrefix(String message) {
+        return (this.prefix.isEmpty()) ? message : "[%s] %s".formatted(this.prefix, message);
     }
 }

@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.hotbar;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.ExtraSounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -33,6 +33,6 @@ public abstract class MouseMixin {
             return;
         }
 
-        SoundManager.hotbar(player.getInventory().selectedSlot);
+        ExtraSounds.MANAGER.hotbar(player.getInventory().selectedSlot);
     }
 }

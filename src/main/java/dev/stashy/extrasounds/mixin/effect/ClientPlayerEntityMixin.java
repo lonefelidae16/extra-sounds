@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.effect;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.impl.EntitySoundHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.entry.RegistryEntry;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,13 +19,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends ExtendLivingEntityMixin {
+    @Unique
+    private final EntitySoundHandler soundHandler = new EntitySoundHandler();
+
     @Override
     protected void extrasounds$invokeOnStatusEffectApplied_AtHead(StatusEffectInstance effect, @Nullable Entity source, CallbackInfo ci) {
         super.extrasounds$invokeOnStatusEffectApplied_AtHead(effect, source, ci);
-        if (!effect.shouldShowIcon()) {
+        if (!effect.shouldShowIcon() || effect.isDurationBelow(1)) {
             return;
         }
-        SoundManager.effectChanged(effect.getEffectType().value(), SoundManager.EffectType.ADD);
+        this.soundHandler.onEffectChanged(effect.getEffectType().value(), EntitySoundHandler.EffectType.ADD);
     }
 
     @Inject(method = "removeStatusEffectInternal", at = @At("HEAD"))
@@ -33,6 +37,6 @@ public abstract class ClientPlayerEntityMixin extends ExtendLivingEntityMixin {
         if (effect == null || !effect.shouldShowIcon()) {
             return;
         }
-        SoundManager.effectChanged(effect.getEffectType().value(), SoundManager.EffectType.REMOVE);
+        this.soundHandler.onEffectChanged(effect.getEffectType().value(), EntitySoundHandler.EffectType.REMOVE);
     }
 }

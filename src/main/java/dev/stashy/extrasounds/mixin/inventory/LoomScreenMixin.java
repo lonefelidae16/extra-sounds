@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.inventory;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.impl.ScreenScrollHandler;
 import net.minecraft.client.gui.screen.ingame.LoomScreen;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,6 +19,9 @@ public abstract class LoomScreenMixin {
     @Unique
     private static final String FIELD_ID_TOP_ROW = "Lnet/minecraft/client/gui/screen/ingame/LoomScreen;visibleTopRow:I";
 
+    @Unique
+    private final ScreenScrollHandler soundHandler = new ScreenScrollHandler();
+
     @Shadow
     private int visibleTopRow;
 
@@ -31,7 +34,7 @@ public abstract class LoomScreenMixin {
             )
     )
     private void extrasounds$loomScreenReset(CallbackInfo ci) {
-        SoundManager.resetScrollPos();
+        this.soundHandler.resetScrollPos();
     }
 
     @Inject(
@@ -44,6 +47,6 @@ public abstract class LoomScreenMixin {
             )
     )
     private void extrasounds$loomScreenScroll(CallbackInfoReturnable<Boolean> cir) {
-        SoundManager.screenScroll(this.visibleTopRow);
+        this.soundHandler.onScroll(this.visibleTopRow);
     }
 }

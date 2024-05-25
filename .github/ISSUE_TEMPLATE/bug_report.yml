@@ -11,10 +11,11 @@ body:
     attributes:
       label: Environment info
       description: |
-        Please list what Minecraft version and modloader you are using.
+        Please list what Minecraft version and mods you are using.
       placeholder: |
-        - Minecraft version, Mod version you are using.
+        - Minecraft version, ExtraSounds version you are using.
         - Fabric API or Quilted Fabric API version.
+        - Other mods and their versions.
         - optional: Operating system you are using and Java version (e.g. "Windows 10 with Bundled JRE", "Ubuntu 22.04 with OpenJDK 17.0.8+7-Ubuntu-122.04", etc.)
     validations:
       required: true

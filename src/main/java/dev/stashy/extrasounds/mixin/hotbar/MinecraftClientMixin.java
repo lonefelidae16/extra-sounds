@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.hotbar;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.block.entity.BlockEntity;
@@ -28,13 +28,13 @@ public abstract class MinecraftClientMixin {
     @Inject(method = "handleInputEvents", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/entity/player/PlayerInventory;selectedSlot:I"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void extrasounds$hotbarKeySound(CallbackInfo ci, int i) {
         if (this.player != null && this.player.getInventory().selectedSlot != i) {
-            SoundManager.hotbar(i);
+            ExtraSounds.MANAGER.hotbar(i);
         }
     }
 
     @Inject(method = "handleInputEvents", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/SpectatorHud;selectSlot(I)V"))
     private void extrasounds$spectatorHotbarSound(CallbackInfo ci) {
-        SoundManager.playSound(Sounds.HOTBAR_SCROLL, SoundType.HOTBAR);
+        ExtraSounds.MANAGER.playSound(Sounds.HOTBAR_SCROLL, SoundType.HOTBAR);
     }
 
     @Inject(
@@ -48,7 +48,7 @@ public abstract class MinecraftClientMixin {
     )
     private void extrasounds$itemPickSound(CallbackInfo ci, boolean isCreative, BlockEntity blockEntity, ItemStack itemStack) {
         if (player != null && !player.getMainHandStack().getItem().equals(itemStack.getItem())) {
-            SoundManager.playSound(itemStack, SoundType.PICKUP);
+            ExtraSounds.MANAGER.playSound(itemStack.getItem(), SoundType.PICKUP);
         }
     }
 }

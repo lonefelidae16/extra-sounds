@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.action.block;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -11,7 +11,9 @@ import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundEvent;
@@ -45,9 +47,18 @@ public abstract class ClientPlayerInteractionManagerMixin {
     private BlockEntity blockEntity;
     @Unique
     private ItemStack currentHandStack;
+    @Unique
+    private ItemStack mainHandStack;
+    @Unique
+    private ItemStack offHandStack;
 
     @Shadow
     private @Final MinecraftClient client;
+
+    @Unique
+    private boolean extrasounds$canInteractBlock(PlayerEntity player) {
+        return !player.isSneaking() || (player.isSneaking() && this.mainHandStack.isEmpty() && this.offHandStack.isEmpty());
+    }
 
     @Inject(method = "interactBlockInternal", at = @At(value = "HEAD"))
     private void extrasounds$storeState(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
@@ -61,6 +72,8 @@ public abstract class ClientPlayerInteractionManagerMixin {
         this.blockEntity = world.getBlockEntity(blockPos);
         this.block = this.blockState.getBlock();
         this.currentHandStack = player.getStackInHand(hand).copy();
+        this.mainHandStack = player.getMainHandStack().copy();
+        this.offHandStack = player.getOffHandStack().copy();
     }
 
     @Inject(
@@ -80,25 +93,34 @@ public abstract class ClientPlayerInteractionManagerMixin {
 
         final BlockPos blockPos = hitResult.getBlockPos();
 
-        if (this.blockState.isOf(Blocks.REPEATER) && this.blockState.contains(RepeaterBlock.DELAY)) {
+        if (this.blockState.isOf(Blocks.REPEATER) &&
+                this.blockState.contains(RepeaterBlock.DELAY) &&
+                this.extrasounds$canInteractBlock(player)
+        ) {
             // Repeater
             final SoundEvent sound = this.blockState.get(RepeaterBlock.DELAY) == 4 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
-            SoundManager.blockInteract(sound, blockPos);
-        } else if (this.blockState.isOf(Blocks.DAYLIGHT_DETECTOR) && this.blockState.contains(DaylightDetectorBlock.INVERTED)) {
+            ExtraSounds.MANAGER.blockInteract(sound, blockPos);
+        } else if (this.blockState.isOf(Blocks.DAYLIGHT_DETECTOR) &&
+                this.blockState.contains(DaylightDetectorBlock.INVERTED) &&
+                this.extrasounds$canInteractBlock(player)
+        ) {
             // Daylight Detector
             final SoundEvent sound = this.blockState.get(DaylightDetectorBlock.INVERTED) ? Sounds.Actions.REDSTONE_COMPONENT_ON : Sounds.Actions.REDSTONE_COMPONENT_OFF;
-            SoundManager.blockInteract(sound, blockPos);
-        } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && mutableObject.getValue() == ActionResult.SUCCESS) {
+            ExtraSounds.MANAGER.blockInteract(sound, blockPos);
+        } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && this.extrasounds$canInteractBlock(player)) {
             // Redstone Wire
-            SoundManager.blockInteract(Sounds.Actions.REDSTONE_WIRE_CHANGE, blockPos);
-        } else if (this.blockState.isIn(BlockTags.REDSTONE_ORES) && this.blockState.contains(RedstoneOreBlock.LIT)) {
+            ExtraSounds.MANAGER.blockInteract(Sounds.Actions.REDSTONE_WIRE_CHANGE, blockPos);
+        } else if (this.blockState.isIn(BlockTags.REDSTONE_ORES) &&
+                this.blockState.contains(RedstoneOreBlock.LIT) &&
+                this.extrasounds$canInteractBlock(player) && !(this.mainHandStack.getItem() instanceof BlockItem)
+        ) {
             // Redstone Ores
-            SoundManager.blockInteract(this.block.asItem().getDefaultStack(), blockPos);
+            ExtraSounds.MANAGER.blockInteract(this.block.asItem(), blockPos);
         } else if (this.blockState.isIn(BlockTags.CAMPFIRES) && (this.blockEntity instanceof CampfireBlockEntity campfireBlockEntity)) {
             // Put item on Campfire
             var recipe = campfireBlockEntity.getRecipeFor(this.currentHandStack);
-            if (recipe.isPresent()) {
-                SoundManager.blockInteract(this.currentHandStack, blockPos);
+            if (recipe.isPresent() && mutableObject.getValue() == ActionResult.CONSUME) {
+                ExtraSounds.MANAGER.blockInteract(this.currentHandStack.getItem(), blockPos);
             }
         } else if (this.blockState.isIn(BlockTags.FLOWER_POTS) &&
                 (this.block instanceof FlowerPotBlock potBlock) &&
@@ -106,30 +128,41 @@ public abstract class ClientPlayerInteractionManagerMixin {
         ) {
             if (!potBlock.isEmpty()) {
                 // Take from pot
-                SoundManager.blockInteract(potBlock.getContent().asItem().getDefaultStack(), blockPos);
+                ExtraSounds.MANAGER.blockInteract(potBlock.getContent().asItem(), blockPos);
             } else {
                 // Place into pot
-                SoundManager.blockInteract(this.currentHandStack, blockPos);
+                ExtraSounds.MANAGER.blockInteract(this.currentHandStack.getItem(), blockPos);
             }
         }
     }
 
-    @Inject(method = "interactEntityAtLocation", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    @Inject(
+            method = "interactEntityAtLocation",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V",
+                    shift = At.Shift.AFTER
+            ), locals = LocalCapture.CAPTURE_FAILSOFT
+    )
     private void extrasounds$interactEntityAt(PlayerEntity player, Entity entity, EntityHitResult hitResult, Hand hand, CallbackInfoReturnable<ActionResult> cir, Vec3d target) {
-        if (player == null || hitResult == null) {
+        if (player == null || hitResult == null || player.isSpectator()) {
             return;
         }
 
-        final ItemStack currentStack = player.getStackInHand(hand);
+        final ItemStack currentStack = player.getStackInHand(hand).copy();
         if (entity instanceof ArmorStandEntity armorStandEntity) {
-            final EquipmentSlot slot = armorStandEntity.getSlotFromPosition(target);
-            if (!armorStandEntity.hasStackEquipped(slot)) {
+            final EquipmentSlot slotFromPosition = armorStandEntity.getSlotFromPosition(target);
+            final EquipmentSlot slotPreferred = MobEntity.getPreferredEquipmentSlot(currentStack);
+            if (!armorStandEntity.hasStackEquipped(slotFromPosition) && !armorStandEntity.hasStackEquipped(slotPreferred)) {
                 return;
             }
 
-            final ItemStack equipped = armorStandEntity.getEquippedStack(slot);
+            final ItemStack equipped = armorStandEntity.getEquippedStack(slotFromPosition).copy();
+            final ItemStack preferred = armorStandEntity.getEquippedStack(slotPreferred).copy();
             if (currentStack.isEmpty() || ItemStack.areItemsAndComponentsEqual(currentStack, equipped)) {
-                SoundManager.blockInteract(equipped, BlockPos.ofFloored(hitResult.getPos()));
+                ExtraSounds.MANAGER.blockInteract(equipped.getItem(), BlockPos.ofFloored(hitResult.getPos()));
+            } else if (ItemStack.areItemsAndComponentsEqual(currentStack, preferred)) {
+                ExtraSounds.MANAGER.blockInteract(preferred.getItem(), BlockPos.ofFloored(hitResult.getPos()));
             }
         }
     }

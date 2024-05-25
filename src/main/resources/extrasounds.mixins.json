@@ -19,7 +19,6 @@
     "hotbar.MouseMixin",
     "inventory.ClientPlayerInteractionManagerMixin",
     "inventory.CreativeInventoryScreenMixin",
-    "inventory.CreativeScreenHandlerMixin",
     "inventory.HandledScreenMixin",
     "inventory.LoomScreenMixin",
     "inventory.MerchantScreenMixin",

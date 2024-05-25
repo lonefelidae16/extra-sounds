@@ -18,6 +18,7 @@ public class ExtraSounds implements ClientModInitializer {
     );
     public static final String MODID = "extrasounds";
     public static final SoundEvent MUTED = Sounds.MUTED;
+    public static final SoundManager MANAGER = new SoundManager();
 
     @Override
     public void onInitializeClient() {
@@ -26,17 +27,31 @@ public class ExtraSounds implements ClientModInitializer {
     }
 
     public static Identifier getClickId(Identifier id, SoundType type) {
-        if (id == null || type == null) {
-            return MUTED.getId();
+        try {
+            final String prefix = type.prefix;
+            final String namespace = id.getNamespace();
+            final String path = id.getPath();
+            if (prefix.isBlank() || namespace.isBlank() || path.isBlank()) {
+                throw new IllegalArgumentException(
+                        "Identifier cannot contain blank String: prefix = '%s', namespace = '%s', path = '%s'".formatted(
+                                prefix,
+                                namespace,
+                                path
+                        )
+                );
+            }
+            return new Identifier(MODID, "%s.%s.%s".formatted(prefix, namespace, path));
+        } catch (Exception ex) {
+            LOGGER.error("Failed to create Click Id.", ex);
         }
-        return new Identifier(MODID, "%s.%s.%s".formatted(type.prefix, id.getNamespace(), id.getPath()));
+        return MUTED.getId();
     }
 
     public static SoundEvent createEvent(String path) {
         try {
             return createEvent(new Identifier(MODID, path));
         } catch (Exception ex) {
-            LOGGER.error("Failed to create SoundEvent", ex);
+            LOGGER.error("Failed to create SoundEvent.", ex);
         }
         return MUTED;
     }

@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.action.entity;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.entity.Entity;
@@ -27,6 +27,6 @@ public abstract class LivingEntityMixin extends Entity {
 
         final float flu = (this.random.nextFloat() - 0.5f) * 0.333333f;
         final float pitch = flu + (float) MathHelper.clampedLerp(2f, 0.5f,  Math.sqrt(this.getHeight() * this.getWidth()) * 0.4f);
-        SoundManager.playSound(Sounds.Entities.POOF, SoundType.ENTITY, .7f, pitch, this.getBlockPos());
+        ExtraSounds.MANAGER.playSound(Sounds.Entities.POOF, SoundType.ENTITY, .7f, pitch, this.getBlockPos());
     }
 }

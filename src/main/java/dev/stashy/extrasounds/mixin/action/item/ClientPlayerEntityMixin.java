@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.mixin.action.item;
 
 import com.mojang.authlib.GameProfile;
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -29,7 +29,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             return;
         }
 
-        SoundManager.playSound(Sounds.Actions.BOW_PULL, SoundType.ITEM_INTR);
+        ExtraSounds.MANAGER.playSound(Sounds.Actions.BOW_PULL, SoundType.ITEM_INTR);
     }
 
     @Inject(method = "clearActiveItem", at = @At(value = "HEAD"))
@@ -38,6 +38,6 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             return;
         }
 
-        SoundManager.stopSound(Sounds.Actions.BOW_PULL, SoundType.ITEM_INTR);
+        ExtraSounds.MANAGER.stopSound(Sounds.Actions.BOW_PULL, SoundType.ITEM_INTR);
     }
 }

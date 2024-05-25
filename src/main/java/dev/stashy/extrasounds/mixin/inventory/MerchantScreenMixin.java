@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.inventory;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.impl.ScreenScrollHandler;
 import net.minecraft.client.gui.screen.ingame.MerchantScreen;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,12 +19,15 @@ public abstract class MerchantScreenMixin {
     @Unique
     private static final String FIELD_ID_START_OFFSET = "Lnet/minecraft/client/gui/screen/ingame/MerchantScreen;indexStartOffset:I";
 
+    @Unique
+    private final ScreenScrollHandler soundHandler = new ScreenScrollHandler();
+
     @Shadow
     int indexStartOffset;
 
     @Inject(method = "init", at = @At("HEAD"))
     private void extrasounds$merchantScreenInit(CallbackInfo ci) {
-        SoundManager.resetScrollPos();
+        this.soundHandler.resetScrollPos();
     }
 
     @Inject(
@@ -37,6 +40,6 @@ public abstract class MerchantScreenMixin {
             )
     )
     private void extrasounds$merchantScreenScroll(CallbackInfoReturnable<Boolean> cir) {
-        SoundManager.screenScroll(this.indexStartOffset);
+        this.soundHandler.onScroll(this.indexStartOffset);
     }
 }

@@ -176,15 +176,15 @@ public class SoundPackLoader {
                 definition = SoundDefinition.of(fallbackSoundEntry);
             }
 
-            final Identifier pickupSoundId = ExtraSounds.getClickId(itemId, SoundType.PICKUP);
-            final SoundEntry pickupSoundEntry = Sounds.aliased(ExtraSounds.createEvent(pickupSoundId));
-            generateSoundEntry(itemId, SoundType.PICKUP, definition.pickup, pickupSoundEntry, resource);
-            generateSoundEntry(itemId, SoundType.PLACE, definition.place, pickupSoundEntry, resource);
-            generateSoundEntry(itemId, SoundType.HOTBAR, definition.hotbar, pickupSoundEntry, resource);
+            final Identifier pickupClickId = ExtraSounds.getClickId(itemId, SoundType.PICKUP);
+            final SoundDefinition filled = definition.fill(Sounds.aliased(ExtraSounds.createEvent(pickupClickId)));
+            generateSoundEntry(pickupClickId, filled.pickup, resource);
+            generateSoundEntry(ExtraSounds.getClickId(itemId, SoundType.PLACE), filled.place, resource);
+            generateSoundEntry(ExtraSounds.getClickId(itemId, SoundType.HOTBAR), filled.hotbar, resource);
 
             if (DebugUtils.SEARCH_UNDEF_SOUND) {
                 final boolean isFallbackSoundEntry = Objects.equals(GSON.toJson(definition.pickup), fallbackSoundJson);
-                final boolean notIncludeSoundsJson = !inSoundsJsonIds.contains(pickupSoundId.getPath());
+                final boolean notIncludeSoundsJson = !inSoundsJsonIds.contains(pickupClickId.getPath());
                 if (isFallbackSoundEntry && notIncludeSoundsJson) {
                     LOGGER.warn("unregistered sound was found: '{}'", itemId);
                 }
@@ -195,17 +195,13 @@ public class SoundPackLoader {
     /**
      * Generates a resource.
      *
-     * @param itemId       Target item id.
-     * @param type         A {@link SoundType} which category of volume to play.
+     * @param clickId      Target id.
      * @param entry        Target {@link SoundEntry}.
-     * @param defaultEntry A fallback SoundEntry.
      * @param resource     {@link Map} of resource that the SoundEntry will be stored.
      */
-    private static void generateSoundEntry(Identifier itemId, SoundType type, SoundEntry entry, SoundEntry defaultEntry, Map<String, SoundEntry> resource) {
-        final SoundEntry soundEntry = (entry == null) ? defaultEntry : entry;
-        final Identifier id = ExtraSounds.getClickId(itemId, type);
-        resource.put(id.getPath(), soundEntry);
-        putSoundEvent(id);
+    private static void generateSoundEntry(Identifier clickId, SoundEntry entry, Map<String, SoundEntry> resource) {
+        resource.put(clickId.getPath(), entry);
+        putSoundEvent(clickId);
     }
 
     /**

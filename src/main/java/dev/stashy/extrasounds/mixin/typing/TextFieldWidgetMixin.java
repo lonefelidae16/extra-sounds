@@ -1,7 +1,6 @@
 package dev.stashy.extrasounds.mixin.typing;
 
-import dev.stashy.extrasounds.SoundManager;
-import dev.stashy.extrasounds.impl.TextFieldState;
+import dev.stashy.extrasounds.impl.TextFieldHandler;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(TextFieldWidget.class)
 public abstract class TextFieldWidgetMixin {
     @Unique
-    private final TextFieldState state = new TextFieldState();
+    private final TextFieldHandler soundHandler = new TextFieldHandler();
 
     // #region method signatures
     // <editor-fold desc="method signatures">
@@ -43,11 +42,11 @@ public abstract class TextFieldWidgetMixin {
 
     @Inject(method = "erase", at = @At("HEAD"))
     private void extrasounds$eraseStrHead(int offset, CallbackInfo ci) {
-        this.state.onErase(offset, this.getText().length(), this.selectionStart, this.selectionEnd);
+        this.soundHandler.onCharErase(offset, this.getText().length(), this.selectionStart, this.selectionEnd);
     }
     @Inject(method = "erase", at = @At("RETURN"))
     private void extrasounds$eraseStrReturn(int offset, CallbackInfo ci) {
-        this.state.setCursor(this.selectionEnd);
+        this.soundHandler.setCursor(this.selectionEnd);
     }
 
     @Inject(
@@ -62,17 +61,17 @@ public abstract class TextFieldWidgetMixin {
         if (!Screen.isCut(keyCode) || this.getSelectedText().isEmpty()) {
             return;
         }
-        SoundManager.keyboard(SoundManager.KeyType.CUT);
-        this.state.setCursor(this.selectionEnd);
+        this.soundHandler.onKey(TextFieldHandler.KeyType.CUT);
+        this.soundHandler.setCursor(this.selectionEnd);
     }
 
     @Inject(method = "charTyped", at = @At("RETURN"))
     private void extrasounds$appendChar(char chr, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValue() || !this.state.isPosUpdated(this.selectionStart, this.selectionEnd)) {
+        if (!cir.getReturnValue() || !this.soundHandler.isPosUpdated(this.selectionStart, this.selectionEnd)) {
             return;
         }
-        SoundManager.keyboard(SoundManager.KeyType.INSERT);
-        this.state.setCursor(this.selectionEnd);
+        this.soundHandler.onKey(TextFieldHandler.KeyType.INSERT);
+        this.soundHandler.setCursor(this.selectionEnd);
     }
 
     @Inject(
@@ -84,11 +83,11 @@ public abstract class TextFieldWidgetMixin {
             )
     )
     private void extrasounds$pasteAction(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (!Screen.isPaste(keyCode) || !this.state.isPosUpdated(this.selectionStart, this.selectionEnd)) {
+        if (!Screen.isPaste(keyCode) || !this.soundHandler.isPosUpdated(this.selectionStart, this.selectionEnd)) {
             return;
         }
-        SoundManager.keyboard(SoundManager.KeyType.PASTE);
-        this.state.setCursor(this.selectionEnd);
+        this.soundHandler.onKey(TextFieldHandler.KeyType.PASTE);
+        this.soundHandler.setCursor(this.selectionEnd);
     }
 
     @Inject(method = "keyPressed",
@@ -100,16 +99,16 @@ public abstract class TextFieldWidgetMixin {
             }
     )
     private void extrasounds$cursorMoveKeyTyped(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        this.state.onCursorChanged(this.selectionStart, this.selectionEnd);
+        this.soundHandler.onCursorChanged(this.selectionStart, this.selectionEnd);
     }
 
     @Inject(method = "onClick", at = @At(value = "INVOKE", target = METHOD_SIGN_SET_CURSOR, shift = At.Shift.AFTER))
     private void extrasounds$clickEvent(double mouseX, double mouseY, CallbackInfo ci) {
-        this.state.onCursorChanged(this.selectionStart, this.selectionEnd);
+        this.soundHandler.onCursorChanged(this.selectionStart, this.selectionEnd);
     }
 
     @Inject(method = "setText", at = @At(value = "INVOKE", target = METHOD_SIGN_CURSOR_TO_END))
     private void extrasounds$autoComplete(String text, CallbackInfo ci) {
-        this.state.setCursor(this.getText().length());
+        this.soundHandler.setCursor(this.getText().length());
     }
 }

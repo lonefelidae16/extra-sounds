@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.inventory;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -26,7 +26,7 @@ public abstract class HandledScreenMixin {
     @Inject(method = "mouseDragged", at = @At(value = "INVOKE", target = "Ljava/util/Set;add(Ljava/lang/Object;)Z"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void extrasounds$quickCraftSound(double mouseX, double mouseY, int button, double deltaX, double deltaY, CallbackInfoReturnable<Boolean> cir, Slot slot) {
         if (!cursorDragSlots.contains(slot) && !cursorDragSlots.isEmpty()) {
-            SoundManager.playSound(Sounds.ITEM_DRAG, SoundType.PLACE);
+            ExtraSounds.MANAGER.playSound(Sounds.ITEM_DRAG, SoundType.PLACE);
         }
     }
 }

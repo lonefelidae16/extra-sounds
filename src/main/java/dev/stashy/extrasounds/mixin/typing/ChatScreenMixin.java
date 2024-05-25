@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.typing;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.impl.TextFieldHandler;
 import net.minecraft.client.gui.screen.ChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,6 +16,8 @@ public abstract class ChatScreenMixin {
 
     @Unique
     private int currentHistoryPos;
+    @Unique
+    private final TextFieldHandler soundHandler = new TextFieldHandler();
 
     @Unique
     private void extrasounds$updateHistoryPos() {
@@ -30,7 +32,7 @@ public abstract class ChatScreenMixin {
     @Inject(method = "setChatFromHistory", at = @At("RETURN"))
     private void extrasounds$selectHistory(int offset, CallbackInfo ci) {
         if (this.messageHistoryIndex != this.currentHistoryPos) {
-            SoundManager.keyboard(SoundManager.KeyType.CURSOR);
+            this.soundHandler.onKey(TextFieldHandler.KeyType.CURSOR);
             this.extrasounds$updateHistoryPos();
         }
     }

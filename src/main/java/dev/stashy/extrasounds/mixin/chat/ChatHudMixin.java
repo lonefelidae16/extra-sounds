@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mixin.chat;
 
-import dev.stashy.extrasounds.SoundManager;
+import dev.stashy.extrasounds.ExtraSounds;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.client.MinecraftClient;
@@ -46,16 +46,16 @@ public abstract class ChatHudMixin {
         }
 
         if (containsPlName) {
-            SoundManager.playSound(Sounds.CHAT_MENTION, SoundType.CHAT_MENTION);
+            ExtraSounds.MANAGER.playSound(Sounds.CHAT_MENTION, SoundType.CHAT_MENTION);
         } else {
-            SoundManager.playSound(Sounds.CHAT, SoundType.CHAT);
+            ExtraSounds.MANAGER.playSound(Sounds.CHAT, SoundType.CHAT);
         }
     }
 
     @Inject(method = "scroll", at = @At("RETURN"))
     private void extrasounds$onScroll(int amount, CallbackInfo ci) {
         if (this.scrolledLines != this.currentLines) {
-            SoundManager.playSound(Sounds.INVENTORY_SCROLL, SoundType.CHAT);
+            ExtraSounds.MANAGER.playSound(Sounds.INVENTORY_SCROLL, SoundType.CHAT);
             this.currentLines = this.scrolledLines;
         }
     }

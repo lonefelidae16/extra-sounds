@@ -21,7 +21,8 @@ public class Sounds {
     public static final SoundEvent ITEM_PICK = ExtraSounds.createEvent("item.pickup");
     public static final SoundEvent ITEM_PICK_ALL = ExtraSounds.createEvent("item.pickup_all");
     public static final SoundEvent ITEM_CLONE = ExtraSounds.createEvent("item.clone");
-    public static final SoundEvent ITEM_DELETE = ExtraSounds.createEvent("item.delete");
+    public static final SoundEvent ITEM_DELETE_ALL = ExtraSounds.createEvent("item.delete_all");
+    public static final SoundEvent ITEM_DELETE_PARTIAL = ExtraSounds.createEvent("item.delete_partial");
     public static final SoundEvent ITEM_DRAG = ExtraSounds.createEvent("item.drag");
     public static final SoundEvent EFFECT_ADD_POSITIVE = ExtraSounds.createEvent("effect.add.positive");
     public static final SoundEvent EFFECT_ADD_NEGATIVE = ExtraSounds.createEvent("effect.add.negative");
