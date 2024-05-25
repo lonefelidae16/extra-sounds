@@ -10,7 +10,18 @@
 
 ### 💭 Bugs / Issues
 
-<small>_Caught bugs and known issues are written._</small>
+<!-- <small>_Caught bugs and known issues are written._</small> -->
+* Delete Item slot sound is wrong when <kbd>Shift</kbd> + click on CreativeInventory.
+* Bundle sound won’t hear when Right Mouse Click on CreativeInventory slot.
+* Weird Block Interaction sounds:
+  - Repeater
+  - Daylight Detector
+  - Redstone Wire
+  - Redstone Ores
+  - Campfire
+* class `SoundManager` has too many states and they’re `static` field.
+(Scheduled for refactoring)
+* <small>Item Deletion sound, a bit loud?</small>
 
 ## [2.3.1+1.20.6-build.1] - 2024-05-16
 ### ✨ Added
