@@ -16,10 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
  */
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin {
-    @Inject(method = "dropSelectedItem", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    @Inject(
+            method = "dropSelectedItem",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V",
+                    shift = At.Shift.AFTER
+            ),
+            locals = LocalCapture.CAPTURE_FAILSOFT
+    )
     private void extrasounds$hotbarItemDrop(boolean entireStack, CallbackInfoReturnable<Boolean> cir, PlayerActionC2SPacket.Action action, ItemStack itemStack) {
-        if (!itemStack.isEmpty()) {
-            ExtraSounds.MANAGER.playThrow(itemStack, Mixers.HOTBAR);
-        }
+        ExtraSounds.MANAGER.playThrow(itemStack, Mixers.HOTBAR);
     }
 }

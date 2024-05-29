@@ -5,8 +5,7 @@ import dev.stashy.extrasounds.Mixers;
 import dev.stashy.extrasounds.sounds.Sounds;
 
 /**
- * Helper class for managing {@link net.minecraft.client.gui.screen.Screen},
- * {@link net.minecraft.client.gui.widget.TextFieldWidget} and its inherited class.
+ * Helper class for managing {@link net.minecraft.client.gui.screen.Screen} and its inherited class.
  */
 public class ScreenScrollHandler {
     /**

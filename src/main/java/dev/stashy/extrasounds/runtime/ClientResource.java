@@ -73,11 +73,12 @@ public class ClientResource implements ResourcePack {
             return null;
         }
 
-        var supplier = this.assets.get(id);
-        if (supplier == null) {
-            return null;
+        try {
+            final var supplier = Objects.requireNonNull(this.assets.get(id));
+            return () -> new ByteArrayInputStream(Objects.requireNonNull(supplier.get()));
+        } catch (Exception ignored) {
         }
-        return () -> new ByteArrayInputStream(supplier.get());
+        return null;
     }
 
     @Override

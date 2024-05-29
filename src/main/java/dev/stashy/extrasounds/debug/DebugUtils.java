@@ -1,7 +1,6 @@
 package dev.stashy.extrasounds.debug;
 
 import dev.stashy.extrasounds.ExtraSounds;
-import dev.stashy.extrasounds.SoundManager;
 import dev.stashy.extrasounds.impl.EntitySoundHandler;
 import dev.stashy.extrasounds.mapping.SoundGenerator;
 import net.minecraft.client.sound.SoundInstance;

@@ -11,7 +11,9 @@ import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ExtraSounds implements ClientModInitializer {
+import java.util.Objects;
+
+public final class ExtraSounds implements ClientModInitializer {
     public static final Logger LOGGER = LogManager.getLogger(
             ExtraSounds.class,
             new PrefixableMessageFactory(ExtraSounds.class.getSimpleName())
@@ -40,7 +42,7 @@ public class ExtraSounds implements ClientModInitializer {
                         )
                 );
             }
-            return new Identifier(MODID, "%s.%s.%s".formatted(prefix, namespace, path));
+            return Objects.requireNonNull(Identifier.of(MODID, "%s.%s.%s".formatted(prefix, namespace, path)));
         } catch (Exception ex) {
             LOGGER.error("Failed to create Click Id.", ex);
         }
@@ -49,7 +51,7 @@ public class ExtraSounds implements ClientModInitializer {
 
     public static SoundEvent createEvent(String path) {
         try {
-            return createEvent(new Identifier(MODID, path));
+            return createEvent(Objects.requireNonNull(Identifier.of(MODID, path)));
         } catch (Exception ex) {
             LOGGER.error("Failed to create SoundEvent.", ex);
         }

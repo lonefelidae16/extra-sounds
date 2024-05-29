@@ -31,7 +31,7 @@ public class EntitySoundHandler {
                 case NEUTRAL, BENEFICIAL -> Sounds.EFFECT_REMOVE_POSITIVE;
             };
         } else {
-            ExtraSounds.LOGGER.error("Unknown type of '{}' is approaching: '{}'", EffectType.class.getSimpleName(), type);
+            ExtraSounds.LOGGER.error("Argument of type '{}' is not supported for '{}'", EffectType.class.getSimpleName(), type);
             return;
         }
 

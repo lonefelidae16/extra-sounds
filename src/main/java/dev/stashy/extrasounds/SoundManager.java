@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
 
-public class SoundManager {
+public final class SoundManager {
     private static final Logger LOGGER = LogManager.getLogger(
             SoundManager.class,
             new PrefixableMessageFactory("%s/%s".formatted(
@@ -81,9 +81,9 @@ public class SoundManager {
         }
         ItemStack stack = player.getInventory().getStack(i);
         if (stack.getItem() == Items.AIR) {
-            playSound(Sounds.HOTBAR_SCROLL, SoundType.HOTBAR);
+            this.playSound(Sounds.HOTBAR_SCROLL, SoundType.HOTBAR);
         } else {
-            playSound(stack.getItem(), SoundType.HOTBAR);
+            this.playSound(stack.getItem(), SoundType.HOTBAR);
         }
     }
 
@@ -247,7 +247,7 @@ public class SoundManager {
                 MC_RANDOM, position));
     }
 
-    public void playSound(SoundInstance instance) {
+    private void playSound(SoundInstance instance) {
         try {
             long now = System.currentTimeMillis();
             if (now - this.lastPlayed > 5) {
@@ -256,7 +256,9 @@ public class SoundManager {
                 this.lastPlayed = now;
                 DebugUtils.soundLog(instance);
             } else {
-                LOGGER.warn("Sound suppressed due to the fast interval between method calls, was '{}'.", instance.getId());
+                if (DebugUtils.DEBUG) {
+                    LOGGER.warn("Sound suppressed due to the fast interval between method calls, was '{}'.", instance.getId());
+                }
             }
         } catch (Exception e) {
             LOGGER.error("Failed to play sound.", e);
@@ -292,11 +294,11 @@ public class SoundManager {
         MinecraftClient.getInstance().getSoundManager().stopSounds(e.getId(), type.category);
     }
 
-    public float getSoundVolume(SoundCategory category) {
+    private float getSoundVolume(SoundCategory category) {
         return MinecraftClient.getInstance().options.getSoundVolume(category);
     }
 
-    public SoundEvent getSoundByItem(Item item, SoundType type) {
+    private SoundEvent getSoundByItem(Item item, SoundType type) {
         var itemId = Registries.ITEM.getId(item);
         Identifier id = ExtraSounds.getClickId(itemId, type);
         SoundEvent sound = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);

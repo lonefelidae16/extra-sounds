@@ -36,8 +36,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    compileOnly include(project(path: ':sound-categories'))
-    runtimeOnly fileTree(include: ["*+${project.minecraft_version}~*-dev.jar"], exclude: ['*-sources.jar'], dir: 'sound-categories/build/devlibs')
+    implementation include(project(path: ':sound-categories', configuration: 'namedElements'))
     modCompileOnly "maven.modrinth:rei:${project.rei_version}+fabric"
 }
 
