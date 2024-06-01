@@ -16,4 +16,5 @@ pluginManagement {
     }
 }
 
-include 'sound-categories'
+include 'sound-categories', 'sound-categories:shared', 'sound-categories:versioned:sc1.20.5', 'sound-categories:versioned:sc1.20.3',
+        'logics', 'versioned:es1.20.5', 'versioned:es1.20.3'

@@ -1,0 +1,32 @@
+plugins {
+    id 'fabric-loom'
+}
+
+var targetJdk = Integer.parseInt(rootProject.java_compiler_version)
+var extraSounds = project.parent
+
+base {
+    archivesName = "${extraSounds.archives_base_name}-base"
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${extraSounds.minecraft_version}"
+    mappings "net.fabricmc:yarn:${extraSounds.minecraft_version}${extraSounds.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${extraSounds.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${extraSounds.fabric_api_version}"
+    modImplementation "me.lonefelidae16:groominglib:${extraSounds.groom_version}"
+
+    implementation project(path: ':sound-categories:shared', configuration: 'namedElements')
+    modCompileOnly "maven.modrinth:rei:${extraSounds.rei_version}+fabric"
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/extrasounds.accesswidener")
+}
+
+java {
+    withSourcesJar()
+
+    sourceCompatibility = JavaVersion.toVersion(targetJdk)
+    targetCompatibility = JavaVersion.toVersion(targetJdk)
+}

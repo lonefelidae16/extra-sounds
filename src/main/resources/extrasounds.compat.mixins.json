@@ -1,8 +1,0 @@
-{
-  "parent": "extrasounds.mixins.json",
-  "package": "dev.stashy.extrasounds.compat.mixin",
-  "plugin": "dev.stashy.extrasounds.compat.MixinPlugin",
-  "client": [
-    "rei.TextFieldWidgetMixin"
-  ]
-}

@@ -1,0 +1,33 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.stashy.extrasounds.logics.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "action.entity.LivingEntityMixin",
+    "action.item.ClientPlayerEntityMixin",
+    "effect.ClientPlayerEntityMixin",
+    "effect.ExtendLivingEntityMixin",
+    "chat.ChatHudMixin",
+    "hotbar.ClientPlayerEntityMixin",
+    "hotbar.ClientConnectionMixin",
+    "hotbar.MinecraftClientMixin",
+    "hotbar.MouseMixin",
+    "inventory.ClientPlayerInteractionManagerMixin",
+    "inventory.CreativeInventoryScreenMixin",
+    "inventory.HandledScreenMixin",
+    "inventory.LoomScreenMixin",
+    "inventory.MerchantScreenMixin",
+    "inventory.MinecraftClientMixin",
+    "inventory.StonecutterScreenMixin",
+    "typing.AbstractSignEditScreenMixin",
+    "typing.SelectionManagerMixin",
+    "typing.SuggestionWindowMixin",
+    "typing.TextFieldWidgetMixin",
+
+    "resource.ReloadableResourceManagerImplMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

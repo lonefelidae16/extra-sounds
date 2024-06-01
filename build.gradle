@@ -7,10 +7,25 @@ plugins {
     id 'com.palantir.git-version'
 }
 
-var targetJdk = 21
+var targetJdk = Integer.parseInt(project.java_compiler_version)
 
-version = "${project.mod_version}+${project.minecraft_version}~lonefelidae16-git+${versionDetails().gitHash[0..7]}"
-group = project.maven_group
+allprojects {
+    version = "${project.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
+    group = project.maven_group
+
+    repositories {
+        maven {
+            url = uri("https://api.modrinth.com/maven/")
+        }
+        maven {
+            name = "stashymane's repo"
+            url = "https://repo.stashy.dev/releases"
+        }
+        maven {
+            url = "https://artifactory.kow08absty.com/artifactory/fabricmc"
+        }
+    }
+}
 
 base {
     archivesName = project.archives_base_name
@@ -18,15 +33,33 @@ base {
 
 var versionTitle = "$project.mod_version for $project.minecraft_version"
 
-tasks.runClient.dependsOn(tasks.build)
+allprojects {
+    project.ext['moduleId'] = 'unnamed'
+    project.ext['moduleName'] = ''
+    project.ext['mod_license'] = project.mod_license
 
-repositories {
-    maven {
-        url = uri("https://api.modrinth.com/maven/")
-    }
-    maven {
-        name = "stashymane's repo"
-        url = "https://repo.stashy.dev/releases"
+    tasks.withType(ProcessResources).configureEach {
+        doFirst {
+            var props = [
+                    "mod_page",
+                    "mod_sources",
+                    "mod_issues",
+                    "mod_license"
+            ].collectEntries {
+                [it, project.properties[it]]
+            }
+
+            props.putAll([
+                    'moduleId': project.ext['moduleId'],
+                    'moduleName': project.ext['moduleName'],
+                    'mod_license': project.ext['mod_license'],
+                    'version': project.version
+            ])
+
+            filesMatching("fabric.mod.json") {
+                expand props
+            }
+        }
     }
 }
 
@@ -36,20 +69,16 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    implementation include(project(path: ':sound-categories', configuration: 'namedElements'))
-    modCompileOnly "maven.modrinth:rei:${project.rei_version}+fabric"
-}
+    modImplementation include("me.lonefelidae16:groominglib:${project.groom_version}")
 
-loom {
-    accessWidenerPath = file("src/main/resources/extrasounds.accesswidener")
-}
+    implementation include(project(path: 'sound-categories', configuration: 'namedElements'))
+    implementation project(path: 'sound-categories:shared', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.20.5', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.20.3', configuration: 'namedElements')
 
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+    implementation include(project(path: 'logics', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.20.5', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.20.3', configuration: 'namedElements'))
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -92,46 +121,4 @@ publishing {
             }
         }
     }
-}
-
-curseforge {
-    apiKey = System.getenv("CURSE_API_KEY") ?: ""
-    project {
-        id = "478890"
-        changelog = project.changelog.get(project.mod_version).toHTML()
-        changelogType = "html"
-        releaseType = "release"
-        addGameVersion project.minecraft_version
-
-        mainArtifact(remapJar) {
-            displayName = versionTitle
-
-            relations {
-                requiredDependency "fabric-api"
-                embeddedLibrary "arrp"
-                embeddedLibrary "sound-categories"
-            }
-        }
-    }
-
-    options {
-        forgeGradleIntegration = false
-        detectNewerJava = true
-    }
-}
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN") ?: ""
-    changelog = project.changelog.get(project.mod_version).toText()
-    projectId = "uPWCQrVL"
-    versionNumber = version
-    versionName = versionTitle
-    uploadFile = remapJar
-    gameVersions = [project.minecraft_version]
-    loaders = ["fabric"]
-}
-
-task publishMod() {
-    dependsOn(tasks.modrinth)
-    dependsOn(tasks.curseforge)
 }

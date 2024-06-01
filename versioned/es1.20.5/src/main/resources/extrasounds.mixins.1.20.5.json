@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.stashy.extrasounds.v1_20_5.mixin",
+  "plugin": "dev.stashy.extrasounds.v1_20_5.VersionedMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "BucketFluidAccessor",
+    "action.block.ClientPlayerInteractionManagerMixin",
+    "typing.ChatScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
