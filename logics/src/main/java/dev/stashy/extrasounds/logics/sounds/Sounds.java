@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.floatprovider.ConstantFloatProvider;
 
 import java.util.List;
+import java.util.Objects;
 
 public final class Sounds {
     private Sounds() {
@@ -74,8 +75,10 @@ public final class Sounds {
 
     public static SoundEntry single(Identifier id, float volume, float pitch, Sound.RegistrationType type) {
         return new SoundEntry(List.of(
-                new Sound(id.toString(), ConstantFloatProvider.create(volume), ConstantFloatProvider.create(pitch), 1,
-                        type, false, false, 16)
+                (Sound) Objects.requireNonNull(
+                        VersionedSoundWrapper.newInstance(id, volume, pitch, 1,
+                                type, false, false, 16)
+                )
         ), false, null);
     }
 }

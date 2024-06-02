@@ -1714,6 +1714,15 @@
       }
     ]
   },
+  "item.pickup.minecraft.scute": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "extrasounds:item.category.wet_slippery",
+        "type": "event"
+      }
+    ]
+  },
   "item.pickup.minecraft.turtle_scute": {
     "replace": true,
     "sounds": [

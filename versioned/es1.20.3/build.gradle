@@ -20,13 +20,17 @@ dependencies {
 }
 
 tasks.withType(ProcessResources).configureEach {
-    project.ext['moduleId'] = 'v1_20_3'
+    project.ext['moduleId'] = 'mc1_20_3'
     project.ext['moduleName'] = '1.20.3-4 module'
 }
 
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
     it.options.release.set(targetJdk)
+}
+
+loom {
+    accessWidenerPath = file('src/main/resources/extrasounds.accesswidener')
 }
 
 java {

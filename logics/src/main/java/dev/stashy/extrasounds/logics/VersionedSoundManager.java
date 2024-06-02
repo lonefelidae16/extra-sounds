@@ -82,7 +82,7 @@ public abstract class VersionedSoundManager {
             Constructor<VersionedSoundManager> init = clazz.getConstructor();
             return init.newInstance();
         } catch (Exception ex) {
-            LOGGER.error("Cannot init SoundManager.", ex);
+            LOGGER.error("Cannot initialize 'SoundManager'", ex);
         }
         return null;
     }

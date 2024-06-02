@@ -49,7 +49,7 @@ public class SoundPackLoader {
 
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(SoundEntry.class, new SoundEntrySerializer())
-            .registerTypeAdapter(Sound.class, new SoundSerializer())
+            .registerTypeHierarchyAdapter(Sound.class, new SoundSerializer())
             .create();
 
     /**
@@ -110,7 +110,7 @@ public class SoundPackLoader {
             }
 
             final JsonObject jsonObject = cacheData.asJsonObject();
-            jsonObject.keySet().forEach(key -> putSoundEvent(new Identifier(ExtraSounds.MODID, key)));
+            jsonObject.keySet().forEach(key -> putSoundEvent(Identifier.of(ExtraSounds.MODID, key)));
         } catch (Exception ex) {
             // If there is an exception, regenerate and write the cache.
             DebugUtils.genericLog(ex.getMessage());

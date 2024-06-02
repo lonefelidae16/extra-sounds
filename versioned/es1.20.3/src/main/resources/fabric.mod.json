@@ -18,7 +18,7 @@
   "environment": "client",
   "entrypoints": {
     "extrasounds": [
-      "dev.stashy.extrasounds.v1_20_3.mapping.VanillaGenerator::generator"
+      "dev.stashy.extrasounds.mc1_20_3.mapping.VanillaGenerator::generator"
     ]
   },
   "mixins": [
@@ -30,5 +30,6 @@
     "minecraft": "*",
     "fabric-resource-loader-v0": "*",
     "soundcategories": "*"
-  }
+  },
+  "accessWidener": "extrasounds.accesswidener"
 }

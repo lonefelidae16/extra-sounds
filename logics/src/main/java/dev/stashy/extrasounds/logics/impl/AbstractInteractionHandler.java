@@ -102,7 +102,7 @@ public abstract class AbstractInteractionHandler {
             final ItemStack preferred = armorStandEntity.getEquippedStack(slotPreferred).copy();
             if (currentStack.isEmpty() || this.canItemsCombine(currentStack, equipped)) {
                 ExtraSounds.MANAGER.blockInteract(equipped.getItem(), BlockPos.ofFloored(hitResult.getPos()));
-            } else if (ItemStack.canCombine(currentStack, preferred)) {
+            } else if (this.canItemsCombine(currentStack, preferred)) {
                 ExtraSounds.MANAGER.blockInteract(preferred.getItem(), BlockPos.ofFloored(hitResult.getPos()));
             }
         }

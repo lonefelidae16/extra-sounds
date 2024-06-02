@@ -73,10 +73,12 @@ dependencies {
 
     implementation include(project(path: 'sound-categories', configuration: 'namedElements'))
     implementation project(path: 'sound-categories:shared', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.21', configuration: 'namedElements')
     implementation project(path: 'sound-categories:versioned:sc1.20.5', configuration: 'namedElements')
     implementation project(path: 'sound-categories:versioned:sc1.20.3', configuration: 'namedElements')
 
     implementation include(project(path: 'logics', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.21', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:es1.20.5', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:es1.20.3', configuration: 'namedElements'))
 }
