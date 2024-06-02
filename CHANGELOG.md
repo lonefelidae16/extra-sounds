@@ -7,6 +7,7 @@
 * Preparing compatibility with 1.21.
 * New interaction sound:
   - Armor Stand
+* The "V3" implementation.
 
 ### 💭 Bugs / Issues
 
