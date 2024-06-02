@@ -1,0 +1,16 @@
+name: Backport request
+description: Suggest more compatibility for this project
+labels: [enhancement, backport]
+body:
+  - type: textarea
+    attributes:
+      label: The Minecraft version you want
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context or mods you are using related to backport requests here!
+    validations:
+      required: false
