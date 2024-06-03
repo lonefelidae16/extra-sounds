@@ -13,12 +13,13 @@ import org.apache.logging.log4j.Logger;
 import java.util.Objects;
 
 public final class ExtraSounds {
+    private static final VersionedMain MAIN = Objects.requireNonNull(VersionedMain.newInstance());
+
     public static final Logger LOGGER = LogManager.getLogger(
             ExtraSounds.class,
             new PrefixableMessageFactory(ExtraSounds.class.getSimpleName())
     );
     public static final String MODID = "extrasounds";
-    public static final SoundEvent MUTED = Sounds.MUTED;
     public static final VersionedSoundManager MANAGER = Objects.requireNonNull(VersionedSoundManager.newInstance());
     public static final String BASE_PACKAGE = "dev.stashy.extrasounds";
 
@@ -41,23 +42,26 @@ public final class ExtraSounds {
                         )
                 );
             }
-            return Objects.requireNonNull(Identifier.of(MODID, "%s.%s.%s".formatted(prefix, namespace, path)));
+            return Objects.requireNonNull(MAIN.generateIdentifier(ExtraSounds.MODID, "%s.%s.%s".formatted(prefix, namespace, path)));
         } catch (Exception ex) {
-            LOGGER.error("Failed to create Click Id.", ex);
+            ExtraSounds.LOGGER.error("Failed to create Click Id.", ex);
         }
-        return MUTED.getId();
+        return Sounds.MUTED.getId();
     }
 
     public static SoundEvent createEvent(String path) {
-        try {
-            return createEvent(Objects.requireNonNull(Identifier.of(MODID, path)));
-        } catch (Exception ex) {
-            LOGGER.error("Failed to create SoundEvent.", ex);
-        }
-        return MUTED;
+        return createEvent(Objects.requireNonNull(generateIdentifier(path)));
     }
 
     public static SoundEvent createEvent(Identifier id) {
         return SoundEvent.of(id);
+    }
+
+    public static Identifier generateIdentifier(String path) {
+        return generateIdentifier(MODID, path);
+    }
+
+    public static Identifier generateIdentifier(String namespace, String path) {
+        return MAIN.generateIdentifier(namespace, path);
     }
 }

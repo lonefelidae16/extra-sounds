@@ -25,7 +25,7 @@ public final class CompatibilityMixinPlugin implements IMixinConfigPlugin {
         if (McVersionInterchange.isSnapshotVersion()) {
             return false;
         }
-        return mixinClassName.contains("dev.stashy.extrasounds.compat.mixin.rei") && FabricLoader.getInstance().isModLoaded("roughlyenoughitems");
+        return mixinClassName.contains("dev.stashy.extrasounds.logics.compat.mixin.rei") && FabricLoader.getInstance().isModLoaded("roughlyenoughitems");
     }
 
     @Override

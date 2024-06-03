@@ -18,7 +18,8 @@ pluginManagement {
 
 include 'sound-categories', 'sound-categories:shared',
         'sound-categories:versioned:sc1.21',
-        'sound-categories:versioned:sc1.20.5', 'sound-categories:versioned:sc1.20.3',
+        'sound-categories:versioned:sc1.20.5', 'sound-categories:versioned:sc1.20.3', 'sound-categories:versioned:sc1.20.2', 'sound-categories:versioned:sc1.20',
         'logics',
         'versioned:es1.21',
-        'versioned:es1.20.5', 'versioned:es1.20.3'
+        'versioned:es1.20.5', 'versioned:es1.20.2', 'versioned:es1.20'
+

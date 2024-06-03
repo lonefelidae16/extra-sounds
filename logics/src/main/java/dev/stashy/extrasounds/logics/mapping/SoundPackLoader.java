@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 public class SoundPackLoader {
     private static final int CACHE_VERSION = 1;
-    private static final Identifier SOUNDS_JSON_ID = Identifier.of(ExtraSounds.MODID, "sounds.json");
+    private static final Identifier SOUNDS_JSON_ID = ExtraSounds.generateIdentifier("sounds.json");
     private static final String CACHE_FNAME = ExtraSounds.MODID + ".cache";
     private static final Path CACHE_PATH = Path.of(System.getProperty("java.io.tmpdir"), ".minecraft_fabric", CACHE_FNAME);
 
@@ -110,7 +110,7 @@ public class SoundPackLoader {
             }
 
             final JsonObject jsonObject = cacheData.asJsonObject();
-            jsonObject.keySet().forEach(key -> putSoundEvent(Identifier.of(ExtraSounds.MODID, key)));
+            jsonObject.keySet().forEach(key -> putSoundEvent(ExtraSounds.generateIdentifier(key)));
         } catch (Exception ex) {
             // If there is an exception, regenerate and write the cache.
             DebugUtils.genericLog(ex.getMessage());

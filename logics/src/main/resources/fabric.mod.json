@@ -14,7 +14,6 @@
     "issues": "${mod_issues}"
   },
   "license": "${mod_license}",
-  "icon": "assets/extrasounds/icon.png",
   "environment": "client",
   "entrypoints": {
     "sound-categories": [

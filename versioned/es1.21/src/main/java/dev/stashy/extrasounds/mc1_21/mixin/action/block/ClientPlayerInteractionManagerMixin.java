@@ -30,9 +30,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
  * For Block Interaction sound.
  */
 @Mixin(ClientPlayerInteractionManager.class)
-public class ClientPlayerInteractionManagerMixin {
+public abstract class ClientPlayerInteractionManagerMixin {
     @Unique
-    private final AbstractInteractionHandler manager = new AbstractInteractionHandler() {
+    private final AbstractInteractionHandler soundHandler = new AbstractInteractionHandler() {
         @Override
         protected boolean canItemsCombine(ItemStack stack1, ItemStack stack2) {
             return ItemStack.areItemsAndComponentsEqual(stack1, stack2);
@@ -55,7 +55,7 @@ public class ClientPlayerInteractionManagerMixin {
         }
 
         final BlockPos blockPos = hitResult.getBlockPos();
-        this.manager.setBlockStatus(
+        this.soundHandler.setBlockStatus(
                 world.getBlockState(blockPos), world.getBlockEntity(blockPos),
                 player.getStackInHand(hand), player.getMainHandStack(), player.getOffHandStack()
         );
@@ -77,7 +77,7 @@ public class ClientPlayerInteractionManagerMixin {
         }
 
         final BlockPos blockPos = hitResult.getBlockPos();
-        this.manager.onUse(player, blockPos, mutableObject);
+        this.soundHandler.onUse(player, blockPos, mutableObject);
     }
 
     @Inject(
@@ -93,6 +93,6 @@ public class ClientPlayerInteractionManagerMixin {
             return;
         }
 
-        this.manager.onInteractEntityAt(player.getStackInHand(hand), entity, hitResult, target);
+        this.soundHandler.onInteractEntityAt(player.getStackInHand(hand), entity, hitResult, target);
     }
 }
