@@ -4,12 +4,12 @@ import me.lonefelidae16.groominglib.api.AbstractVersionedMixinPlugin;
 
 public final class VersionedMixinPlugin extends AbstractVersionedMixinPlugin {
     @Override
-    protected CharSequence startVersion() {
-        return SupportedVersions.START;
+    protected String startVersion() {
+        return "1.20";
     }
 
     @Override
-    protected CharSequence endVersion() {
-        return SupportedVersions.END;
+    protected String endVersion() {
+        return "1.20.1";
     }
 }

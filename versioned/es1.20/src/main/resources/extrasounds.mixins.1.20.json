@@ -7,7 +7,6 @@
   "mixins": [
   ],
   "client": [
-    "BucketFluidAccessor",
     "action.block.ClientPlayerInteractionManagerMixin",
     "effect.ClientPlayerEntityMixin",
     "effect.ExtendLivingEntityMixin",

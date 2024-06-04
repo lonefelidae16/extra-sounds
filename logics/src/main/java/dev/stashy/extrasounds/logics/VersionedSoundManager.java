@@ -6,6 +6,7 @@ import dev.stashy.extrasounds.logics.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.logics.sounds.SoundType;
 import dev.stashy.extrasounds.logics.sounds.Sounds;
 import dev.stashy.extrasounds.logics.throwable.NoSuchSoundException;
+import me.lonefelidae16.groominglib.Util;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.minecraft.client.MinecraftClient;
@@ -23,7 +24,6 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
@@ -78,7 +78,7 @@ public abstract class VersionedSoundManager {
 
     public static VersionedSoundManager newInstance() {
         try {
-            Class<VersionedSoundManager> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE,"SoundManager");
+            Class<VersionedSoundManager> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "SoundManager");
             Constructor<VersionedSoundManager> init = clazz.getConstructor();
             return init.newInstance();
         } catch (Exception ex) {

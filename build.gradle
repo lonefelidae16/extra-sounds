@@ -1,9 +1,6 @@
 plugins {
     id "fabric-loom"
     id "maven-publish"
-    id "com.matthewprenger.cursegradle"
-    id "com.modrinth.minotaur"
-    id "org.jetbrains.changelog"
     id 'com.palantir.git-version'
 }
 
@@ -61,6 +58,10 @@ allprojects {
             }
         }
     }
+}
+
+configurations.configureEach {
+    resolutionStrategy.cacheChangingModulesFor 10, 'minutes'
 }
 
 dependencies {

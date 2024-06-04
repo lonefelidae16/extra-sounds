@@ -60,4 +60,17 @@ public class SoundDefinition {
                 (this.hotbar == null) ? Objects.requireNonNull(filler.hotbar) : this.hotbar
         );
     }
+
+    @Override
+    public boolean equals(Object that) {
+        if (that == this) {
+            return true;
+        }
+        if (!(that instanceof SoundDefinition soundDefinition)) {
+            return false;
+        }
+        return Objects.equals(soundDefinition.pickup, this.pickup) &&
+                Objects.equals(soundDefinition.place, this.place) &&
+                Objects.equals(soundDefinition.hotbar, this.hotbar);
+    }
 }

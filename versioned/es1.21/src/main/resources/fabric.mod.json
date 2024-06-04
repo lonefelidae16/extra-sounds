@@ -16,9 +16,6 @@
   "license": "${mod_license}",
   "environment": "client",
   "entrypoints": {
-    "extrasounds": [
-      "dev.stashy.extrasounds.mc1_21.mapping.VanillaGenerator::generator"
-    ]
   },
   "mixins": [
     "extrasounds.mixins.1.21.json"
