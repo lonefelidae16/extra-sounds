@@ -20,8 +20,8 @@ dependencies {
 }
 
 tasks.withType(ProcessResources).configureEach {
-    project.ext['moduleId'] = 'mc1_20'
-    project.ext['moduleName'] = '1.20 module'
+    project.ext['moduleId'] = 'mc1_19_3'
+    project.ext['moduleName'] = '1.19.3 module'
 }
 
 tasks.withType(JavaCompile).configureEach {

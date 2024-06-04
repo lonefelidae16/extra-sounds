@@ -43,6 +43,11 @@ public abstract class ClientPlayerInteractionManagerMixin {
         protected EquipmentSlot getPreferredSlot(ArmorStandEntity armorStandEntity, ItemStack itemStack) {
             return MobEntity.getPreferredEquipmentSlot(itemStack);
         }
+
+        @Override
+        protected BlockPos getBlockPos(Vec3d vec3d) {
+            return BlockPos.ofFloored(vec3d);
+        }
     };
 
     @Shadow

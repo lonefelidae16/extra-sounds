@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.mc1_20.runtime;
+package dev.stashy.extrasounds.mc1_19_3.runtime;
 
 import dev.stashy.extrasounds.logics.runtime.VersionedClientResource;
 import net.minecraft.resource.InputSupplier;

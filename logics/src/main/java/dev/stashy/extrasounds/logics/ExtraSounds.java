@@ -13,12 +13,13 @@ import org.apache.logging.log4j.Logger;
 import java.util.Objects;
 
 public final class ExtraSounds {
-    private static final VersionedMain MAIN = Objects.requireNonNull(VersionedMain.newInstance());
-
     public static final Logger LOGGER = LogManager.getLogger(
             ExtraSounds.class,
             new PrefixableMessageFactory(ExtraSounds.class.getSimpleName())
     );
+
+    private static final VersionedMain MAIN = Objects.requireNonNull(VersionedMain.newInstance());
+
     public static final String MODID = "extrasounds";
     public static final VersionedSoundManager MANAGER = Objects.requireNonNull(VersionedSoundManager.newInstance());
     public static final String BASE_PACKAGE = "dev.stashy.extrasounds";

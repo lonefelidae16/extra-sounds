@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.mc1_20_5.mixin.action.block;
+package dev.stashy.extrasounds.mc1_19_3.mixin.action.block;
 
 import dev.stashy.extrasounds.logics.impl.AbstractInteractionHandler;
 import net.minecraft.client.MinecraftClient;
@@ -36,7 +36,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
     private final AbstractInteractionHandler soundHandler = new AbstractInteractionHandler() {
         @Override
         protected boolean canItemsCombine(ItemStack stack1, ItemStack stack2) {
-            return ItemStack.areItemsAndComponentsEqual(stack1, stack2);
+            return ItemStack.canCombine(stack1, stack2);
         }
 
         @Override
@@ -46,7 +46,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
 
         @Override
         protected BlockPos getBlockPos(Vec3d vec3d) {
-            return BlockPos.ofFloored(vec3d);
+            return new BlockPos(vec3d);
         }
     };
 
@@ -61,10 +61,8 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
 
         final BlockPos blockPos = hitResult.getBlockPos();
-        this.soundHandler.setBlockStatus(
-                world.getBlockState(blockPos), world.getBlockEntity(blockPos),
-                player.getStackInHand(hand), player.getMainHandStack(), player.getOffHandStack()
-        );
+        this.soundHandler.setBlockStatus(world.getBlockState(blockPos), world.getBlockEntity(blockPos),
+                player.getStackInHand(hand), player.getMainHandStack(), player.getOffHandStack());
     }
 
     @Inject(
@@ -90,7 +88,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
             method = "interactEntityAtLocation",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V",
+                    target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/Packet;)V",
                     shift = At.Shift.AFTER
             ), locals = LocalCapture.CAPTURE_FAILSOFT
     )

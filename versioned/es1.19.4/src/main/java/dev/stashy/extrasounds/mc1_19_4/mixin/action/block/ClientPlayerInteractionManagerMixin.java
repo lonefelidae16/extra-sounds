@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.mc1_20_5.mixin.action.block;
+package dev.stashy.extrasounds.mc1_19_4.mixin.action.block;
 
 import dev.stashy.extrasounds.logics.impl.AbstractInteractionHandler;
 import net.minecraft.client.MinecraftClient;
@@ -36,7 +36,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
     private final AbstractInteractionHandler soundHandler = new AbstractInteractionHandler() {
         @Override
         protected boolean canItemsCombine(ItemStack stack1, ItemStack stack2) {
-            return ItemStack.areItemsAndComponentsEqual(stack1, stack2);
+            return ItemStack.canCombine(stack1, stack2);
         }
 
         @Override
@@ -61,10 +61,8 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
 
         final BlockPos blockPos = hitResult.getBlockPos();
-        this.soundHandler.setBlockStatus(
-                world.getBlockState(blockPos), world.getBlockEntity(blockPos),
-                player.getStackInHand(hand), player.getMainHandStack(), player.getOffHandStack()
-        );
+        this.soundHandler.setBlockStatus(world.getBlockState(blockPos), world.getBlockEntity(blockPos),
+                player.getStackInHand(hand), player.getMainHandStack(), player.getOffHandStack());
     }
 
     @Inject(

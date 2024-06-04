@@ -41,7 +41,8 @@ allprojects {
                     "mod_page",
                     "mod_sources",
                     "mod_issues",
-                    "mod_license"
+                    "mod_license",
+                    "mod_support_lowest_mc"
             ].collectEntries {
                 [it, project.properties[it]]
             }
@@ -82,6 +83,9 @@ dependencies {
     implementation include(project(path: 'versioned:es1.20.5', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:es1.20.2', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:es1.20', configuration: 'namedElements'))
+    // 1.19 family
+    implementation include(project(path: 'versioned:es1.19.4', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.19.3', configuration: 'namedElements'))
 
     // Sound Categories modules
     implementation include(project(path: 'sound-categories', configuration: 'namedElements'))
@@ -93,6 +97,9 @@ dependencies {
     implementation project(path: 'sound-categories:versioned:sc1.20.3', configuration: 'namedElements')
     implementation project(path: 'sound-categories:versioned:sc1.20.2', configuration: 'namedElements')
     implementation project(path: 'sound-categories:versioned:sc1.20', configuration: 'namedElements')
+    // 1.19 family
+    implementation project(path: 'sound-categories:versioned:sc1.19.4', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.19.3', configuration: 'namedElements')
 }
 
 tasks.withType(JavaCompile).configureEach {

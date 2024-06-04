@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
  * For Block Interaction sound.
  */
 @Mixin(ClientPlayerInteractionManager.class)
-public class ClientPlayerInteractionManagerMixin {
+public abstract class ClientPlayerInteractionManagerMixin {
     @Unique
     private final AbstractInteractionHandler soundHandler = new AbstractInteractionHandler() {
         @Override
@@ -42,6 +42,11 @@ public class ClientPlayerInteractionManagerMixin {
         @Override
         protected EquipmentSlot getPreferredSlot(ArmorStandEntity armorStandEntity, ItemStack itemStack) {
             return MobEntity.getPreferredEquipmentSlot(itemStack);
+        }
+
+        @Override
+        protected BlockPos getBlockPos(Vec3d vec3d) {
+            return BlockPos.ofFloored(vec3d);
         }
     };
 

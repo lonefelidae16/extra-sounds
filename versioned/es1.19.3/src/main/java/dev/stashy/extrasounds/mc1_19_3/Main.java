@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.mc1_20;
+package dev.stashy.extrasounds.mc1_19_3;
 
 import dev.stashy.extrasounds.logics.VersionedMain;
 import net.minecraft.util.Identifier;

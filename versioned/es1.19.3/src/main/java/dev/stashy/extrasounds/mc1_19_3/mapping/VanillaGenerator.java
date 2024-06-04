@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.mc1_20.mapping;
+package dev.stashy.extrasounds.mc1_19_3.mapping;
 
 import dev.stashy.extrasounds.logics.mapping.BaseVanillaGenerator;
 import dev.stashy.extrasounds.logics.mapping.SoundDefinition;
@@ -26,8 +26,6 @@ public final class VanillaGenerator extends BaseVanillaGenerator {
                 return SoundDefinition.of(aliased(POTION));
             } else if (item instanceof GoatHornItem) {
                 return SoundDefinition.of(single(LOOSE_METAL.getId(), 0.6f, 0.9f, Sound.RegistrationType.SOUND_EVENT));
-            } else if (item instanceof SmithingTemplateItem) {
-                return SoundDefinition.of(aliased(LOOSE_METAL));
             } else if (item instanceof DiscFragmentItem) {
                 return SoundDefinition.of(single(METAL_BITS.getId(), 0.7f, 0.85f, Sound.RegistrationType.SOUND_EVENT));
             } else if (item instanceof MusicDiscItem) {

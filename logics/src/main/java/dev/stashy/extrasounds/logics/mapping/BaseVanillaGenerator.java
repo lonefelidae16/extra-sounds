@@ -25,7 +25,8 @@ public abstract class BaseVanillaGenerator {
     }
 
     protected static boolean isBrickItem(Item item) {
-        return item == Items.BRICK || getItemIdPath(item).endsWith("pottery_sherd");
+        final String idPath = getItemIdPath(item);
+        return item == Items.BRICK || idPath.endsWith("pottery_sherd") || idPath.startsWith("pottery_shard");
     }
 
     protected static boolean isPaperItem(Item item) {

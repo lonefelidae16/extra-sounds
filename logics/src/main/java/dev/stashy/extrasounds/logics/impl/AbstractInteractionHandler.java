@@ -32,6 +32,8 @@ public abstract class AbstractInteractionHandler {
 
     protected abstract EquipmentSlot getPreferredSlot(ArmorStandEntity armorStandEntity, ItemStack itemStack);
 
+    protected abstract BlockPos getBlockPos(Vec3d vec3d);
+
     private boolean canInteractBlock(PlayerEntity player) {
         return !player.isSneaking() || (player.isSneaking() && this.mainHandStack.isEmpty() && this.offHandStack.isEmpty());
     }
@@ -101,9 +103,9 @@ public abstract class AbstractInteractionHandler {
             final ItemStack equipped = armorStandEntity.getEquippedStack(slotFromPosition).copy();
             final ItemStack preferred = armorStandEntity.getEquippedStack(slotPreferred).copy();
             if (currentStack.isEmpty() || this.canItemsCombine(currentStack, equipped)) {
-                ExtraSounds.MANAGER.blockInteract(equipped.getItem(), BlockPos.ofFloored(hitResult.getPos()));
+                ExtraSounds.MANAGER.blockInteract(equipped.getItem(), this.getBlockPos(hitResult.getPos()));
             } else if (this.canItemsCombine(currentStack, preferred)) {
-                ExtraSounds.MANAGER.blockInteract(preferred.getItem(), BlockPos.ofFloored(hitResult.getPos()));
+                ExtraSounds.MANAGER.blockInteract(preferred.getItem(), this.getBlockPos(hitResult.getPos()));
             }
         }
     }
