@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.stashy.extrasounds.mc1_19_2.mixin",
+  "plugin": "dev.stashy.extrasounds.mc1_19_2.VersionedMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "action.block.ClientPlayerInteractionManagerMixin",
+    "action.item.ClientPlayerEntityMixin",
+    "effect.ClientPlayerEntityMixin",
+    "effect.ExtendLivingEntityMixin",
+    "hotbar.ClientConnectionMixin",
+    "hotbar.ClientPlayerEntityMixin",
+    "inventory.CreativeInventoryScreenMixin",
+    "inventory.LoomScreenMixin",
+    "inventory.MerchantScreenMixin",
+    "inventory.StonecutterScreenMixin",
+    "typing.ChatScreenMixin",
+    "typing.SignEditScreenMixin",
+    "typing.TextFieldWidgetMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

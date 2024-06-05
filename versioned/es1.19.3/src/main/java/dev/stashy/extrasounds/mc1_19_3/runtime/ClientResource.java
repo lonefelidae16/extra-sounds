@@ -8,9 +8,12 @@ import net.minecraft.resource.metadata.ResourceMetadataReader;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class ClientResource extends VersionedClientResource implements ResourcePack {
     public ClientResource(String modId, String packName) {
@@ -21,18 +24,50 @@ public class ClientResource extends VersionedClientResource implements ResourceP
     @Nullable
     @Override
     public InputSupplier<InputStream> openRoot(String... segments) {
-        return super.openRootImpl(segments);
+        return null;
+    }
+
+    @Override
+    protected Supplier<InputStream> openRootImpl(String... segments) {
+        try {
+            var stream = Objects.requireNonNull(this.openRoot(segments)).get();
+            return () -> Objects.requireNonNull(stream);
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
     @Nullable
     @Override
     public InputSupplier<InputStream> open(ResourceType type, Identifier id) {
-        return super.openImpl(type, id);
+        if (type != ResourceType.CLIENT_RESOURCES) {
+            return null;
+        }
+
+        try {
+            final var supplier = Objects.requireNonNull(this.assets.get(id));
+            return () -> new ByteArrayInputStream(Objects.requireNonNull(supplier.get()));
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
     @Override
     public void findResources(ResourceType type, String namespace, String prefix, ResultConsumer consumer) {
-        super.findResourcesImpl(type, namespace, prefix, consumer);
+        if (type != ResourceType.CLIENT_RESOURCES) {
+            return;
+        }
+
+        for (var id : this.assets.keySet()) {
+            var supplier = this.assets.get(id);
+            if (supplier == null) {
+                continue;
+            }
+            InputSupplier<InputStream> inputSupplier = () -> new ByteArrayInputStream(supplier.get());
+            if (id.getNamespace().equals(namespace) && id.getPath().startsWith(prefix)) {
+                consumer.accept(id, inputSupplier);
+            }
+        }
     }
 
     @Override

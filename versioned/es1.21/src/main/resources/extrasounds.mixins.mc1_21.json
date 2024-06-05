@@ -8,6 +8,7 @@
   ],
   "client": [
     "action.block.ClientPlayerInteractionManagerMixin",
+    "action.item.ClientPlayerEntityMixin",
     "effect.ClientPlayerEntityMixin",
     "effect.ExtendLivingEntityMixin",
     "hotbar.ClientConnectionMixin",
@@ -16,6 +17,7 @@
     "inventory.LoomScreenMixin",
     "inventory.MerchantScreenMixin",
     "inventory.StonecutterScreenMixin",
+    "typing.AbstractSignEditScreenMixin",
     "typing.ChatScreenMixin",
     "typing.TextFieldWidgetMixin"
   ],

@@ -10,6 +10,7 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -47,6 +48,21 @@ public abstract class ClientPlayerInteractionManagerMixin {
         @Override
         protected BlockPos getBlockPos(Vec3d vec3d) {
             return BlockPos.ofFloored(vec3d);
+        }
+
+        @Override
+        protected boolean isFlowerPotBlocks() {
+            return this.blockState.isIn(BlockTags.FLOWER_POTS);
+        }
+
+        @Override
+        protected boolean isRedstoneOreBlocks() {
+            return this.blockState.isIn(BlockTags.REDSTONE_ORES);
+        }
+
+        @Override
+        protected boolean isCampfireBlocks() {
+            return this.blockState.isIn(BlockTags.CAMPFIRES);
         }
     };
 

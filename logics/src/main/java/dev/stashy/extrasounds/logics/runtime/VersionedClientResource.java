@@ -6,15 +6,12 @@ import dev.stashy.extrasounds.logics.ExtraSounds;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.minecraft.resource.AbstractFileResourcePack;
-import net.minecraft.resource.InputSupplier;
-import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.metadata.ResourceMetadataReader;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
@@ -52,6 +49,8 @@ public abstract class VersionedClientResource {
     protected CharSequence name;
     protected final Map<Identifier, Supplier<byte[]>> assets;
 
+    protected abstract Supplier<InputStream> openRootImpl(String... segments);
+
     public void addResourceAsync(Identifier location, Function<Identifier, byte[]> supplier) {
         var future = EXECUTOR_SERVICE.submit(() -> supplier.apply(location));
         this.assets.put(location, () -> {
@@ -77,40 +76,6 @@ public abstract class VersionedClientResource {
             ExtraSounds.LOGGER.error("Failed to initialize 'ClientResource'", ex);
         }
         return null;
-    }
-
-    public InputSupplier<InputStream> openRootImpl(String... segments) {
-        return null;
-    }
-
-    public InputSupplier<InputStream> openImpl(ResourceType type, Identifier id) {
-        if (type != ResourceType.CLIENT_RESOURCES) {
-            return null;
-        }
-
-        try {
-            final var supplier = Objects.requireNonNull(this.assets.get(id));
-            return () -> new ByteArrayInputStream(Objects.requireNonNull(supplier.get()));
-        } catch (Exception ignored) {
-        }
-        return null;
-    }
-
-    public void findResourcesImpl(ResourceType type, String namespace, String prefix, ResourcePack.ResultConsumer consumer) {
-        if (type != ResourceType.CLIENT_RESOURCES) {
-            return;
-        }
-
-        for (var id : this.assets.keySet()) {
-            var supplier = this.assets.get(id);
-            if (supplier == null) {
-                continue;
-            }
-            InputSupplier<InputStream> inputSupplier = () -> new ByteArrayInputStream(supplier.get());
-            if (id.getNamespace().equals(namespace) && id.getPath().startsWith(prefix)) {
-                consumer.accept(id, inputSupplier);
-            }
-        }
     }
 
     public Set<String> getNamespacesImpl(ResourceType type) {

@@ -6,7 +6,6 @@ import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.minecraft.block.*;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.*;
-import net.minecraft.registry.Registries;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
@@ -21,7 +20,7 @@ public abstract class BaseVanillaGenerator {
     protected static final SoundDefinition DEFAULT_SOUND = SoundDefinition.of(aliased(Sounds.ITEM_PICK));
 
     protected static String getItemIdPath(Item item) {
-        return Registries.ITEM.getId(item).getPath();
+        return ExtraSounds.fromItemRegistry(item).getPath();
     }
 
     protected static boolean isBrickItem(Item item) {

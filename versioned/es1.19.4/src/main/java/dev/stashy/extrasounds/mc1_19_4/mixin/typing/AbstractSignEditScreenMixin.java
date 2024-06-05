@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.logics.mixin.typing;
+package dev.stashy.extrasounds.mc1_19_4.mixin.typing;
 
 import dev.stashy.extrasounds.logics.impl.TextFieldHandler;
 import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;

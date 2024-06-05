@@ -5,8 +5,10 @@ import dev.stashy.extrasounds.logics.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.logics.sounds.SoundType;
 import dev.stashy.extrasounds.logics.sounds.Sounds;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
+import net.minecraft.item.Item;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.IndexedIterable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,7 +57,7 @@ public final class ExtraSounds {
     }
 
     public static SoundEvent createEvent(Identifier id) {
-        return SoundEvent.of(id);
+        return MAIN.generateSoundEvent(id);
     }
 
     public static Identifier generateIdentifier(String path) {
@@ -64,5 +66,13 @@ public final class ExtraSounds {
 
     public static Identifier generateIdentifier(String namespace, String path) {
         return MAIN.generateIdentifier(namespace, path);
+    }
+
+    public static Identifier fromItemRegistry(Item item) {
+        return MAIN.fromItemRegistry(item);
+    }
+
+    public static IndexedIterable<Item> getItemRegistry() {
+        return MAIN.getItemRegistry();
     }
 }

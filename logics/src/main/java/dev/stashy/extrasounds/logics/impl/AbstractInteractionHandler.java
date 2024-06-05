@@ -12,7 +12,6 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -33,6 +32,12 @@ public abstract class AbstractInteractionHandler {
     protected abstract EquipmentSlot getPreferredSlot(ArmorStandEntity armorStandEntity, ItemStack itemStack);
 
     protected abstract BlockPos getBlockPos(Vec3d vec3d);
+
+    protected abstract boolean isFlowerPotBlocks();
+
+    protected abstract boolean isRedstoneOreBlocks();
+
+    protected abstract boolean isCampfireBlocks();
 
     private boolean canInteractBlock(PlayerEntity player) {
         return !player.isSneaking() || (player.isSneaking() && this.mainHandStack.isEmpty() && this.offHandStack.isEmpty());
@@ -65,19 +70,19 @@ public abstract class AbstractInteractionHandler {
         } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && this.canInteractBlock(player)) {
             // Redstone Wire
             ExtraSounds.MANAGER.blockInteract(Sounds.Actions.REDSTONE_WIRE_CHANGE, blockPos);
-        } else if (this.blockState.isIn(BlockTags.REDSTONE_ORES) &&
+        } else if (this.isRedstoneOreBlocks() &&
                 this.blockState.contains(RedstoneOreBlock.LIT) &&
                 this.canInteractBlock(player) && !(this.mainHandStack.getItem() instanceof BlockItem)
         ) {
             // Redstone Ores
             ExtraSounds.MANAGER.blockInteract(this.block.asItem(), blockPos);
-        } else if (this.blockState.isIn(BlockTags.CAMPFIRES) && (this.blockEntity instanceof CampfireBlockEntity campfireBlockEntity)) {
+        } else if (this.isCampfireBlocks() && (this.blockEntity instanceof CampfireBlockEntity campfireBlockEntity)) {
             // Put item on Campfire
             var recipe = campfireBlockEntity.getRecipeFor(this.currentHandStack);
             if (recipe.isPresent() && mutableObject.getValue() == ActionResult.CONSUME) {
                 ExtraSounds.MANAGER.blockInteract(this.currentHandStack.getItem(), blockPos);
             }
-        } else if (this.blockState.isIn(BlockTags.FLOWER_POTS) &&
+        } else if (this.isFlowerPotBlocks() &&
                 (this.block instanceof FlowerPotBlock potBlock) &&
                 mutableObject.getValue() == ActionResult.SUCCESS
         ) {

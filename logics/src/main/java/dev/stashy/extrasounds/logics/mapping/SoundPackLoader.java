@@ -19,7 +19,6 @@ import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
@@ -158,8 +157,8 @@ public class SoundPackLoader {
             }
         }
 
-        for (Item item : Registries.ITEM) {
-            final Identifier itemId = Registries.ITEM.getId(item);
+        for (Item item : ExtraSounds.getItemRegistry()) {
+            final Identifier itemId = ExtraSounds.fromItemRegistry(item);
             final SoundDefinition definition;
             if (soundGenerator.containsKey(itemId.getNamespace())) {
                 definition = soundGenerator.get(itemId.getNamespace()).itemSoundGenerator.apply(item);
@@ -232,7 +231,7 @@ public class SoundPackLoader {
          * @return A new instance of {@link CacheInfo}.
          */
         public static CacheInfo of(String[] info) {
-            return new CacheInfo(CACHE_VERSION, Registries.ITEM.size(), info);
+            return new CacheInfo(CACHE_VERSION, ExtraSounds.getItemRegistry().size(), info);
         }
 
         /**

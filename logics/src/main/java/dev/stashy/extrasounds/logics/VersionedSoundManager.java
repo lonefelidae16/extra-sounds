@@ -17,7 +17,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
@@ -314,7 +313,7 @@ public abstract class VersionedSoundManager {
     }
 
     protected SoundEvent getSoundByItem(Item item, SoundType type) {
-        var itemId = Registries.ITEM.getId(item);
+        var itemId = ExtraSounds.fromItemRegistry(item);
         Identifier id = ExtraSounds.getClickId(itemId, type);
         SoundEvent sound = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
         if (sound == null) {
