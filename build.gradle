@@ -1,3 +1,6 @@
+import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
+
 plugins {
     id "fabric-loom"
     id "maven-publish"
@@ -34,6 +37,7 @@ allprojects {
     project.ext['moduleId'] = 'unnamed'
     project.ext['moduleName'] = ''
     project.ext['mod_license'] = project.mod_license
+    project.ext['moduleAccessWidener'] = ''
 
     tasks.withType(ProcessResources).configureEach {
         doFirst {
@@ -56,6 +60,16 @@ allprojects {
 
             filesMatching("fabric.mod.json") {
                 expand props
+            }
+        }
+
+        doLast {
+            fileTree(dir: outputs.files.asPath, include: "**/fabric.mod.json").each { file ->
+                var json = JsonParser.parseString(file.text).asJsonObject
+                if (!project.ext['moduleAccessWidener'].isEmpty()) {
+                    json.add("accessWidener", new JsonPrimitive(project.ext['moduleAccessWidener']))
+                    file.text = json.toString()
+                }
             }
         }
     }
@@ -86,7 +100,8 @@ dependencies {
     // 1.19 family
     implementation include(project(path: 'versioned:es1.19.4', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:es1.19.3', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:es1.19.2', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.19.1', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.19', configuration: 'namedElements'))
 
     // Sound Categories modules
     implementation include(project(path: 'sound-categories', configuration: 'namedElements'))
@@ -101,7 +116,7 @@ dependencies {
     // 1.19 family
     implementation project(path: 'sound-categories:versioned:sc1.19.4', configuration: 'namedElements')
     implementation project(path: 'sound-categories:versioned:sc1.19.3', configuration: 'namedElements')
-    implementation project(path: 'sound-categories:versioned:sc1.19.2', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.19', configuration: 'namedElements')
 }
 
 tasks.withType(JavaCompile).configureEach {

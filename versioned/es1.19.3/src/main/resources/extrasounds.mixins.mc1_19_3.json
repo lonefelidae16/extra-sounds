@@ -9,6 +9,7 @@
   "client": [
     "action.block.ClientPlayerInteractionManagerMixin",
     "action.item.ClientPlayerEntityMixin",
+    "chat.ChatHudMixin",
     "effect.ClientPlayerEntityMixin",
     "effect.ExtendLivingEntityMixin",
     "hotbar.ClientConnectionMixin",
@@ -19,6 +20,7 @@
     "inventory.StonecutterScreenMixin",
     "typing.AbstractSignEditScreenMixin",
     "typing.ChatScreenMixin",
+    "typing.SuggestionWindowMixin",
     "typing.TextFieldWidgetMixin"
   ],
   "injectors": {

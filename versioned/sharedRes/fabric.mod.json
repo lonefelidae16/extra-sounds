@@ -26,6 +26,5 @@
     "minecraft": "*",
     "fabric-resource-loader-v0": "*",
     "soundcategories": "*"
-  },
-  "accessWidener": "extrasounds.accesswidener"
+  }
 }

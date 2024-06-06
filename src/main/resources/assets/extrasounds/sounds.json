@@ -433,6 +433,16 @@
     ],
     "replace": true
   },
+  "item.integrated.stick": {
+    "sounds": [
+      "extrasounds:item/stick/pickup1",
+      "extrasounds:item/stick/pickup2",
+      "extrasounds:item/stick/pickup3",
+      "extrasounds:item/stick/pickup4",
+      "extrasounds:item/stick/pickup5",
+      "extrasounds:item/stick/pickup6"
+    ]
+  },
   "action.bow": {
     "sounds": [
       {
@@ -1798,7 +1808,7 @@
     "replace": true,
     "sounds": [
       {
-        "name": "minecraft:block.chiseled_bookshelf.place",
+        "name": "extrasounds:item.integrated.stick",
         "pitch": 2,
         "type": "event",
         "volume": 0.4
@@ -1809,7 +1819,7 @@
     "replace": true,
     "sounds": [
       {
-        "name": "minecraft:block.chiseled_bookshelf.place",
+        "name": "extrasounds:item.integrated.stick",
         "pitch": 2,
         "type": "event",
         "volume": 0.4

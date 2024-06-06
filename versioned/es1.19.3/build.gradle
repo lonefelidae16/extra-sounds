@@ -22,6 +22,7 @@ dependencies {
 tasks.withType(ProcessResources).configureEach {
     project.ext['moduleId'] = 'mc1_19_3'
     project.ext['moduleName'] = '1.19.3 module'
+    project.ext['moduleAccessWidener'] = 'extrasounds.accesswidener'
 }
 
 tasks.withType(JavaCompile).configureEach {

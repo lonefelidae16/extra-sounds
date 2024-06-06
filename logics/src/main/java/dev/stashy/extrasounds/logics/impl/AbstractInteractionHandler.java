@@ -67,7 +67,9 @@ public abstract class AbstractInteractionHandler {
             // Daylight Detector
             final SoundEvent sound = this.blockState.get(DaylightDetectorBlock.INVERTED) ? Sounds.Actions.REDSTONE_COMPONENT_ON : Sounds.Actions.REDSTONE_COMPONENT_OFF;
             ExtraSounds.MANAGER.blockInteract(sound, blockPos);
-        } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && this.canInteractBlock(player)) {
+        } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && this.canInteractBlock(player) &&
+                mutableObject.getValue() == ActionResult.SUCCESS
+        ) {
             // Redstone Wire
             ExtraSounds.MANAGER.blockInteract(Sounds.Actions.REDSTONE_WIRE_CHANGE, blockPos);
         } else if (this.isRedstoneOreBlocks() &&

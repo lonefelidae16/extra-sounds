@@ -5,14 +5,12 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "action.entity.LivingEntityMixin",
-    "chat.ChatHudMixin",
     "hotbar.MinecraftClientMixin",
     "hotbar.MouseMixin",
     "inventory.ClientPlayerInteractionManagerMixin",
     "inventory.HandledScreenMixin",
     "inventory.MinecraftClientMixin",
     "typing.SelectionManagerMixin",
-    "typing.SuggestionWindowMixin",
 
     "resource.ReloadableResourceManagerImplMixin"
   ],

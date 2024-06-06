@@ -15,7 +15,7 @@ public abstract class VersionedMain {
             Constructor<VersionedMain> init = clazz.getConstructor();
             return init.newInstance();
         } catch (Exception ex) {
-            ExtraSounds.LOGGER.error("Cannot initialize 'SoundManager'", ex);
+            ExtraSounds.LOGGER.error("Cannot initialize 'Main'", ex);
         }
         return null;
     }
