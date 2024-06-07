@@ -21,6 +21,8 @@ include 'sound-categories:versioned:sc1.21'
 include 'sound-categories:versioned:sc1.20.5', 'sound-categories:versioned:sc1.20.3', 'sound-categories:versioned:sc1.20.2', 'sound-categories:versioned:sc1.20'
 // 1.19 family
 include 'sound-categories:versioned:sc1.19.4', 'sound-categories:versioned:sc1.19.3', 'sound-categories:versioned:sc1.19'
+// 1.18 family
+include 'sound-categories:versioned:sc1.18.2'
 
 // ExtraSounds modules
 include 'logics'
@@ -30,3 +32,5 @@ include 'versioned:es1.21'
 include 'versioned:es1.20.5', 'versioned:es1.20.2', 'versioned:es1.20'
 // 1.19 family
 include 'versioned:es1.19.4', 'versioned:es1.19.3', 'versioned:es1.19.1', 'versioned:es1.19'
+// 1.18 family
+include 'versioned:es1.18.2'

@@ -6,16 +6,16 @@ import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.VersionedSoundManager;
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
 import dev.stashy.extrasounds.logics.json.SoundEntrySerializer;
-import dev.stashy.extrasounds.logics.json.SoundSerializer;
+import dev.stashy.extrasounds.logics.json.VersionedSoundSerializer;
 import dev.stashy.extrasounds.logics.runtime.VersionedClientResource;
 import dev.stashy.extrasounds.logics.sounds.SoundType;
 import dev.stashy.extrasounds.logics.sounds.Sounds;
+import dev.stashy.extrasounds.logics.sounds.VersionedSoundWrapper;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -48,7 +48,7 @@ public class SoundPackLoader {
 
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(SoundEntry.class, new SoundEntrySerializer())
-            .registerTypeHierarchyAdapter(Sound.class, new SoundSerializer())
+            .registerTypeHierarchyAdapter(VersionedSoundWrapper.class, Objects.requireNonNull(VersionedSoundSerializer.newInstance()))
             .create();
 
     /**

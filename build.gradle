@@ -102,6 +102,8 @@ dependencies {
     implementation include(project(path: 'versioned:es1.19.3', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:es1.19.1', configuration: 'namedElements'))
     implementation include(project(path: 'versioned:es1.19', configuration: 'namedElements'))
+    // 1.18 family
+    implementation include(project(path: 'versioned:es1.18.2', configuration: 'namedElements'))
 
     // Sound Categories modules
     implementation include(project(path: 'sound-categories', configuration: 'namedElements'))
@@ -117,6 +119,8 @@ dependencies {
     implementation project(path: 'sound-categories:versioned:sc1.19.4', configuration: 'namedElements')
     implementation project(path: 'sound-categories:versioned:sc1.19.3', configuration: 'namedElements')
     implementation project(path: 'sound-categories:versioned:sc1.19', configuration: 'namedElements')
+    // 1.18.2 family
+    implementation project(path: 'sound-categories:versioned:sc1.18.2', configuration: 'namedElements')
 }
 
 tasks.withType(JavaCompile).configureEach {

@@ -36,13 +36,13 @@ public abstract class ClientPlayerInteractionManagerMixin {
     @Unique
     private final AbstractInteractionHandler soundHandler = new AbstractInteractionHandler() {
         @Override
-        protected boolean canItemsCombine(ItemStack stack1, ItemStack stack2) {
-            return ItemStack.areItemsAndComponentsEqual(stack1, stack2);
+        protected EquipmentSlot getPreferredSlot(ArmorStandEntity armorStandEntity, ItemStack itemStack) {
+            return MobEntity.getPreferredEquipmentSlot(itemStack);
         }
 
         @Override
-        protected EquipmentSlot getPreferredSlot(ArmorStandEntity armorStandEntity, ItemStack itemStack) {
-            return MobEntity.getPreferredEquipmentSlot(itemStack);
+        protected EquipmentSlot getSlotFromPosition(ArmorStandEntity armorStandEntity, Vec3d position) {
+            return armorStandEntity.getSlotFromPosition(position);
         }
 
         @Override
@@ -63,6 +63,16 @@ public abstract class ClientPlayerInteractionManagerMixin {
         @Override
         protected boolean isCampfireBlocks() {
             return this.blockState.isIn(BlockTags.CAMPFIRES);
+        }
+
+        @Override
+        protected boolean canSoundArmorStandEquipped(ItemStack currentStack, ItemStack equipped) {
+            return currentStack.isEmpty() || ItemStack.areItemsAndComponentsEqual(currentStack, equipped);
+        }
+
+        @Override
+        protected boolean canSoundArmorStandPreferred(ItemStack currentStack, ItemStack preferred) {
+            return ItemStack.areItemsAndComponentsEqual(currentStack, preferred);
         }
     };
 
@@ -99,7 +109,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
 
         final BlockPos blockPos = hitResult.getBlockPos();
-        this.soundHandler.onUse(player, blockPos, mutableObject);
+        this.soundHandler.onUse(player, blockPos, mutableObject.getValue());
     }
 
     @Inject(

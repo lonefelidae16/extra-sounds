@@ -5,6 +5,7 @@ import dev.stashy.extrasounds.logics.debug.DebugUtils;
 import dev.stashy.extrasounds.logics.mapping.SoundPackLoader;
 import dev.stashy.extrasounds.logics.sounds.SoundType;
 import dev.stashy.extrasounds.logics.sounds.Sounds;
+import dev.stashy.extrasounds.logics.sounds.VersionedPositionedSoundInstanceWrapper;
 import dev.stashy.extrasounds.logics.throwable.NoSuchSoundException;
 import me.lonefelidae16.groominglib.Util;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
@@ -25,7 +26,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,10 +34,10 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiPredicate;
 
 public abstract class VersionedSoundManager {
-    protected static final Random MC_RANDOM = Random.create();
     protected static final Logger LOGGER = LogManager.getLogger(
             VersionedSoundManager.class,
             new PrefixableMessageFactory("%s/%s".formatted(
@@ -251,14 +251,22 @@ public abstract class VersionedSoundManager {
                 volume = Math.min(getSoundVolume(cat), volume);
             }
         }
-        this.playSound(new PositionedSoundInstance(snd.getId(), category, volume, pitch, VersionedSoundManager.MC_RANDOM,
-                false, 0, SoundInstance.AttenuationType.NONE, 0.0D, 0.0D, 0.0D,
-                true));
+        this.playSound(
+                (PositionedSoundInstance) Objects.requireNonNull(
+                        VersionedPositionedSoundInstanceWrapper.newInstance(snd.getId(), category, volume, pitch,
+                                false, 0, SoundInstance.AttenuationType.NONE, 0.0D, 0.0D, 0.0D,
+                                true)
+                )
+        );
     }
 
     public void playSound(SoundEvent snd, SoundType type, float volume, float pitch, BlockPos position) {
-        this.playSound(new PositionedSoundInstance(snd, type.category, getSoundVolume(Mixers.MASTER) * volume, pitch,
-                MC_RANDOM, position));
+        this.playSound(
+                (PositionedSoundInstance) Objects.requireNonNull(
+                        VersionedPositionedSoundInstanceWrapper.newInstance(snd, type.category, getSoundVolume(Mixers.MASTER) * volume, pitch,
+                                position)
+                )
+        );
     }
 
     protected void playSound(SoundInstance instance) {

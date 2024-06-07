@@ -9,5 +9,7 @@
   "soundCategory.extrasounds_logics$item_intr": "Item Interactions",
   "soundCategory.extrasounds_logics$block_intr": "Block Interactions",
   "soundCategory.extrasounds_logics$entity": "Entity Events",
-  "soundCategory.extrasounds_logics$item_drop": "Item Drop"
+  "soundCategory.extrasounds_logics$item_drop": "Item Drop",
+
+  "options.extrasounds.slider.min": "OFF"
 }

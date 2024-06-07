@@ -3,19 +3,28 @@ package dev.stashy.extrasounds.mc1_19.mapping;
 import dev.stashy.extrasounds.logics.mapping.BaseVanillaGenerator;
 import dev.stashy.extrasounds.logics.mapping.SoundDefinition;
 import dev.stashy.extrasounds.logics.mapping.SoundGenerator;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.PillarBlock;
 import net.minecraft.client.sound.Sound;
 import net.minecraft.item.*;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
 import static dev.stashy.extrasounds.logics.sounds.Categories.*;
-import static dev.stashy.extrasounds.logics.sounds.Sounds.aliased;
-import static dev.stashy.extrasounds.logics.sounds.Sounds.single;
+import static dev.stashy.extrasounds.logics.sounds.Sounds.*;
 
 public final class VanillaGenerator extends BaseVanillaGenerator {
     public static SoundGenerator generate() {
         return SoundGenerator.of(Identifier.DEFAULT_NAMESPACE, item -> {
             if (item instanceof BlockItem blockItem) {
-                return generateFromBlock(blockItem.getBlock());
+                final Block block = blockItem.getBlock();
+                final BlockState blockState = block.getDefaultState();
+                final Identifier blockSoundId = blockState.getSoundGroup().getPlaceSound().getId();
+                if (block instanceof PillarBlock pillarBlock && pillarBlock.getDefaultState().getSoundGroup().equals(BlockSoundGroup.FROGLIGHT)) {
+                    return SoundDefinition.of(event(blockSoundId, 0.3f));
+                }
+                return generateFromBlock(block);
             } else if (item instanceof ToolItem toolItem) {
                 return generateFromToolMaterial(toolItem.getMaterial());
             } else if (item instanceof ArmorItem armorItem) {

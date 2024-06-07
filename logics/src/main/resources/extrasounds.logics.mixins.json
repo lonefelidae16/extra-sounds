@@ -10,7 +10,6 @@
     "inventory.ClientPlayerInteractionManagerMixin",
     "inventory.HandledScreenMixin",
     "inventory.MinecraftClientMixin",
-    "typing.SelectionManagerMixin",
 
     "resource.ReloadableResourceManagerImplMixin"
   ],

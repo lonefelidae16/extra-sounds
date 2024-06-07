@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.mc1_19;
+package dev.stashy.extrasounds.mc1_18_2;
 
 import dev.stashy.extrasounds.logics.VersionedSoundManager;
 import net.minecraft.item.ItemStack;

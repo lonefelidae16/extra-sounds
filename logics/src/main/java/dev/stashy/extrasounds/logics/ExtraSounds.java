@@ -12,6 +12,10 @@ import net.minecraft.util.collection.IndexedIterable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public final class ExtraSounds {
@@ -20,6 +24,7 @@ public final class ExtraSounds {
             new PrefixableMessageFactory(ExtraSounds.class.getSimpleName())
     );
 
+    public static final Map<String, Method> CACHED_METHOD_MAP = new HashMap<>();
     private static final VersionedMain MAIN = Objects.requireNonNull(VersionedMain.newInstance());
 
     public static final String MODID = "extrasounds";

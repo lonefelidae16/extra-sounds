@@ -1,0 +1,44 @@
+package dev.stashy.extrasounds.mc1_19.json;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import dev.stashy.extrasounds.logics.json.VersionedSoundSerializer;
+import dev.stashy.extrasounds.logics.sounds.VersionedSoundWrapper;
+import net.minecraft.client.sound.Sound;
+import net.minecraft.util.math.floatprovider.FloatSupplier;
+import net.minecraft.util.math.random.Random;
+
+import java.lang.reflect.Type;
+
+public class SoundSerializer extends VersionedSoundSerializer {
+    private static final Random MC_RANDOM = Random.create();
+
+    @Override
+    public JsonElement serialize(VersionedSoundWrapper src, Type typeOfSrc, JsonSerializationContext context) {
+        JsonObject o = new JsonObject();
+        o.addProperty("name", src.getIdentifierImpl().toString());
+        if (src.getVolumeImpl() instanceof FloatSupplier supplier && supplier.get(MC_RANDOM) != 1) {
+            o.addProperty("volume", supplier.get(MC_RANDOM));
+        }
+        if (src.getPitchImpl() instanceof FloatSupplier supplier && supplier.get(MC_RANDOM) != 1) {
+            o.addProperty("pitch", supplier.get(MC_RANDOM));
+        }
+        if (src.getWeightImpl() != 1) {
+            o.addProperty("weight", src.getWeightImpl());
+        }
+        if (src.getRegistrationTypeImpl() != Sound.RegistrationType.FILE) {
+            o.addProperty("type", "event");
+        }
+        if (src.isStreamedImpl()) {
+            o.addProperty("stream", src.isStreamedImpl());
+        }
+        if (src.isPreloadedImpl()) {
+            o.addProperty("preload", src.isPreloadedImpl());
+        }
+        if (src.getAttenuationImpl() != 16) {
+            o.addProperty("attenuation_distance", src.getAttenuationImpl());
+        }
+        return o;
+    }
+}

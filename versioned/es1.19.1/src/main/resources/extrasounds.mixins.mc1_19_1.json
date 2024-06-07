@@ -20,6 +20,7 @@
     "inventory.StonecutterScreenMixin",
     "typing.ChatScreenMixin",
     "typing.SignEditScreenMixin",
+    "typing.SelectionManagerMixin",
     "typing.SuggestionWindowMixin",
     "typing.TextFieldWidgetMixin"
   ],

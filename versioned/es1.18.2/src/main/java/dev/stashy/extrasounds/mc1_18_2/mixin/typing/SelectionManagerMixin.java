@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.logics.mixin.typing;
+package dev.stashy.extrasounds.mc1_18_2.mixin.typing;
 
 import dev.stashy.extrasounds.logics.impl.TextFieldHandler;
 import net.minecraft.client.util.SelectionManager;
@@ -20,7 +20,7 @@ public abstract class SelectionManagerMixin {
     private boolean bPasteAction = false;
 
     @Unique
-    private static final String METHOD_SIGN_DELETE = "delete(ILnet/minecraft/client/util/SelectionManager$SelectionType;)V";
+    private static final String METHOD_SIGN_DELETE = "delete(I)V";
 
     @Shadow
     private int selectionStart;
@@ -30,12 +30,12 @@ public abstract class SelectionManagerMixin {
     private @Final Supplier<String> stringGetter;
 
     @Inject(method = METHOD_SIGN_DELETE, at = @At("HEAD"))
-    private void extrasounds$beforeDelete(int offset, SelectionManager.SelectionType selectionType, CallbackInfo ci) {
+    private void extrasounds$beforeDelete(int offset, CallbackInfo ci) {
         final String text = this.stringGetter.get();
         this.soundHandler.onCharErase(offset, text.length(), this.selectionStart, this.selectionEnd);
     }
     @Inject(method = METHOD_SIGN_DELETE, at = @At("RETURN"))
-    private void extrasounds$afterDelete(int offset, SelectionManager.SelectionType selectionType, CallbackInfo ci) {
+    private void extrasounds$afterDelete(int offset, CallbackInfo ci) {
         this.soundHandler.setCursor(this.selectionEnd);
     }
 

@@ -6,7 +6,6 @@ import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.minecraft.block.*;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.*;
-import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
 import java.lang.reflect.Method;
@@ -85,8 +84,6 @@ public abstract class BaseVanillaGenerator {
             } else {
                 return SoundDefinition.of(event(blockSoundId));
             }
-        } else if (block instanceof PillarBlock pillarBlock && pillarBlock.getDefaultState().getSoundGroup().equals(BlockSoundGroup.FROGLIGHT)) {
-            return SoundDefinition.of(event(blockSoundId, 0.3f));
         }
 
         return SoundDefinition.of(event(blockSoundId));

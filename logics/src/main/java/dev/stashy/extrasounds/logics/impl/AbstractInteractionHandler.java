@@ -17,7 +17,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.apache.commons.lang3.mutable.MutableObject;
 
 public abstract class AbstractInteractionHandler {
     protected BlockState blockState;
@@ -27,9 +26,9 @@ public abstract class AbstractInteractionHandler {
     protected ItemStack mainHandStack;
     protected ItemStack offHandStack;
 
-    protected abstract boolean canItemsCombine(ItemStack stack1, ItemStack stack2);
-
     protected abstract EquipmentSlot getPreferredSlot(ArmorStandEntity armorStandEntity, ItemStack itemStack);
+
+    protected abstract EquipmentSlot getSlotFromPosition(ArmorStandEntity armorStandEntity, Vec3d position);
 
     protected abstract BlockPos getBlockPos(Vec3d vec3d);
 
@@ -38,6 +37,10 @@ public abstract class AbstractInteractionHandler {
     protected abstract boolean isRedstoneOreBlocks();
 
     protected abstract boolean isCampfireBlocks();
+
+    protected abstract boolean canSoundArmorStandEquipped(ItemStack currentStack, ItemStack equipped);
+
+    protected abstract boolean canSoundArmorStandPreferred(ItemStack currentStack, ItemStack preferred);
 
     private boolean canInteractBlock(PlayerEntity player) {
         return !player.isSneaking() || (player.isSneaking() && this.mainHandStack.isEmpty() && this.offHandStack.isEmpty());
@@ -52,7 +55,7 @@ public abstract class AbstractInteractionHandler {
         this.offHandStack = offHandStack.copy();
     }
 
-    public final void onUse(ClientPlayerEntity player, BlockPos blockPos, MutableObject<ActionResult> mutableObject) {
+    public final void onUse(ClientPlayerEntity player, BlockPos blockPos, ActionResult actionResult) {
         if (this.blockState.isOf(Blocks.REPEATER) &&
                 this.blockState.contains(RepeaterBlock.DELAY) &&
                 this.canInteractBlock(player)
@@ -68,7 +71,7 @@ public abstract class AbstractInteractionHandler {
             final SoundEvent sound = this.blockState.get(DaylightDetectorBlock.INVERTED) ? Sounds.Actions.REDSTONE_COMPONENT_ON : Sounds.Actions.REDSTONE_COMPONENT_OFF;
             ExtraSounds.MANAGER.blockInteract(sound, blockPos);
         } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && this.canInteractBlock(player) &&
-                mutableObject.getValue() == ActionResult.SUCCESS
+                actionResult == ActionResult.SUCCESS
         ) {
             // Redstone Wire
             ExtraSounds.MANAGER.blockInteract(Sounds.Actions.REDSTONE_WIRE_CHANGE, blockPos);
@@ -81,12 +84,12 @@ public abstract class AbstractInteractionHandler {
         } else if (this.isCampfireBlocks() && (this.blockEntity instanceof CampfireBlockEntity campfireBlockEntity)) {
             // Put item on Campfire
             var recipe = campfireBlockEntity.getRecipeFor(this.currentHandStack);
-            if (recipe.isPresent() && mutableObject.getValue() == ActionResult.CONSUME) {
+            if (recipe.isPresent() && actionResult == ActionResult.CONSUME) {
                 ExtraSounds.MANAGER.blockInteract(this.currentHandStack.getItem(), blockPos);
             }
         } else if (this.isFlowerPotBlocks() &&
                 (this.block instanceof FlowerPotBlock potBlock) &&
-                mutableObject.getValue() == ActionResult.SUCCESS
+                actionResult == ActionResult.SUCCESS
         ) {
             if (!potBlock.isEmpty()) {
                 // Take from pot
@@ -101,7 +104,7 @@ public abstract class AbstractInteractionHandler {
     public void onInteractEntityAt(ItemStack stackInHand, Entity entity, EntityHitResult hitResult, Vec3d target) {
         final ItemStack currentStack = stackInHand.copy();
         if (entity instanceof ArmorStandEntity armorStandEntity) {
-            final EquipmentSlot slotFromPosition = armorStandEntity.getSlotFromPosition(target);
+            final EquipmentSlot slotFromPosition = this.getSlotFromPosition(armorStandEntity, target);
             final EquipmentSlot slotPreferred = this.getPreferredSlot(armorStandEntity, currentStack);
             if (!armorStandEntity.hasStackEquipped(slotFromPosition) && !armorStandEntity.hasStackEquipped(slotPreferred)) {
                 return;
@@ -109,9 +112,9 @@ public abstract class AbstractInteractionHandler {
 
             final ItemStack equipped = armorStandEntity.getEquippedStack(slotFromPosition).copy();
             final ItemStack preferred = armorStandEntity.getEquippedStack(slotPreferred).copy();
-            if (currentStack.isEmpty() || this.canItemsCombine(currentStack, equipped)) {
+            if (this.canSoundArmorStandEquipped(currentStack, equipped)) {
                 ExtraSounds.MANAGER.blockInteract(equipped.getItem(), this.getBlockPos(hitResult.getPos()));
-            } else if (this.canItemsCombine(currentStack, preferred)) {
+            } else if (this.canSoundArmorStandPreferred(currentStack, preferred)) {
                 ExtraSounds.MANAGER.blockInteract(preferred.getItem(), this.getBlockPos(hitResult.getPos()));
             }
         }
