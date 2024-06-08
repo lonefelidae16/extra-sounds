@@ -1,9 +1,6 @@
 package dev.stashy.extrasounds.mc1_20.mixin.chat;
 
-import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.impl.ChatSoundHandler;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.MessageIndicator;
@@ -18,8 +15,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Objects;
 
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
@@ -39,6 +34,11 @@ public abstract class ChatHudMixin {
         }
 
         this.soundHandler.onMessage(player, message.getString());
+    }
+
+    @Inject(method = "resetScroll", at = @At("HEAD"))
+    private void extrasounds$resetScroll(CallbackInfo ci) {
+        this.soundHandler.resetScroll();
     }
 
     @Inject(method = "scroll", at = @At("RETURN"))

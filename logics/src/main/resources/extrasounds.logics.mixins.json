@@ -9,9 +9,7 @@
     "hotbar.MouseMixin",
     "inventory.ClientPlayerInteractionManagerMixin",
     "inventory.HandledScreenMixin",
-    "inventory.MinecraftClientMixin",
-
-    "resource.ReloadableResourceManagerImplMixin"
+    "inventory.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -31,4 +31,8 @@ public class ChatSoundHandler {
             this.currentLines = line;
         }
     }
+
+    public void resetScroll() {
+        this.currentLines = 0;
+    }
 }

@@ -1,11 +1,8 @@
 package dev.stashy.extrasounds.logics.debug;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.impl.EntitySoundHandler;
 import dev.stashy.extrasounds.logics.mapping.SoundGenerator;
 import dev.stashy.extrasounds.logics.sounds.Sounds;
-import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.entity.effect.StatusEffect;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -67,21 +64,6 @@ public class DebugUtils {
         } catch (IOException e) {
             ExtraSounds.LOGGER.error("Failed to export generators", e);
         }
-    }
-
-    public static void soundLog(SoundInstance instance) {
-        if (!DEBUG) return;
-        ExtraSounds.LOGGER.info("Playing sound: {}", instance.getId());
-    }
-
-    public static void effectLog(StatusEffect effect, EntitySoundHandler.EffectType type) {
-        if (!DEBUG) return;
-        ExtraSounds.LOGGER.info("EffectType = {}, Effect = {}", type, effect.getName().getString());
-    }
-
-    public static void genericLog(String message) {
-        if (!DEBUG) return;
-        ExtraSounds.LOGGER.info(message);
     }
 
     private static void createFile(Path p) {

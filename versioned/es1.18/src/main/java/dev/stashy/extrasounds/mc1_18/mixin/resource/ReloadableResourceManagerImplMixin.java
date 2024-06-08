@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.logics.mixin.resource;
+package dev.stashy.extrasounds.mc1_18.mixin.resource;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.mapping.SoundPackLoader;
@@ -19,7 +19,7 @@ public abstract class ReloadableResourceManagerImplMixin {
     @Shadow
     private @Final ResourceType type;
 
-    @ModifyVariable(method = "reload", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/LifecycledResourceManager;close()V", shift = At.Shift.AFTER), ordinal = 0)
+    @ModifyVariable(method = "reload", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/ReloadableResourceManagerImpl;clear()V", shift = At.Shift.AFTER), ordinal = 0)
     private List<ResourcePack> extrasounds$registerResPack(List<ResourcePack> arg3) {
         if (this.type != ResourceType.CLIENT_RESOURCES) {
             return arg3;

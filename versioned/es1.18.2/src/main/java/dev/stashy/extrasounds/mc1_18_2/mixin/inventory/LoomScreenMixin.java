@@ -25,9 +25,17 @@ public abstract class LoomScreenMixin {
     @Shadow
     private int firstPatternButtonId;
 
-    @Inject(method = "onInventoryChanged", at = @At("HEAD"))
-    private void extrasounds$loomScreenReset(CallbackInfo ci) {
-        this.soundHandler.resetScrollPos();
+    @Inject(
+            method = "<init>",
+            at = @At(
+                    value = "FIELD",
+                    target = FIELD_ID_BUTTON_ID,
+                    opcode = Opcodes.PUTFIELD,
+                    shift = At.Shift.AFTER
+            )
+    )
+    private void extrasounds$loomScreenInit(CallbackInfo ci) {
+        this.soundHandler.setScroll(this.firstPatternButtonId);
     }
 
     @Inject(

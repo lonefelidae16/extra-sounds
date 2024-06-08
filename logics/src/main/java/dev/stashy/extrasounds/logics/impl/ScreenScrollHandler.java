@@ -46,4 +46,8 @@ public class ScreenScrollHandler {
             this.lastScrollPos = row;
         }
     }
+
+    public void setScroll(int position) {
+        this.lastScrollPos = position;
+    }
 }

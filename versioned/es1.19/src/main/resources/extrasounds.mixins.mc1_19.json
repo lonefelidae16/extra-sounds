@@ -22,7 +22,9 @@
     "typing.SignEditScreenMixin",
     "typing.SelectionManagerMixin",
     "typing.SuggestionWindowMixin",
-    "typing.TextFieldWidgetMixin"
+    "typing.TextFieldWidgetMixin",
+
+    "resource.ReloadableResourceManagerImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1

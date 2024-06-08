@@ -33,6 +33,11 @@ public abstract class ChatHudMixin {
         this.soundHandler.onMessage(player, message.getString());
     }
 
+    @Inject(method = "resetScroll", at = @At("HEAD"))
+    private void extrasounds$resetScroll(CallbackInfo ci) {
+        this.soundHandler.resetScroll();
+    }
+
     @Inject(method = "scroll", at = @At("RETURN"))
     private void extrasounds$onScroll(int amount, CallbackInfo ci) {
         this.soundHandler.onScroll(this.scrolledLines);

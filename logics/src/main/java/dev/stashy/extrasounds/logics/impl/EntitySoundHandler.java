@@ -2,8 +2,8 @@ package dev.stashy.extrasounds.logics.impl;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
 import dev.stashy.extrasounds.logics.sounds.SoundType;
+import dev.stashy.extrasounds.logics.sounds.Sounds;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.sound.SoundEvent;
 
@@ -17,7 +17,9 @@ public class EntitySoundHandler {
     }
 
     public void onEffectChanged(StatusEffect effect, EffectType type) {
-        DebugUtils.effectLog(effect, type);
+        if (DebugUtils.DEBUG) {
+            ExtraSounds.LOGGER.info("EffectType = {}, Effect = {}", type, effect.getName().getString());
+        }
 
         final SoundEvent sound;
         if (type == EffectType.ADD) {

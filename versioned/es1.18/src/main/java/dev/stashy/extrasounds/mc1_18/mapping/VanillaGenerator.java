@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.mc1_18_2.mapping;
+package dev.stashy.extrasounds.mc1_18.mapping;
 
 import dev.stashy.extrasounds.logics.mapping.BaseVanillaGenerator;
 import dev.stashy.extrasounds.logics.mapping.SoundDefinition;

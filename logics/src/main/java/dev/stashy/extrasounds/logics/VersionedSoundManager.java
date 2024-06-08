@@ -276,7 +276,9 @@ public abstract class VersionedSoundManager {
                 final MinecraftClient client = MinecraftClient.getInstance();
                 client.send(() -> client.getSoundManager().play(instance));
                 this.lastPlayed = now;
-                DebugUtils.soundLog(instance);
+                if (DebugUtils.DEBUG) {
+                    LOGGER.info("Playing sound: {}", instance.getId());
+                }
             } else {
                 if (DebugUtils.DEBUG) {
                     LOGGER.warn("Sound suppressed due to the fast interval between method calls, was '{}'.", instance.getId());

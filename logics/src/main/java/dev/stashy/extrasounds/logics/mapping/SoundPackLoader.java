@@ -85,7 +85,9 @@ public class SoundPackLoader {
                 // FIXME: When duplicate namespace declared from 2 or more mods, the last mod takes priority.
                 namespace = generator.namespace;
             }
-            DebugUtils.genericLog("registering generator with namespace '%s'".formatted(namespace));
+            if (DebugUtils.DEBUG) {
+                LOGGER.info("registering generator with namespace '{}'", namespace);
+            }
             soundGenMappers.put(namespace, generator);
             generatorVer.add(CacheInfo.getModVersion(container));
         });
@@ -112,7 +114,9 @@ public class SoundPackLoader {
             jsonObject.keySet().forEach(key -> putSoundEvent(ExtraSounds.generateIdentifier(key)));
         } catch (Exception ex) {
             // If there is an exception, regenerate and write the cache.
-            DebugUtils.genericLog(ex.getMessage());
+            if (DebugUtils.DEBUG) {
+                LOGGER.info("{}: {}", ex.getClass().getSimpleName(), ex.getMessage());
+            }
             LOGGER.info("Regenerating cache...");
             final Map<String, SoundEntry> resourceMapper = new HashMap<>();
             processSounds(soundGenMappers, resourceMapper);
@@ -128,8 +132,8 @@ public class SoundPackLoader {
         final long tookMillis = System.currentTimeMillis() - start;
         if (tookMillis >= 1000) {
             LOGGER.warn("init took too long; {}ms.", tookMillis);
-        } else {
-            DebugUtils.genericLog("init finished; took %dms.".formatted(tookMillis));
+        } else if (DebugUtils.DEBUG) {
+            LOGGER.info("init finished; took {}ms.", tookMillis);
         }
         LOGGER.info("sound pack successfully loaded; {} entries.", CUSTOM_SOUND_EVENT.keySet().size());
     }
@@ -338,7 +342,9 @@ public class SoundPackLoader {
                 writer.newLine();
                 GSON.toJson(map, writer);
                 writer.flush();
-                DebugUtils.genericLog("Cache saved at %s".formatted(CACHE_PATH.toAbsolutePath()));
+                if (DebugUtils.DEBUG) {
+                    LOGGER.info("Cache saved at {}", CACHE_PATH.toAbsolutePath());
+                }
             } catch (IOException | JsonIOException ex) {
                 LOGGER.error("Failed to save the cache.", ex);
             }
