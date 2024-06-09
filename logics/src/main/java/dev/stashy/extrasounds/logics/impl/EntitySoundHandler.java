@@ -2,8 +2,8 @@ package dev.stashy.extrasounds.logics.impl;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
+import dev.stashy.extrasounds.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.sound.SoundEvent;
 

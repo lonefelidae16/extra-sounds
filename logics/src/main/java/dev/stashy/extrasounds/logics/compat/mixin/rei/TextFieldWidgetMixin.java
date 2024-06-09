@@ -26,6 +26,7 @@ public abstract class TextFieldWidgetMixin implements TextField {
     private void extrasounds$eraseStrHead(int offset, CallbackInfo ci) {
         this.soundHandler.onCharErase(offset, this.getText().length(), this.cursorPos, this.cursorPos);
     }
+
     @Inject(method = "erase", at = @At("RETURN"), remap = false)
     private void extrasounds$eraseStrReturn(int offset, CallbackInfo ci) {
         this.soundHandler.setCursor(this.cursorPos);

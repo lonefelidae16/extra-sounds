@@ -34,6 +34,7 @@ public abstract class SelectionManagerMixin {
         final String text = this.stringGetter.get();
         this.soundHandler.onCharErase(offset, text.length(), this.selectionStart, this.selectionEnd);
     }
+
     @Inject(method = METHOD_SIGN_DELETE, at = @At("RETURN"))
     private void extrasounds$afterDelete(int offset, SelectionManager.SelectionType selectionType, CallbackInfo ci) {
         this.soundHandler.setCursor(this.selectionEnd);

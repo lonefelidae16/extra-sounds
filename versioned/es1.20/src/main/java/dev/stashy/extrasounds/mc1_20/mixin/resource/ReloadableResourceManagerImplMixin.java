@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.mc1_20.mixin.resource;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.mapping.SoundPackLoader;
+import dev.stashy.extrasounds.logics.entry.SoundPackLoader;
 import net.minecraft.resource.ReloadableResourceManagerImpl;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;

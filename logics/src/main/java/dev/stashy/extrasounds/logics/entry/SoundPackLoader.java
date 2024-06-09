@@ -1,16 +1,18 @@
-package dev.stashy.extrasounds.logics.mapping;
+package dev.stashy.extrasounds.logics.entry;
 
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.VersionedSoundManager;
+import dev.stashy.extrasounds.logics.SoundManager;
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
 import dev.stashy.extrasounds.logics.json.SoundEntrySerializer;
 import dev.stashy.extrasounds.logics.json.VersionedSoundSerializer;
 import dev.stashy.extrasounds.logics.runtime.VersionedClientResource;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
-import dev.stashy.extrasounds.logics.sounds.VersionedSoundWrapper;
+import dev.stashy.extrasounds.logics.runtime.VersionedSoundWrapper;
+import dev.stashy.extrasounds.mapping.SoundDefinition;
+import dev.stashy.extrasounds.mapping.SoundGenerator;
+import dev.stashy.extrasounds.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.Sounds;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
@@ -147,7 +149,7 @@ public class SoundPackLoader {
      * @param resource       The {@link Map} of resource that the SoundEntry will be stored.
      */
     private static void processSounds(Map<String, SoundGenerator> soundGenerator, Map<String, SoundEntry> resource) {
-        final SoundEntry fallbackSoundEntry = Sounds.aliased(VersionedSoundManager.FALLBACK_SOUND_EVENT);
+        final SoundEntry fallbackSoundEntry = Sounds.aliased(SoundManager.FALLBACK_SOUND_EVENT);
         final List<String> inSoundsJsonIds = Lists.newArrayList();
         final String fallbackSoundJson = GSON.toJson(fallbackSoundEntry);
         if (DebugUtils.SEARCH_UNDEF_SOUND) {
@@ -198,9 +200,9 @@ public class SoundPackLoader {
     /**
      * Generates a resource.
      *
-     * @param clickId      Target id.
-     * @param entry        Target {@link SoundEntry}.
-     * @param resource     {@link Map} of resource that the SoundEntry will be stored.
+     * @param clickId  Target id.
+     * @param entry    Target {@link SoundEntry}.
+     * @param resource {@link Map} of resource that the SoundEntry will be stored.
      */
     private static void generateSoundEntry(Identifier clickId, SoundEntry entry, Map<String, SoundEntry> resource) {
         resource.put(clickId.getPath(), entry);

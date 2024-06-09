@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.logics.mapping;
+package dev.stashy.extrasounds.mapping;
 
 import net.minecraft.client.sound.SoundEntry;
 import org.jetbrains.annotations.NotNull;

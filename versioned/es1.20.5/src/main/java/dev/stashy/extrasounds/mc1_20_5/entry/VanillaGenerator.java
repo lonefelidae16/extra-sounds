@@ -1,8 +1,8 @@
-package dev.stashy.extrasounds.mc1_21.mapping;
+package dev.stashy.extrasounds.mc1_20_5.entry;
 
-import dev.stashy.extrasounds.logics.mapping.BaseVanillaGenerator;
-import dev.stashy.extrasounds.logics.mapping.SoundDefinition;
-import dev.stashy.extrasounds.logics.mapping.SoundGenerator;
+import dev.stashy.extrasounds.logics.entry.BaseVanillaGenerator;
+import dev.stashy.extrasounds.mapping.SoundDefinition;
+import dev.stashy.extrasounds.mapping.SoundGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PillarBlock;
@@ -11,8 +11,8 @@ import net.minecraft.item.*;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
-import static dev.stashy.extrasounds.logics.sounds.Categories.*;
-import static dev.stashy.extrasounds.logics.sounds.Sounds.*;
+import static dev.stashy.extrasounds.sounds.Categories.*;
+import static dev.stashy.extrasounds.sounds.Sounds.*;
 
 public final class VanillaGenerator extends BaseVanillaGenerator {
     public static SoundGenerator generate() {
@@ -29,7 +29,7 @@ public final class VanillaGenerator extends BaseVanillaGenerator {
                 return generateFromToolMaterial(toolItem.getMaterial());
             } else if (item instanceof ArmorItem armorItem) {
                 return fromArmorMaterial(armorItem.getMaterial().value());
-            } else if (isStewItem(item)) {
+            } else if (item instanceof StewItem || item instanceof SuspiciousStewItem) {
                 return SoundDefinition.of(aliased(BOWL));
             } else if (isPotionItem(item)) {
                 return SoundDefinition.of(aliased(POTION));
@@ -39,7 +39,7 @@ public final class VanillaGenerator extends BaseVanillaGenerator {
                 return SoundDefinition.of(aliased(LOOSE_METAL));
             } else if (item instanceof DiscFragmentItem) {
                 return SoundDefinition.of(single(METAL_BITS.getId(), 0.7f, 0.85f, Sound.RegistrationType.SOUND_EVENT));
-            } else if (getItemIdPath(item).startsWith("music_disc_")) {
+            } else if (item instanceof MusicDiscItem) {
                 return SoundDefinition.of(aliased(MUSIC_DISC));
             } else if (isBrickItem(item)) {
                 return SoundDefinition.of(aliased(BRICK));
@@ -55,11 +55,6 @@ public final class VanillaGenerator extends BaseVanillaGenerator {
 
             return generalSounds(item);
         });
-    }
-
-    private static boolean isStewItem(Item item) {
-        return item instanceof SuspiciousStewItem || item == Items.RABBIT_STEW ||
-                item == Items.BEETROOT_SOUP || item == Items.MUSHROOM_STEW;
     }
 
     private static boolean isPotionItem(Item item) {

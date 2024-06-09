@@ -3,7 +3,7 @@ package dev.stashy.extrasounds.mc1_21.mixin.inventory;
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.impl.AbstractCreativeInventoryHandler;
 import dev.stashy.extrasounds.logics.impl.ScreenScrollHandler;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.SoundType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
@@ -72,6 +72,7 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
 
     @Shadow
     protected abstract boolean isClickInTab(ItemGroup group, double mouseX, double mouseY);
+
     @Shadow
     abstract boolean isCreativeInventorySlot(@Nullable Slot slot);
 

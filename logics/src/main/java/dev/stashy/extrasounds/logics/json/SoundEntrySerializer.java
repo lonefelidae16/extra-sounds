@@ -7,11 +7,9 @@ import net.minecraft.client.sound.SoundEntry;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
-public class SoundEntrySerializer implements JsonSerializer<SoundEntry>
-{
+public class SoundEntrySerializer implements JsonSerializer<SoundEntry> {
     @Override
-    public JsonElement serialize(SoundEntry src, Type typeOfSrc, JsonSerializationContext context)
-    {
+    public JsonElement serialize(SoundEntry src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject o = new JsonObject();
         JsonArray sounds = new JsonArray();
         for (Sound snd : src.getSounds())

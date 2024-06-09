@@ -2,8 +2,8 @@ package dev.stashy.extrasounds.mc1_19_3.mixin.action.item;
 
 import com.mojang.authlib.GameProfile;
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
+import dev.stashy.extrasounds.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;

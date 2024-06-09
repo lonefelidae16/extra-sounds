@@ -1,7 +1,9 @@
-package dev.stashy.extrasounds.logics.mapping;
+package dev.stashy.extrasounds.logics.entry;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
+import dev.stashy.extrasounds.mapping.SoundDefinition;
+import dev.stashy.extrasounds.mapping.SoundGenerator;
+import dev.stashy.extrasounds.sounds.Sounds;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.minecraft.block.*;
 import net.minecraft.client.sound.SoundEntry;
@@ -11,12 +13,25 @@ import net.minecraft.util.Identifier;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-import static dev.stashy.extrasounds.logics.sounds.Categories.*;
-import static dev.stashy.extrasounds.logics.sounds.Sounds.aliased;
-import static dev.stashy.extrasounds.logics.sounds.Sounds.event;
+import static dev.stashy.extrasounds.sounds.Categories.*;
+import static dev.stashy.extrasounds.sounds.Sounds.aliased;
+import static dev.stashy.extrasounds.sounds.Sounds.event;
 
 public abstract class BaseVanillaGenerator {
     protected static final SoundDefinition DEFAULT_SOUND = SoundDefinition.of(aliased(Sounds.ITEM_PICK));
+    public static final SoundGenerator GENERATOR;
+
+    static {
+        SoundGenerator result = null;
+        try {
+            Class<BaseVanillaGenerator> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "entry.VanillaGenerator");
+            Method generator = clazz.getMethod("generate");
+            result = (SoundGenerator) generator.invoke(null);
+        } catch (Exception ex) {
+            ExtraSounds.LOGGER.error("Cannot initialize 'VanillaGenerator'", ex);
+        }
+        GENERATOR = Objects.requireNonNull(result);
+    }
 
     protected static String getItemIdPath(Item item) {
         return ExtraSounds.fromItemRegistry(item).getPath();
@@ -110,19 +125,5 @@ public abstract class BaseVanillaGenerator {
         }
 
         return DEFAULT_SOUND;
-    }
-
-    public static final SoundGenerator GENERATOR;
-
-    static {
-        SoundGenerator result = null;
-        try {
-            Class<BaseVanillaGenerator> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE,"mapping.VanillaGenerator");
-            Method generator = clazz.getMethod("generate");
-            result = (SoundGenerator) generator.invoke(null);
-        } catch (Exception ex) {
-            ExtraSounds.LOGGER.error("Cannot initialize 'VanillaGenerator'", ex);
-        }
-        GENERATOR = Objects.requireNonNull(result);
     }
 }

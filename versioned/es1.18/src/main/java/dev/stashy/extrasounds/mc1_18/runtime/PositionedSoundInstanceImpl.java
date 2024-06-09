@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mc1_18.runtime;
 
-import dev.stashy.extrasounds.logics.sounds.VersionedPositionedSoundInstanceWrapper;
+import dev.stashy.extrasounds.logics.runtime.VersionedPositionedSoundInstanceWrapper;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;

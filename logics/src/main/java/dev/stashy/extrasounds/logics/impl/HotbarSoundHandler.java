@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.logics.impl;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.SoundType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 

@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.logics.sounds;
+package dev.stashy.extrasounds.logics.runtime;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;

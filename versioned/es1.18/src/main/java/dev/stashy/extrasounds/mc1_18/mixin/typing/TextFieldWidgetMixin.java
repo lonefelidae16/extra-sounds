@@ -44,6 +44,7 @@ public abstract class TextFieldWidgetMixin {
     private void extrasounds$eraseStrHead(int offset, CallbackInfo ci) {
         this.soundHandler.onCharErase(offset, this.getText().length(), this.selectionStart, this.selectionEnd);
     }
+
     @Inject(method = "erase", at = @At("RETURN"))
     private void extrasounds$eraseStrReturn(int offset, CallbackInfo ci) {
         this.soundHandler.setCursor(this.selectionEnd);

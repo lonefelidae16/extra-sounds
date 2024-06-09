@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.logics;
 
-import dev.stashy.soundcategories.shared.CategoryLoader;
+import dev.stashy.soundcategories.CategoryLoader;
 import net.minecraft.sound.SoundCategory;
 
 public class Mixers implements CategoryLoader {

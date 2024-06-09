@@ -39,7 +39,7 @@ public abstract class LoomScreenMixin {
     }
 
     @Inject(
-            method = { "mouseScrolled", "mouseDragged" },
+            method = {"mouseScrolled", "mouseDragged"},
             at = @At(
                     value = "FIELD",
                     target = FIELD_ID_BUTTON_ID,

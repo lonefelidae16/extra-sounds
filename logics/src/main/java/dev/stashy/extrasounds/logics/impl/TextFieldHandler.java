@@ -1,8 +1,8 @@
 package dev.stashy.extrasounds.logics.impl;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
+import dev.stashy.extrasounds.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.Sounds;
 
 /**
  * Helper class for managing {@link net.minecraft.client.gui.widget.TextFieldWidget} and its inherited class.

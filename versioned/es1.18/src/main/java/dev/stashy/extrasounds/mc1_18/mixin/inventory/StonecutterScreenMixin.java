@@ -38,7 +38,7 @@ public abstract class StonecutterScreenMixin {
     }
 
     @Inject(
-            method = { "mouseScrolled", "mouseDragged" },
+            method = {"mouseScrolled", "mouseDragged"},
             at = @At(
                     value = "FIELD",
                     target = FIELD_ID_SCROLL_OFFSET,

@@ -36,7 +36,7 @@ public abstract class MerchantScreenMixin extends HandledScreen<MerchantScreenHa
     }
 
     @Inject(
-            method = { "mouseScrolled", "mouseDragged" },
+            method = {"mouseScrolled", "mouseDragged"},
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/util/math/MathHelper;clamp(III)I",

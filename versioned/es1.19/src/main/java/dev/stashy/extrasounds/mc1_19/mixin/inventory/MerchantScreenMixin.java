@@ -31,7 +31,7 @@ public abstract class MerchantScreenMixin {
     }
 
     @Inject(
-            method = { "mouseScrolled", "mouseDragged" },
+            method = {"mouseScrolled", "mouseDragged"},
             at = @At(
                     value = "FIELD",
                     target = FIELD_ID_START_OFFSET,

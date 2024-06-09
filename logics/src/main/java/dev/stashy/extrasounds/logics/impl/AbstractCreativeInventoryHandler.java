@@ -1,9 +1,9 @@
 package dev.stashy.extrasounds.logics.impl;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.VersionedSoundManager;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
+import dev.stashy.extrasounds.logics.SoundManager;
+import dev.stashy.extrasounds.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -81,7 +81,7 @@ public abstract class AbstractCreativeInventoryHandler {
                     !bOnHotbar &&
                     slot != null
             ) {
-                if (this.canItemsCombine(slot.getStack(), cursorStack) && !VersionedSoundManager.RIGHT_CLICK_PREDICATE.test(actionType, button)) {
+                if (this.canItemsCombine(slot.getStack(), cursorStack) && !SoundManager.RIGHT_CLICK_PREDICATE.test(actionType, button)) {
                     // Left Mouse Clicked on the same slot in CreativeInventory tab except Hotbar
                     ExtraSounds.MANAGER.playSound(cursorStack.getItem(), SoundType.PICKUP);
                 } else {

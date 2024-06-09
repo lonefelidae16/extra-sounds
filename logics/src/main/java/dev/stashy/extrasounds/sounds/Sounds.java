@@ -1,6 +1,7 @@
-package dev.stashy.extrasounds.logics.sounds;
+package dev.stashy.extrasounds.sounds;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
+import dev.stashy.extrasounds.logics.runtime.VersionedSoundWrapper;
 import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.sound.SoundEvent;

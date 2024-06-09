@@ -2,13 +2,12 @@ package dev.stashy.extrasounds.logics;
 
 import com.google.common.collect.Maps;
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
-import dev.stashy.extrasounds.logics.mapping.SoundPackLoader;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
-import dev.stashy.extrasounds.logics.sounds.VersionedPositionedSoundInstanceWrapper;
+import dev.stashy.extrasounds.logics.entry.SoundPackLoader;
+import dev.stashy.extrasounds.logics.runtime.VersionedPositionedSoundInstanceWrapper;
 import dev.stashy.extrasounds.logics.throwable.NoSuchSoundException;
+import dev.stashy.extrasounds.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.Sounds;
 import me.lonefelidae16.groominglib.Util;
-import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -31,18 +30,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 
-public abstract class VersionedSoundManager {
-    protected static final Logger LOGGER = LogManager.getLogger(
-            VersionedSoundManager.class,
+public final class SoundManager {
+    private static final Logger LOGGER = LogManager.getLogger(
+            SoundManager.class,
             new PrefixableMessageFactory("%s/%s".formatted(
                     ExtraSounds.class.getSimpleName(),
-                    VersionedSoundManager.class.getSimpleName()
+                    SoundManager.class.getSimpleName()
             ))
     );
 
@@ -61,32 +59,19 @@ public abstract class VersionedSoundManager {
      * BiPredicate in this value will be passed <code>SlotActionType</code> and <code>int</code> of button ID.<br>
      * Item -&gt; BiPredicate&lt;SlotActionType, Integer&gt;
      */
-    protected static final Map<Item, BiPredicate<SlotActionType, Integer>> IGNORE_SOUND_PREDICATE_MAP = Util.make(Maps.newHashMap(), map -> {
+    private static final Map<Item, BiPredicate<SlotActionType, Integer>> IGNORE_SOUND_PREDICATE_MAP = Util.make(Maps.newHashMap(), map -> {
         map.put(Items.BUNDLE, RIGHT_CLICK_PREDICATE);
     });
 
-    protected final List<Identifier> missingSoundId;
-    protected long lastPlayed;
-    protected Item quickMovingItem;
+    private final List<Identifier> missingSoundId;
+    private long lastPlayed;
+    private Item quickMovingItem;
 
-    protected VersionedSoundManager() {
+    public SoundManager() {
         this.missingSoundId = Lists.newArrayList();
         this.lastPlayed = 0;
         this.quickMovingItem = Items.AIR;
     }
-
-    public static VersionedSoundManager newInstance() {
-        try {
-            Class<VersionedSoundManager> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "SoundManager");
-            Constructor<VersionedSoundManager> init = clazz.getConstructor();
-            return init.newInstance();
-        } catch (Exception ex) {
-            LOGGER.error("Cannot initialize 'SoundManager'", ex);
-        }
-        return null;
-    }
-
-    protected abstract boolean canItemsCombine(ItemStack stack1, ItemStack stack2);
 
     /**
      * Handles Click and KeyPress on inventory
@@ -186,7 +171,7 @@ public abstract class VersionedSoundManager {
                  * hasCursor == false, hasSlot == true
                  *  --> PICKUP
                  */
-                if (!hasSlot || hasCursor && this.canItemsCombine(slotItem, cursorItem)) {
+                if (!hasSlot || hasCursor && ExtraSounds.canItemsCombine(slotItem, cursorItem)) {
                     this.playSound(cursorItem.getItem(), SoundType.PLACE);
                 } else {
                     this.playSound(slotItem.getItem(), SoundType.PICKUP);
@@ -232,7 +217,7 @@ public abstract class VersionedSoundManager {
      * @see net.minecraft.client.network.ClientPlayerInteractionManager#clickSlot
      * @see ScreenHandler#internalOnSlotClick
      */
-    protected void handleQuickMoveSound(Item item) {
+    private void handleQuickMoveSound(Item item) {
         if (item == Items.AIR) {
             return;
         }
@@ -269,7 +254,7 @@ public abstract class VersionedSoundManager {
         );
     }
 
-    protected void playSound(SoundInstance instance) {
+    private void playSound(SoundInstance instance) {
         try {
             long now = System.currentTimeMillis();
             if (now - this.lastPlayed > 5) {
@@ -318,11 +303,11 @@ public abstract class VersionedSoundManager {
         MinecraftClient.getInstance().getSoundManager().stopSounds(e.getId(), type.category);
     }
 
-    protected float getSoundVolume(SoundCategory category) {
+    private float getSoundVolume(SoundCategory category) {
         return MinecraftClient.getInstance().options.getSoundVolume(category);
     }
 
-    protected SoundEvent getSoundByItem(Item item, SoundType type) {
+    private SoundEvent getSoundByItem(Item item, SoundType type) {
         var itemId = ExtraSounds.fromItemRegistry(item);
         Identifier id = ExtraSounds.getClickId(itemId, type);
         SoundEvent sound = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);

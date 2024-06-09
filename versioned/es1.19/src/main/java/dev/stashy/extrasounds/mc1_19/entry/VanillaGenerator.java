@@ -1,8 +1,8 @@
-package dev.stashy.extrasounds.mc1_19_4.mapping;
+package dev.stashy.extrasounds.mc1_19.entry;
 
-import dev.stashy.extrasounds.logics.mapping.BaseVanillaGenerator;
-import dev.stashy.extrasounds.logics.mapping.SoundDefinition;
-import dev.stashy.extrasounds.logics.mapping.SoundGenerator;
+import dev.stashy.extrasounds.logics.entry.BaseVanillaGenerator;
+import dev.stashy.extrasounds.mapping.SoundDefinition;
+import dev.stashy.extrasounds.mapping.SoundGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PillarBlock;
@@ -11,8 +11,8 @@ import net.minecraft.item.*;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
-import static dev.stashy.extrasounds.logics.sounds.Categories.*;
-import static dev.stashy.extrasounds.logics.sounds.Sounds.*;
+import static dev.stashy.extrasounds.sounds.Categories.*;
+import static dev.stashy.extrasounds.sounds.Sounds.*;
 
 public final class VanillaGenerator extends BaseVanillaGenerator {
     public static SoundGenerator generate() {
@@ -35,8 +35,6 @@ public final class VanillaGenerator extends BaseVanillaGenerator {
                 return SoundDefinition.of(aliased(POTION));
             } else if (item instanceof GoatHornItem) {
                 return SoundDefinition.of(single(LOOSE_METAL.getId(), 0.6f, 0.9f, Sound.RegistrationType.SOUND_EVENT));
-            } else if (item instanceof SmithingTemplateItem) {
-                return SoundDefinition.of(aliased(LOOSE_METAL));
             } else if (item instanceof DiscFragmentItem) {
                 return SoundDefinition.of(single(METAL_BITS.getId(), 0.7f, 0.85f, Sound.RegistrationType.SOUND_EVENT));
             } else if (item instanceof MusicDiscItem) {

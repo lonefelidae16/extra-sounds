@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.logics.sounds;
+package dev.stashy.extrasounds.sounds;
 
 import dev.stashy.extrasounds.logics.Mixers;
 import net.minecraft.sound.SoundCategory;

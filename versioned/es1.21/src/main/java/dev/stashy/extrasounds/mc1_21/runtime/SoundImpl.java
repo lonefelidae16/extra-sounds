@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.mc1_21.runtime;
 
-import dev.stashy.extrasounds.logics.sounds.VersionedSoundWrapper;
+import dev.stashy.extrasounds.logics.runtime.VersionedSoundWrapper;
 import net.minecraft.client.sound.Sound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.floatprovider.ConstantFloatProvider;

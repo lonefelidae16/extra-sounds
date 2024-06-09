@@ -1,8 +1,7 @@
 package dev.stashy.extrasounds.logics.debug;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.mapping.SoundGenerator;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
+import dev.stashy.extrasounds.mapping.SoundGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +25,7 @@ public class DebugUtils {
     /**
      * For debugging.<br>
      * When run with the JVM argument {@link DebugUtils#JVM_ARG_SEARCH_UNDEF_SND}, the log shows a SoundEntry that plays
-     * the default {@link Sounds#ITEM_PICK}.<br>
+     * the default {@link dev.stashy.extrasounds.sounds.Sounds#ITEM_PICK}.<br>
      * To ensure that the debugging statements are executed, it is recommended that you also run with the
      * {@link DebugUtils#NO_CACHE_VAR} JVM argument.
      */

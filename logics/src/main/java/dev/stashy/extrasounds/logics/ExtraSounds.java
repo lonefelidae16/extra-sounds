@@ -1,11 +1,12 @@
 package dev.stashy.extrasounds.logics;
 
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
-import dev.stashy.extrasounds.logics.mapping.SoundPackLoader;
-import dev.stashy.extrasounds.logics.sounds.SoundType;
-import dev.stashy.extrasounds.logics.sounds.Sounds;
+import dev.stashy.extrasounds.logics.entry.SoundPackLoader;
+import dev.stashy.extrasounds.sounds.SoundType;
+import dev.stashy.extrasounds.sounds.Sounds;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.IndexedIterable;
@@ -27,7 +28,7 @@ public final class ExtraSounds {
     private static final VersionedMain MAIN = Objects.requireNonNull(VersionedMain.newInstance());
 
     public static final String MODID = "extrasounds";
-    public static final VersionedSoundManager MANAGER = Objects.requireNonNull(VersionedSoundManager.newInstance());
+    public static final SoundManager MANAGER = new SoundManager();
     public static final String BASE_PACKAGE = "dev.stashy.extrasounds";
 
     public static void init() {
@@ -78,5 +79,9 @@ public final class ExtraSounds {
 
     public static IndexedIterable<Item> getItemRegistry() {
         return MAIN.getItemRegistry();
+    }
+
+    public static boolean canItemsCombine(ItemStack stack1, ItemStack stack2) {
+        return MAIN.canItemsCombine(stack1, stack2);
     }
 }
