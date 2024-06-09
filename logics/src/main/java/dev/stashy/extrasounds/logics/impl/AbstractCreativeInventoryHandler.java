@@ -7,6 +7,7 @@ import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import org.jetbrains.annotations.Nullable;
@@ -72,6 +73,15 @@ public abstract class AbstractCreativeInventoryHandler {
             if (this.getDeleteItemSlot() != null && slot == this.getDeleteItemSlot()) {
                 // Clicked deleteItemSlot
                 ExtraSounds.MANAGER.playSound(Sounds.ITEM_DELETE_PARTIAL, SoundType.PICKUP);
+                return;
+            }
+
+            if (slotId == ScreenHandler.EMPTY_SPACE_SLOT_INDEX &&
+                    actionType != SlotActionType.QUICK_CRAFT &&
+                    this.getTabType() == TabType.INVENTORY
+            ) {
+                // out of screen area on inventory tab
+                ExtraSounds.MANAGER.playThrow(cursorStack);
                 return;
             }
 

@@ -32,9 +32,6 @@ public abstract class SuggestionWindowMixin {
 
     @Inject(method = "complete", at = @At("HEAD"))
     private void extrasounds$suggestionComplete(CallbackInfo ci) {
-        if (this.completed) {
-            return;
-        }
         this.soundHandler.onKey(TextFieldHandler.KeyType.INSERT);
     }
 

@@ -14,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SuggestionWindowMixin {
     @Shadow
     private int selection;
-    @Shadow
-    private boolean completed;
 
     @Unique
     private final TextFieldHandler soundHandler = new TextFieldHandler();
@@ -32,9 +30,6 @@ public abstract class SuggestionWindowMixin {
 
     @Inject(method = "complete", at = @At("HEAD"))
     private void extrasounds$suggestionComplete(CallbackInfo ci) {
-        if (this.completed) {
-            return;
-        }
         this.soundHandler.onKey(TextFieldHandler.KeyType.INSERT);
     }
 
