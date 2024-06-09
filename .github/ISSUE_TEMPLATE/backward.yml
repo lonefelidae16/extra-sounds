@@ -1,6 +1,6 @@
-name: Backport request
-description: Suggest more compatibility for this project
-labels: [enhancement, backport]
+name: Backward compatibility request
+description: Suggest more Minecraft compatibility for this project
+labels: [enhancement, backward]
 body:
   - type: textarea
     attributes:
