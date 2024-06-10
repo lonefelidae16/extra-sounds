@@ -13,8 +13,8 @@ public class ChatSoundHandler {
     public void onMessage(PlayerEntity player, String text) {
         boolean containsPlName = false;
         try {
-            containsPlName = text.contains("@" + player.getName().getString()) ||
-                    text.contains("@" + Objects.requireNonNull(player.getDisplayName()).getString());
+            containsPlName |= text.contains("@" + player.getName().getString());
+            containsPlName |= text.contains("@" + Objects.requireNonNull(player.getDisplayName()).getString());
         } catch (Exception ignore) {
         }
 

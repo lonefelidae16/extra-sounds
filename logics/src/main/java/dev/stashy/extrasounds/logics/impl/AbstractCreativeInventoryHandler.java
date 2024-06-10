@@ -18,8 +18,6 @@ public abstract class AbstractCreativeInventoryHandler {
         INVENTORY
     }
 
-    protected abstract boolean canItemsCombine(ItemStack stack1, ItemStack stack2);
-
     protected abstract TabType getTabType();
 
     protected abstract boolean isCreativeInventorySlot(Slot slot);
@@ -34,7 +32,7 @@ public abstract class AbstractCreativeInventoryHandler {
                 slot != null &&
                 slotId >= 0
         ) {
-            // CreativeInventory can drop items while holding anything on cursor
+            // When CreativeInventory is opened, can drop items while holding anything on cursor.
             final ItemStack slotStack = slot.getStack().copy();
             if (this.getTabType() == TabType.CREATIVE && (slotStack.getCount() == 1 || button == 1) && cursorStack.isEmpty() && bOnHotbar) {
                 // Item will be deleted
@@ -91,7 +89,7 @@ public abstract class AbstractCreativeInventoryHandler {
                     !bOnHotbar &&
                     slot != null
             ) {
-                if (this.canItemsCombine(slot.getStack(), cursorStack) && !SoundManager.RIGHT_CLICK_PREDICATE.test(actionType, button)) {
+                if (ExtraSounds.canItemsCombine(slot.getStack(), cursorStack) && !SoundManager.RIGHT_CLICK_PREDICATE.test(actionType, button)) {
                     // Left Mouse Clicked on the same slot in CreativeInventory tab except Hotbar
                     ExtraSounds.MANAGER.playSound(cursorStack.getItem(), SoundType.PICKUP);
                 } else {

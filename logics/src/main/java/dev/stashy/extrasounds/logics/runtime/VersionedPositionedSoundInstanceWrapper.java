@@ -12,16 +12,16 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 public interface VersionedPositionedSoundInstanceWrapper {
-    String METHOD_SIGNATURE = VersionedPositionedSoundInstanceWrapper.class.getCanonicalName() + "#init";
+    String METHOD_KEY_INIT = VersionedPositionedSoundInstanceWrapper.class.getCanonicalName() + "#init";
 
     static VersionedPositionedSoundInstanceWrapper newInstance(Identifier id, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, SoundInstance.AttenuationType attenuationType, double x, double y, double z, boolean relative) {
-        Method init = ExtraSounds.CACHED_METHOD_MAP.getOrDefault(METHOD_SIGNATURE, null);
+        Method init = ExtraSounds.CACHED_METHOD_MAP.getOrDefault(METHOD_KEY_INIT, null);
 
         if (init == null) {
             try {
                 Class<VersionedPositionedSoundInstanceWrapper> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "runtime.PositionedSoundInstanceImpl");
                 init = clazz.getMethod("init", Identifier.class, SoundCategory.class, float.class, float.class, boolean.class, int.class, SoundInstance.AttenuationType.class, double.class, double.class, double.class, boolean.class);
-                ExtraSounds.CACHED_METHOD_MAP.put(METHOD_SIGNATURE, Objects.requireNonNull(init));
+                ExtraSounds.CACHED_METHOD_MAP.put(METHOD_KEY_INIT, Objects.requireNonNull(init));
             } catch (Exception ex) {
                 ExtraSounds.LOGGER.error("Failed to find 'PositionedSoundInstance' class.", ex);
             }

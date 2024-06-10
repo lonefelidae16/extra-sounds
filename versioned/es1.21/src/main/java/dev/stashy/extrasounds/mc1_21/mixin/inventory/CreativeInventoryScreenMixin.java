@@ -10,7 +10,6 @@ import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
-import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
@@ -37,11 +36,6 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     private final ScreenScrollHandler soundHandler = new ScreenScrollHandler();
     @Unique
     private final AbstractCreativeInventoryHandler inventoryHandler = new AbstractCreativeInventoryHandler() {
-        @Override
-        protected boolean canItemsCombine(ItemStack stack1, ItemStack stack2) {
-            return ItemStack.areItemsAndComponentsEqual(stack1, stack2);
-        }
-
         @Override
         protected TabType getTabType() {
             if (selectedTab.getType() == TYPE_INVENTORY) {

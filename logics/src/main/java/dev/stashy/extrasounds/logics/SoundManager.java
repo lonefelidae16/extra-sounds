@@ -236,22 +236,18 @@ public final class SoundManager {
                 volume = Math.min(getSoundVolume(cat), volume);
             }
         }
-        this.playSound(
-                (PositionedSoundInstance) Objects.requireNonNull(
-                        VersionedPositionedSoundInstanceWrapper.newInstance(snd.getId(), category, volume, pitch,
-                                false, 0, SoundInstance.AttenuationType.NONE, 0.0D, 0.0D, 0.0D,
-                                true)
-                )
+        final var soundInstance = VersionedPositionedSoundInstanceWrapper.newInstance(
+                snd.getId(), category, volume, pitch, false, 0, SoundInstance.AttenuationType.NONE,
+                0.0D, 0.0D, 0.0D, true
         );
+        this.playSound((PositionedSoundInstance) Objects.requireNonNull(soundInstance));
     }
 
     public void playSound(SoundEvent snd, SoundType type, float volume, float pitch, BlockPos position) {
-        this.playSound(
-                (PositionedSoundInstance) Objects.requireNonNull(
-                        VersionedPositionedSoundInstanceWrapper.newInstance(snd, type.category, getSoundVolume(Mixers.MASTER) * volume, pitch,
-                                position)
-                )
+        final var soundInstance = VersionedPositionedSoundInstanceWrapper.newInstance(
+                snd, type.category, getSoundVolume(Mixers.MASTER) * volume, pitch, position
         );
+        this.playSound((PositionedSoundInstance) Objects.requireNonNull(soundInstance));
     }
 
     private void playSound(SoundInstance instance) {

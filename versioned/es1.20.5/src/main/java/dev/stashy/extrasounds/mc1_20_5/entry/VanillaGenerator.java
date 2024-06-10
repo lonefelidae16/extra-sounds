@@ -78,6 +78,8 @@ public final class VanillaGenerator extends BaseVanillaGenerator {
             return SoundDefinition.of(aliased(Gear.TURTLE));
         } else if (mat == ArmorMaterials.LEATHER.value()) {
             return SoundDefinition.of(aliased(Gear.LEATHER));
+        } else if (mat == ArmorMaterials.ARMADILLO.value()) {
+            return SoundDefinition.of(aliased(Gear.ARMADILLO));
         } else {
             return SoundDefinition.of(aliased(Gear.GENERIC));
         }
