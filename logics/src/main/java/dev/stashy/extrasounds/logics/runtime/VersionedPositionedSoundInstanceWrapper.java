@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-public interface VersionedPositionedSoundInstanceWrapper {
+public interface VersionedPositionedSoundInstanceWrapper extends SoundInstance {
     String METHOD_KEY_INIT = VersionedPositionedSoundInstanceWrapper.class.getCanonicalName() + "#init";
 
     static VersionedPositionedSoundInstanceWrapper newInstance(Identifier id, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, SoundInstance.AttenuationType attenuationType, double x, double y, double z, boolean relative) {
@@ -30,7 +30,7 @@ public interface VersionedPositionedSoundInstanceWrapper {
         try {
             return (VersionedPositionedSoundInstanceWrapper) Objects.requireNonNull(init).invoke(null, id, category, volume, pitch, repeat, repeatDelay, attenuationType, x, y, z, relative);
         } catch (Exception ex) {
-            ExtraSounds.LOGGER.error("Cannot initialize 'PositionedSoundInstance'", ex);
+            ExtraSounds.LOGGER.error("Cannot instantiate 'PositionedSoundInstance'", ex);
         }
 
         return null;

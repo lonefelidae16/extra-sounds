@@ -10,7 +10,6 @@ import dev.stashy.extrasounds.sounds.Sounds;
 import me.lonefelidae16.groominglib.Util;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -199,7 +198,7 @@ public final class SoundManager {
     }
 
     public void blockInteract(Item item, BlockPos position) {
-        this.blockInteract(getSoundByItem(item, SoundType.PICKUP), position);
+        this.blockInteract(this.getSoundByItem(item, SoundType.PICKUP), position);
     }
 
     public void playSound(SoundEvent snd, SoundType type) {
@@ -207,7 +206,7 @@ public final class SoundManager {
     }
 
     public void playSound(Item item, SoundType type) {
-        this.playSound(getSoundByItem(item, type), type.pitch, type.category);
+        this.playSound(this.getSoundByItem(item, type), type.pitch, type.category);
     }
 
     /**
@@ -230,24 +229,43 @@ public final class SoundManager {
     }
 
     public void playSound(SoundEvent snd, float pitch, SoundCategory category, SoundCategory... optionalVolumes) {
-        float volume = getSoundVolume(Mixers.MASTER);
+        float volume = this.getSoundVolume(Mixers.MASTER);
         if (optionalVolumes != null) {
             for (SoundCategory cat : optionalVolumes) {
-                volume = Math.min(getSoundVolume(cat), volume);
+                volume = Math.min(this.getSoundVolume(cat), volume);
             }
+        }
+        if (volume == 0) {
+            // skip reflection when volume is zero.
+            if (DebugUtils.DEBUG) {
+                this.logZeroVolume(snd);
+            }
+            return;
         }
         final var soundInstance = VersionedPositionedSoundInstanceWrapper.newInstance(
                 snd.getId(), category, volume, pitch, false, 0, SoundInstance.AttenuationType.NONE,
                 0.0D, 0.0D, 0.0D, true
         );
-        this.playSound((PositionedSoundInstance) Objects.requireNonNull(soundInstance));
+        this.playSound(Objects.requireNonNull(soundInstance));
     }
 
     public void playSound(SoundEvent snd, SoundType type, float volume, float pitch, BlockPos position) {
+        volume *= getSoundVolume(Mixers.MASTER);
+        if (volume == 0) {
+            // skip reflection when volume is zero.
+            if (DebugUtils.DEBUG) {
+                this.logZeroVolume(snd);
+            }
+            return;
+        }
         final var soundInstance = VersionedPositionedSoundInstanceWrapper.newInstance(
-                snd, type.category, getSoundVolume(Mixers.MASTER) * volume, pitch, position
+                snd, type.category, volume, pitch, position
         );
-        this.playSound((PositionedSoundInstance) Objects.requireNonNull(soundInstance));
+        this.playSound(Objects.requireNonNull(soundInstance));
+    }
+
+    private void logZeroVolume(SoundEvent snd) {
+        LOGGER.warn("Sound suppressed due to zero volume, was '{}'.", snd.getId());
     }
 
     private void playSound(SoundInstance instance) {

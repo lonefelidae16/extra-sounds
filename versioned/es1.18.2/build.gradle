@@ -2,7 +2,6 @@ plugins {
     id 'fabric-loom'
 }
 
-var targetJdk = Integer.parseInt(rootProject.java_compiler_version)
 var extraSounds = project.parent.parent
 
 base {
@@ -25,18 +24,6 @@ tasks.withType(ProcessResources).configureEach {
     project.ext['moduleAccessWidener'] = 'extrasounds.accesswidener'
 }
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    it.options.release.set(targetJdk)
-}
-
 loom {
     accessWidenerPath = file("src/main/resources/extrasounds.accesswidener")
-}
-
-java {
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.toVersion(targetJdk)
-    targetCompatibility = JavaVersion.toVersion(targetJdk)
 }

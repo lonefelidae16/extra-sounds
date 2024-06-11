@@ -58,7 +58,7 @@ public final class ExtraSounds {
     }
 
     public static SoundEvent createEvent(String path) {
-        return createEvent(Objects.requireNonNull(generateIdentifier(path)));
+        return createEvent(Objects.requireNonNull(generateIdentifier(MODID, path)));
     }
 
     public static SoundEvent createEvent(Identifier id) {

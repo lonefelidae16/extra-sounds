@@ -31,9 +31,20 @@ base {
     archivesName = project.archives_base_name
 }
 
-var versionTitle = "$project.mod_version for $project.minecraft_version"
-
 allprojects {
+    apply plugin: 'java'
+
+    java {
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.toVersion(targetJdk)
+        targetCompatibility = JavaVersion.toVersion(targetJdk)
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        it.options.release.set(targetJdk)
+    }
+
     project.ext['moduleId'] = 'unnamed'
     project.ext['moduleName'] = ''
     project.ext['mod_license'] = project.mod_license
@@ -52,10 +63,10 @@ allprojects {
             }
 
             props.putAll([
-                    'moduleId': project.ext['moduleId'],
-                    'moduleName': project.ext['moduleName'],
+                    'moduleId'   : project.ext['moduleId'],
+                    'moduleName' : project.ext['moduleName'],
                     'mod_license': project.ext['mod_license'],
-                    'version': project.version
+                    'version'    : project.version
             ])
 
             filesMatching("fabric.mod.json") {
@@ -65,10 +76,10 @@ allprojects {
 
         doLast {
             fileTree(dir: outputs.files.asPath, include: "**/fabric.mod.json").each { file ->
-                var json = JsonParser.parseString(file.text).asJsonObject
+                var fabricModJson = JsonParser.parseString(file.text).asJsonObject
                 if (!project.ext['moduleAccessWidener'].isEmpty()) {
-                    json.add("accessWidener", new JsonPrimitive(project.ext['moduleAccessWidener']))
-                    file.text = json.toString()
+                    fabricModJson.add("accessWidener", new JsonPrimitive(project.ext['moduleAccessWidener']))
+                    file.text = fabricModJson.toString()
                 }
             }
         }
@@ -122,18 +133,6 @@ dependencies {
     implementation project(path: 'sound-categories:versioned:sc1.19', configuration: 'namedElements')
     // 1.18 family
     implementation project(path: 'sound-categories:versioned:sc1.18', configuration: 'namedElements')
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    it.options.release.set(targetJdk)
-}
-
-java {
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.toVersion(targetJdk)
-    targetCompatibility = JavaVersion.toVersion(targetJdk)
 }
 
 jar {

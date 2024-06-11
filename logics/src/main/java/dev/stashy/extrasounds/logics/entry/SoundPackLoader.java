@@ -39,7 +39,9 @@ public class SoundPackLoader {
     private static final Path CACHE_PATH = Path.of(System.getProperty("java.io.tmpdir"), ".minecraft_fabric", CACHE_FNAME);
 
     public static final Map<Identifier, SoundEvent> CUSTOM_SOUND_EVENT = new HashMap<>();
-    public static final VersionedClientResource EXTRA_SOUNDS_RESOURCE = Objects.requireNonNull(VersionedClientResource.newInstance(ExtraSounds.MODID, "%s Runtime Resources".formatted(ExtraSounds.class.getSimpleName())));
+    public static final VersionedClientResource EXTRA_SOUNDS_RESOURCE = Objects.requireNonNull(
+            VersionedClientResource.newInstance(ExtraSounds.MODID, "%s Runtime Resources".formatted(ExtraSounds.class.getSimpleName()))
+    );
     public static final Logger LOGGER = LogManager.getLogger(
             SoundPackLoader.class,
             new PrefixableMessageFactory("%s/%s".formatted(
@@ -113,7 +115,7 @@ public class SoundPackLoader {
             }
 
             final JsonObject jsonObject = cacheData.asJsonObject();
-            jsonObject.keySet().forEach(key -> putSoundEvent(ExtraSounds.generateIdentifier(key)));
+            jsonObject.keySet().forEach(key -> putSoundEvent(ExtraSounds.generateIdentifier(ExtraSounds.MODID, key)));
         } catch (Exception ex) {
             // If there is an exception, regenerate and write the cache.
             if (DebugUtils.DEBUG) {
@@ -297,7 +299,7 @@ public class SoundPackLoader {
     /**
      * Shows the cache data that include {@link CacheInfo} and Json String.
      */
-    protected static class CacheData {
+    static class CacheData {
         /**
          * The cache info.
          */

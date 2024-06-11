@@ -81,7 +81,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
     @Inject(method = "interactBlockInternal", at = @At(value = "HEAD"))
     private void extrasounds$storeState(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
         final World world = this.client.world;
-        if (world == null) {
+        if (player == null || world == null) {
             return;
         }
 
@@ -103,7 +103,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
     )
     private void extrasounds$afterOnUse(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir, MutableObject<ActionResult> mutableObject) {
         final World world = this.client.world;
-        if (world == null || player.isSpectator()) {
+        if (player == null || world == null || player.isSpectator()) {
             return;
         }
 
@@ -120,7 +120,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
             ), locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private void extrasounds$interactEntityAt(PlayerEntity player, Entity entity, EntityHitResult hitResult, Hand hand, CallbackInfoReturnable<ActionResult> cir, Vec3d target) {
-        if (player == null || hitResult == null || player.isSpectator()) {
+        if (player == null || entity == null || hitResult == null || player.isSpectator()) {
             return;
         }
 
