@@ -66,12 +66,12 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
 
         @Override
-        protected boolean canSoundArmorStandEquipped(ItemStack currentStack, ItemStack equipped) {
+        protected boolean shouldSoundArmorStandEquipped(ItemStack currentStack, ItemStack equipped) {
             return currentStack.isEmpty() || ItemStack.canCombine(currentStack, equipped);
         }
 
         @Override
-        protected boolean canSoundArmorStandPreferred(ItemStack currentStack, ItemStack preferred) {
+        protected boolean shouldSoundArmorStandPreferred(ItemStack currentStack, ItemStack preferred) {
             return ItemStack.canCombine(currentStack, preferred);
         }
     };

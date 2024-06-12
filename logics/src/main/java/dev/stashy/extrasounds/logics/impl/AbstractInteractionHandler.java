@@ -38,9 +38,9 @@ public abstract class AbstractInteractionHandler {
 
     protected abstract boolean isCampfireBlocks();
 
-    protected abstract boolean canSoundArmorStandEquipped(ItemStack currentStack, ItemStack equipped);
+    protected abstract boolean shouldSoundArmorStandEquipped(ItemStack currentStack, ItemStack equipped);
 
-    protected abstract boolean canSoundArmorStandPreferred(ItemStack currentStack, ItemStack preferred);
+    protected abstract boolean shouldSoundArmorStandPreferred(ItemStack currentStack, ItemStack preferred);
 
     private boolean canInteractBlock(PlayerEntity player) {
         return !player.isSneaking() || (player.isSneaking() && this.mainHandStack.isEmpty() && this.offHandStack.isEmpty());
@@ -112,9 +112,9 @@ public abstract class AbstractInteractionHandler {
 
             final ItemStack equipped = armorStandEntity.getEquippedStack(slotFromPosition).copy();
             final ItemStack preferred = armorStandEntity.getEquippedStack(slotPreferred).copy();
-            if (this.canSoundArmorStandEquipped(currentStack, equipped)) {
+            if (this.shouldSoundArmorStandEquipped(currentStack, equipped)) {
                 ExtraSounds.MANAGER.blockInteract(equipped.getItem(), this.getBlockPos(hitResult.getPos()));
-            } else if (this.canSoundArmorStandPreferred(currentStack, preferred)) {
+            } else if (this.shouldSoundArmorStandPreferred(currentStack, preferred)) {
                 ExtraSounds.MANAGER.blockInteract(preferred.getItem(), this.getBlockPos(hitResult.getPos()));
             }
         }
