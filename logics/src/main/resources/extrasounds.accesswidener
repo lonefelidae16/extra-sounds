@@ -1,0 +1,3 @@
+accessWidener	v2	named
+accessible field net/minecraft/item/BucketItem fluid Lnet/minecraft/fluid/Fluid;
+accessible method net/minecraft/block/FlowerPotBlock isEmpty ()Z

@@ -1,0 +1,5 @@
+subprojects {
+    tasks.withType(ProcessResources).configureEach {
+        from "${project.parent.projectDir}/sharedRes/fabric.mod.json"
+    }
+}

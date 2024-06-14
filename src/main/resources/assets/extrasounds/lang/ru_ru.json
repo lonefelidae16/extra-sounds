@@ -1,13 +1,13 @@
 {
-  "soundCategory.extrasounds$master": "ExtraSounds",
-  "soundCategory.extrasounds$inventory": "Инвентарь",
-  "soundCategory.extrasounds$hotbar": "Хотбар",
-  "soundCategory.extrasounds$chat": "Сообщения в чате",
-  "soundCategory.extrasounds$chat_mention": "Упоминания в чате",
-  "soundCategory.extrasounds$effects": "Эффекты/Зелья",
-  "soundCategory.extrasounds$typing": "Ввод текста",
-  "soundCategory.extrasounds$item_intr": "Item Interactions",
-  "soundCategory.extrasounds$block_intr": "Block Interactions",
-  "soundCategory.extrasounds$entity": "Entity Events",
-  "soundCategory.extrasounds$item_drop": "Выбросить предмет"
+  "soundCategory.extrasounds_logics$master": "ExtraSounds",
+  "soundCategory.extrasounds_logics$inventory": "Инвентарь",
+  "soundCategory.extrasounds_logics$hotbar": "Хотбар",
+  "soundCategory.extrasounds_logics$chat": "Сообщения в чате",
+  "soundCategory.extrasounds_logics$chat_mention": "Упоминания в чате",
+  "soundCategory.extrasounds_logics$effects": "Эффекты/Зелья",
+  "soundCategory.extrasounds_logics$typing": "Ввод текста",
+  "soundCategory.extrasounds_logics$item_intr": "Item Interactions",
+  "soundCategory.extrasounds_logics$block_intr": "Block Interactions",
+  "soundCategory.extrasounds_logics$entity": "Entity Events",
+  "soundCategory.extrasounds_logics$item_drop": "Выбросить предмет"
 }

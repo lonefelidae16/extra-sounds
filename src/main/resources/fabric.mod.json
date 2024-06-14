@@ -9,34 +9,22 @@
     "lonefelidae16"
   ],
   "contact": {
-    "homepage": "https://artifactory.kow08absty.com/ui/native/fabricmc/dev/stashy/extra-sounds/",
-    "sources": "https://github.com/lonefelidae16/extra-sounds",
-    "issues": "https://github.com/lonefelidae16/extra-sounds/issues"
+    "homepage": "${mod_page}",
+    "sources": "${mod_sources}",
+    "issues": "${mod_issues}"
   },
-  "license": "CC0-1.0",
+  "license": "${mod_license}",
   "icon": "assets/extrasounds/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "dev.stashy.extrasounds.ExtraSounds"
-    ],
-    "extrasounds": [
-      "dev.stashy.extrasounds.mapping.VanillaGenerator::generator"
-    ],
-    "sound-categories": [
-      "dev.stashy.extrasounds.Mixers"
+      "dev.stashy.extrasounds.ExtraSoundsBootstrap"
     ]
   },
-  "mixins": [
-    "extrasounds.mixins.json",
-    "extrasounds.compat.mixins.json"
-  ],
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "minecraft": "~1.20.5",
-    "fabric-resource-loader-v0": "*",
+    "minecraft": ">=${mod_support_lowest_mc}",
     "soundcategories": "*"
-  },
-  "accessWidener": "extrasounds.accesswidener"
+  }
 }

@@ -2,9 +2,6 @@ pluginManagement {
     plugins {
         id 'fabric-loom' version '1.6-SNAPSHOT' apply false
         id "maven-publish" apply false
-        id "com.matthewprenger.cursegradle" version "1.4.0" apply false
-        id "com.modrinth.minotaur" version "2.2.0" apply false
-        id "org.jetbrains.changelog" version "1.3.1" apply false
         id 'com.palantir.git-version' version '3.0.0' apply false
     }
     repositories {
@@ -16,4 +13,24 @@ pluginManagement {
     }
 }
 
-include 'sound-categories'
+// SoundCategories modules
+include 'sound-categories', 'sound-categories:shared'
+// 1.21 family
+include 'sound-categories:versioned:sc1.21'
+// 1.20 family
+include 'sound-categories:versioned:sc1.20.5', 'sound-categories:versioned:sc1.20.3', 'sound-categories:versioned:sc1.20.2', 'sound-categories:versioned:sc1.20'
+// 1.19 family
+include 'sound-categories:versioned:sc1.19.4', 'sound-categories:versioned:sc1.19.3', 'sound-categories:versioned:sc1.19'
+// 1.18 family
+include 'sound-categories:versioned:sc1.18'
+
+// ExtraSounds modules
+include 'logics'
+// 1.21 family
+include 'versioned:es1.21'
+// 1.20 family
+include 'versioned:es1.20.5', 'versioned:es1.20.2', 'versioned:es1.20'
+// 1.19 family
+include 'versioned:es1.19.4', 'versioned:es1.19.3', 'versioned:es1.19.1', 'versioned:es1.19'
+// 1.18 family
+include 'versioned:es1.18.2', 'versioned:es1.18'

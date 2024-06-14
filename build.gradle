@@ -1,32 +1,88 @@
+import com.google.gson.JsonParser
+import com.google.gson.JsonPrimitive
+
 plugins {
     id "fabric-loom"
     id "maven-publish"
-    id "com.matthewprenger.cursegradle"
-    id "com.modrinth.minotaur"
-    id "org.jetbrains.changelog"
     id 'com.palantir.git-version'
 }
 
-var targetJdk = 21
+var targetJdk = Integer.parseInt(project.java_compiler_version)
 
-version = "${project.mod_version}+${project.minecraft_version}~lonefelidae16-git+${versionDetails().gitHash[0..7]}"
-group = project.maven_group
+allprojects {
+    version = "${project.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
+    group = project.maven_group
+
+    repositories {
+        maven {
+            url = uri("https://api.modrinth.com/maven/")
+        }
+        maven {
+            name = "stashymane's repo"
+            url = "https://repo.stashy.dev/releases"
+        }
+        maven {
+            url = "https://artifactory.kow08absty.com/artifactory/fabricmc"
+        }
+    }
+}
 
 base {
     archivesName = project.archives_base_name
 }
 
-var versionTitle = "$project.mod_version for $project.minecraft_version"
+allprojects {
+    apply plugin: 'java'
 
-tasks.runClient.dependsOn(tasks.build)
-
-repositories {
-    maven {
-        url = uri("https://api.modrinth.com/maven/")
+    java {
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.toVersion(targetJdk)
+        targetCompatibility = JavaVersion.toVersion(targetJdk)
     }
-    maven {
-        name = "stashymane's repo"
-        url = "https://repo.stashy.dev/releases"
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        it.options.release.set(targetJdk)
+    }
+
+    project.ext['moduleId'] = 'unnamed'
+    project.ext['moduleName'] = ''
+    project.ext['mod_license'] = project.mod_license
+    project.ext['moduleAccessWidener'] = ''
+
+    tasks.withType(ProcessResources).configureEach {
+        doFirst {
+            var props = [
+                    "mod_page",
+                    "mod_sources",
+                    "mod_issues",
+                    "mod_license",
+                    "mod_support_lowest_mc"
+            ].collectEntries {
+                [it, project.properties[it]]
+            }
+
+            props.putAll([
+                    'moduleId'   : project.ext['moduleId'],
+                    'moduleName' : project.ext['moduleName'],
+                    'mod_license': project.ext['mod_license'],
+                    'version'    : project.version
+            ])
+
+            filesMatching("fabric.mod.json") {
+                expand props
+            }
+        }
+
+        doLast {
+            fileTree(dir: outputs.files.asPath, include: "**/fabric.mod.json").each { file ->
+                var fabricModJson = JsonParser.parseString(file.text).asJsonObject
+                if (!project.ext['moduleAccessWidener'].isEmpty()) {
+                    fabricModJson.add("accessWidener", new JsonPrimitive(project.ext['moduleAccessWidener']))
+                    file.text = fabricModJson.toString()
+                }
+            }
+        }
     }
 }
 
@@ -36,33 +92,41 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    compileOnly include(project(path: ':sound-categories'))
-    runtimeOnly fileTree(include: ["*+${project.minecraft_version}~*-dev.jar"], exclude: ['*-sources.jar'], dir: 'sound-categories/build/devlibs')
-    modCompileOnly "maven.modrinth:rei:${project.rei_version}+fabric"
-}
+    modImplementation include("me.lonefelidae16:groominglib:${project.groom_version}")
 
-loom {
-    accessWidenerPath = file("src/main/resources/extrasounds.accesswidener")
-}
+    // Extra Sounds modules
+    implementation include(project(path: 'logics', configuration: 'namedElements'))
+    // 1.21 family
+    implementation include(project(path: 'versioned:es1.21', configuration: 'namedElements'))
+    // 1.20 family
+    implementation include(project(path: 'versioned:es1.20.5', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.20.2', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.20', configuration: 'namedElements'))
+    // 1.19 family
+    implementation include(project(path: 'versioned:es1.19.4', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.19.3', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.19.1', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.19', configuration: 'namedElements'))
+    // 1.18 family
+    implementation include(project(path: 'versioned:es1.18.2', configuration: 'namedElements'))
+    implementation include(project(path: 'versioned:es1.18', configuration: 'namedElements'))
 
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    it.options.release.set(targetJdk)
-}
-
-java {
-    withSourcesJar()
-
-    sourceCompatibility = JavaVersion.toVersion(targetJdk)
-    targetCompatibility = JavaVersion.toVersion(targetJdk)
+    // Sound Categories modules
+    implementation include(project(path: 'sound-categories', configuration: 'namedElements'))
+    implementation project(path: 'sound-categories:shared', configuration: 'namedElements')
+    // 1.21 family
+    implementation project(path: 'sound-categories:versioned:sc1.21', configuration: 'namedElements')
+    // 1.20 family
+    implementation project(path: 'sound-categories:versioned:sc1.20.5', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.20.3', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.20.2', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.20', configuration: 'namedElements')
+    // 1.19 family
+    implementation project(path: 'sound-categories:versioned:sc1.19.4', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.19.3', configuration: 'namedElements')
+    implementation project(path: 'sound-categories:versioned:sc1.19', configuration: 'namedElements')
+    // 1.18 family
+    implementation project(path: 'sound-categories:versioned:sc1.18', configuration: 'namedElements')
 }
 
 jar {
@@ -93,46 +157,4 @@ publishing {
             }
         }
     }
-}
-
-curseforge {
-    apiKey = System.getenv("CURSE_API_KEY") ?: ""
-    project {
-        id = "478890"
-        changelog = project.changelog.get(project.mod_version).toHTML()
-        changelogType = "html"
-        releaseType = "release"
-        addGameVersion project.minecraft_version
-
-        mainArtifact(remapJar) {
-            displayName = versionTitle
-
-            relations {
-                requiredDependency "fabric-api"
-                embeddedLibrary "arrp"
-                embeddedLibrary "sound-categories"
-            }
-        }
-    }
-
-    options {
-        forgeGradleIntegration = false
-        detectNewerJava = true
-    }
-}
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN") ?: ""
-    changelog = project.changelog.get(project.mod_version).toText()
-    projectId = "uPWCQrVL"
-    versionNumber = version
-    versionName = versionTitle
-    uploadFile = remapJar
-    gameVersions = [project.minecraft_version]
-    loaders = ["fabric"]
-}
-
-task publishMod() {
-    dependsOn(tasks.modrinth)
-    dependsOn(tasks.curseforge)
 }

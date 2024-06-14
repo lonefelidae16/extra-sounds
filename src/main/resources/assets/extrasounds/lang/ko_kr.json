@@ -1,13 +1,13 @@
 {
-  "soundCategory.extrasounds$master": "ExtraSounds",
-  "soundCategory.extrasounds$inventory": "목록",
-  "soundCategory.extrasounds$hotbar": "단축바",
-  "soundCategory.extrasounds$chat": "채팅 메시지",
-  "soundCategory.extrasounds$chat_mention": "채팅 언급",
-  "soundCategory.extrasounds$effects": "효과/포션",
-  "soundCategory.extrasounds$typing": "타이핑",
-  "soundCategory.extrasounds$item_intr": "Item Interactions",
-  "soundCategory.extrasounds$block_intr": "Block Interactions",
-  "soundCategory.extrasounds$entity": "Entity Events",
-  "soundCategory.extrasounds$item_drop": "선택한 아이템 떨어뜨리기"
+  "soundCategory.extrasounds_logics$master": "ExtraSounds",
+  "soundCategory.extrasounds_logics$inventory": "목록",
+  "soundCategory.extrasounds_logics$hotbar": "단축바",
+  "soundCategory.extrasounds_logics$chat": "채팅 메시지",
+  "soundCategory.extrasounds_logics$chat_mention": "채팅 언급",
+  "soundCategory.extrasounds_logics$effects": "효과/포션",
+  "soundCategory.extrasounds_logics$typing": "타이핑",
+  "soundCategory.extrasounds_logics$item_intr": "Item Interactions",
+  "soundCategory.extrasounds_logics$block_intr": "Block Interactions",
+  "soundCategory.extrasounds_logics$entity": "Entity Events",
+  "soundCategory.extrasounds_logics$item_drop": "선택한 아이템 떨어뜨리기"
 }

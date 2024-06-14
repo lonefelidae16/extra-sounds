@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "extrasounds-logics",
+  "version": "${version}",
+  "name": "ExtraSounds base logics",
+  "description": "Adds more sounds to Minecraft UI.",
+  "authors": [
+    "stashymane",
+    "lonefelidae16"
+  ],
+  "contact": {
+    "homepage": "${mod_page}",
+    "sources": "${mod_sources}",
+    "issues": "${mod_issues}"
+  },
+  "license": "${mod_license}",
+  "environment": "client",
+  "entrypoints": {
+    "extrasounds": [
+      "dev.stashy.extrasounds.logics.entry.BaseVanillaGenerator::GENERATOR"
+    ],
+    "sound-categories": [
+      "dev.stashy.extrasounds.logics.Mixers"
+    ]
+  },
+  "mixins": [
+    "extrasounds.logics.mixins.json",
+    "extrasounds.compat.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "fabric": "*",
+    "minecraft": "*",
+    "soundcategories": "*"
+  },
+  "accessWidener": "extrasounds.accesswidener"
+}

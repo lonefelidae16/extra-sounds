@@ -1,0 +1,16 @@
+name: Backward compatibility request
+description: Suggest more Minecraft compatibility for this project
+labels: [enhancement, backward]
+body:
+  - type: textarea
+    attributes:
+      label: The Minecraft version you want
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context or mods you are using related to backport requests here!
+    validations:
+      required: false

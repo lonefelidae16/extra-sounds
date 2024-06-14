@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.stashy.extrasounds.logics.compat.mixin",
+  "plugin": "dev.stashy.extrasounds.logics.compat.CompatibilityMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "rei.TextFieldWidgetMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
