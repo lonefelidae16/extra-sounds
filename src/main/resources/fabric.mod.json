@@ -25,7 +25,6 @@
     "fabricloader": "*",
     "fabric": "*",
     "minecraft": ">=${mod_support_lowest_mc}",
-    "fabric-resource-loader-v0": "*",
     "soundcategories": "*"
   }
 }

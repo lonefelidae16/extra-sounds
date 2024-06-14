@@ -24,7 +24,6 @@
     "fabricloader": "*",
     "fabric": "*",
     "minecraft": "*",
-    "fabric-resource-loader-v0": "*",
     "soundcategories": "*"
   }
 }

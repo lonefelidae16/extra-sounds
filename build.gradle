@@ -86,19 +86,13 @@ allprojects {
     }
 }
 
-configurations.configureEach {
-    resolutionStrategy.cacheChangingModulesFor 10, 'minutes'
-}
-
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.minecraft_version}${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    modImplementation include("me.lonefelidae16:groominglib:${project.groom_version}") {
-        changing = true
-    }
+    modImplementation include("me.lonefelidae16:groominglib:${project.groom_version}")
 
     // Extra Sounds modules
     implementation include(project(path: 'logics', configuration: 'namedElements'))

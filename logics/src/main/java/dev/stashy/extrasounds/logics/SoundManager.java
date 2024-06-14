@@ -250,7 +250,7 @@ public final class SoundManager {
     }
 
     public void playSound(SoundEvent snd, SoundType type, float volume, float pitch, BlockPos position) {
-        volume *= getSoundVolume(Mixers.MASTER);
+        volume *= this.getSoundVolume(Mixers.MASTER);
         if (volume == 0) {
             // skip reflection when volume is zero.
             if (DebugUtils.DEBUG) {
