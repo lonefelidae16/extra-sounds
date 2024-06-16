@@ -3,26 +3,40 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-<!-- <small>_Exciting new features may be coming here._</small> -->
-* Preparing compatibility with 1.21.
-* New interaction sound:
-  - Armor Stand
-* The "V3" implementation.
+<small>_Exciting new features may be coming here._</small>
 
 ### 💭 Bugs / Issues
 
-<!-- <small>_Caught bugs and known issues are written._</small> -->
-* Delete Item slot sound is wrong when <kbd>Shift</kbd> + click on CreativeInventory.
-* Bundle sound won’t hear when Right Mouse Click on CreativeInventory slot.
-* Weird Block Interaction sounds:
-  - Repeater
-  - Daylight Detector
-  - Redstone Wire
-  - Redstone Ores
-  - Campfire
-* class `SoundManager` has too many states and they’re `static` field.
-(Scheduled for refactoring)
-* <small>Item Deletion sound, a bit loud?</small>
+<small>_Caught bugs and known issues are written._</small>
+
+## [3.0.0+1.21-build.1] - 2024-06-17
+### ✨ Added
+
+* Bumped version to v3.
+  - Compatible with Minecraft 1.18 or later.
+
+* New interaction sound:
+  - Armor Stand
+
+### 🔧 Fixed
+
+* Item deletion sound, Delete item slot sound on Creative Inventory.
+* Block interaction sounds.
+
+### 👷 Technical
+
+* Dependency updates:
+  - yarn mappings 1.21+build.1
+  - fabric api 0.100.1+1.21
+  - fabric loader 0.15.11
+  - SoundCategories
+  - Gradle 8.8
+* Set Java language level to 17 to fit the minimum bytecode version
+  supported by Minecraft’s JRE.
+* Modularize packages to fit each Minecraft environment
+  <sup>(Gradle tasks become much heavier...)</sup>
+* Use a number of reflections to execute code
+  suitable for the current Minecraft runtime environment.
 
 ## [2.3.1+1.20.6-build.1] - 2024-05-16
 ### ✨ Added
@@ -45,7 +59,7 @@
 
 * Some files were refactored.
 * Dependency updates:
-  -  yarn mappings 1.20.6+build.1
+  - yarn mappings 1.20.6+build.1
   - fabric api 0.97.8+1.20.6
   - fabric loader 0.15.10
   - fabric loom 1.6
