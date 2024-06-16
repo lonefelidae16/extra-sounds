@@ -7,7 +7,10 @@ plugins {
     id 'com.palantir.git-version'
 }
 
-var targetJdk = Integer.parseInt(project.java_compiler_version)
+apply from: 'https://gitlab.kow08absty.com/-/snippets/1/raw/main/properties-reader.gradle'
+apply from: 'https://gitlab.kow08absty.com/-/snippets/3/raw/main/versioning.gradle'
+
+var targetJavaLang = Integer.parseInt(project.java_lang_version)
 
 allprojects {
     version = "${project.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
@@ -36,13 +39,13 @@ allprojects {
 
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.toVersion(targetJdk)
-        targetCompatibility = JavaVersion.toVersion(targetJdk)
+        sourceCompatibility = JavaVersion.toVersion(targetJavaLang)
+        targetCompatibility = JavaVersion.toVersion(targetJavaLang)
     }
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = "UTF-8"
-        it.options.release.set(targetJdk)
+        it.options.release.set(targetJavaLang)
     }
 
     project.ext['moduleId'] = 'unnamed'
