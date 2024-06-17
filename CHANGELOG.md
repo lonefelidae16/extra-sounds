@@ -9,7 +9,17 @@
 
 <small>_Caught bugs and known issues are written._</small>
 
-## [3.0.0+1.21-build.1] - 2024-06-17
+## [3.0.0+1.21-build.3] - 2024-06-17
+### 🔧 Fixed
+
+* Hotfix for startup crashes in Production environment.
+
+### 👷 Technical
+
+* Reverts dependency:
+  - fabric loom 1.6
+
+## [3.0.0+1.21-build.2] - 2024-06-17
 ### ✨ Added
 
 * Bumped version to v3.
@@ -29,6 +39,7 @@
   - yarn mappings 1.21+build.1
   - fabric api 0.100.1+1.21
   - fabric loader 0.15.11
+  - fabric loom 1.7
   - SoundCategories
   - Gradle 8.8
 * Set Java language level to 17 to fit the minimum bytecode version
