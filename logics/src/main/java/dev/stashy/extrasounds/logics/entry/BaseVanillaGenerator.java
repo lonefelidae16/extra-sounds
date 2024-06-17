@@ -1,9 +1,9 @@
 package dev.stashy.extrasounds.logics.entry;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
+import dev.stashy.extrasounds.logics.SoundManager;
 import dev.stashy.extrasounds.mapping.SoundDefinition;
 import dev.stashy.extrasounds.mapping.SoundGenerator;
-import dev.stashy.extrasounds.sounds.Sounds;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.minecraft.block.*;
 import net.minecraft.client.sound.SoundEntry;
@@ -18,7 +18,7 @@ import static dev.stashy.extrasounds.sounds.Sounds.aliased;
 import static dev.stashy.extrasounds.sounds.Sounds.event;
 
 public abstract class BaseVanillaGenerator {
-    protected static final SoundDefinition DEFAULT_SOUND = SoundDefinition.of(aliased(Sounds.ITEM_PICK));
+    protected static final SoundDefinition DEFAULT_SOUND = SoundDefinition.of(aliased(SoundManager.FALLBACK_SOUND_EVENT));
     public static final SoundGenerator GENERATOR;
 
     static {

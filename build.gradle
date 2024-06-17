@@ -7,9 +7,6 @@ plugins {
     id 'com.palantir.git-version'
 }
 
-apply from: 'https://gitlab.kow08absty.com/-/snippets/1/raw/main/properties-reader.gradle'
-apply from: 'https://gitlab.kow08absty.com/-/snippets/3/raw/main/versioning.gradle'
-
 var targetJavaLang = Integer.parseInt(project.java_lang_version)
 
 allprojects {

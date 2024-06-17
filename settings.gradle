@@ -1,6 +1,6 @@
 pluginManagement {
     plugins {
-        id 'fabric-loom' version '1.7-SNAPSHOT' apply false
+        id 'fabric-loom' version '1.6-SNAPSHOT' apply false
         id "maven-publish" apply false
         id 'com.palantir.git-version' version '3.0.0' apply false
     }
