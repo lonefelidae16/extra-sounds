@@ -9,6 +9,8 @@ plugins {
 
 var targetJavaLang = Integer.parseInt(project.java_lang_version)
 
+tasks.runClient.dependsOn(build)
+
 allprojects {
     version = "${project.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
     group = project.maven_group
@@ -86,6 +88,9 @@ allprojects {
     }
 }
 
+var devLibsPaths = '**/build/devlibs/*-dev.jar'
+var sourcesPaths = '**/*-sources.jar'
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.minecraft_version}${project.yarn_mappings}:v2"
@@ -95,38 +100,29 @@ dependencies {
     modImplementation include("me.lonefelidae16:groominglib:${project.groom_version}")
 
     // Extra Sounds modules
-    implementation include(project(path: 'logics', configuration: 'namedElements'))
+    compileOnly include(project(path: 'logics'))
     // 1.21 family
-    implementation include(project(path: 'versioned:es1.21', configuration: 'namedElements'))
+    compileOnly include(project(path: 'versioned:es1.21'))
     // 1.20 family
-    implementation include(project(path: 'versioned:es1.20.5', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:es1.20.2', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:es1.20', configuration: 'namedElements'))
+    compileOnly include(project(path: 'versioned:es1.20.5'))
+    compileOnly include(project(path: 'versioned:es1.20.2'))
+    compileOnly include(project(path: 'versioned:es1.20'))
     // 1.19 family
-    implementation include(project(path: 'versioned:es1.19.4', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:es1.19.3', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:es1.19.1', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:es1.19', configuration: 'namedElements'))
+    compileOnly include(project(path: 'versioned:es1.19.4'))
+    compileOnly include(project(path: 'versioned:es1.19.3'))
+    compileOnly include(project(path: 'versioned:es1.19.1'))
+    compileOnly include(project(path: 'versioned:es1.19'))
     // 1.18 family
-    implementation include(project(path: 'versioned:es1.18.2', configuration: 'namedElements'))
-    implementation include(project(path: 'versioned:es1.18', configuration: 'namedElements'))
+    compileOnly include(project(path: 'versioned:es1.18.2'))
+    compileOnly include(project(path: 'versioned:es1.18'))
 
     // Sound Categories modules
-    implementation include(project(path: 'sound-categories', configuration: 'namedElements'))
-    implementation project(path: 'sound-categories:shared', configuration: 'namedElements')
-    // 1.21 family
-    implementation project(path: 'sound-categories:versioned:sc1.21', configuration: 'namedElements')
-    // 1.20 family
-    implementation project(path: 'sound-categories:versioned:sc1.20.5', configuration: 'namedElements')
-    implementation project(path: 'sound-categories:versioned:sc1.20.3', configuration: 'namedElements')
-    implementation project(path: 'sound-categories:versioned:sc1.20.2', configuration: 'namedElements')
-    implementation project(path: 'sound-categories:versioned:sc1.20', configuration: 'namedElements')
-    // 1.19 family
-    implementation project(path: 'sound-categories:versioned:sc1.19.4', configuration: 'namedElements')
-    implementation project(path: 'sound-categories:versioned:sc1.19.3', configuration: 'namedElements')
-    implementation project(path: 'sound-categories:versioned:sc1.19', configuration: 'namedElements')
-    // 1.18 family
-    implementation project(path: 'sound-categories:versioned:sc1.18', configuration: 'namedElements')
+    compileOnly include(project(path: 'sound-categories'))
+
+    // DevLaunch
+    runtimeOnly fileTree(dir: 'logics', exclude: [sourcesPaths], include: [devLibsPaths])
+    runtimeOnly fileTree(dir: 'versioned', exclude: [sourcesPaths], include: [devLibsPaths])
+    runtimeOnly fileTree(dir: 'sound-categories', exclude: [sourcesPaths], include: [devLibsPaths])
 }
 
 jar {
