@@ -9,6 +9,17 @@
 
 <small>_Caught bugs and known issues are written._</small>
 
+## [3.0.0+1.21-build.3] - 2024-06-18
+### 🔧 Fixed
+
+* Hotfix for importing project using `modImplementation`/`modCompileOnly`.
+
+### 👷 Technical
+
+* Reverts dependency notation in build.gradle.
+* Dependency updates:
+  - fabric loom 1.7
+
 ## [3.0.0+1.21-build.3] - 2024-06-17
 ### 🔧 Fixed
 
