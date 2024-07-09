@@ -25,6 +25,7 @@
     "fabricloader": "*",
     "fabric": "*",
     "minecraft": ">=${mod_support_lowest_mc}",
+    "extrasounds-logics": "*",
     "soundcategories": "*"
   }
 }
