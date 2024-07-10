@@ -7,7 +7,9 @@
 
 ### 💭 Bugs / Issues
 
-<small>_Caught bugs and known issues are written._</small>
+<!-- <small>_Caught bugs and known issues are written._</small> -->
+* Chat sound won’t hear when Chat Mention is muted.
+* Unnecessary versioned classes.
 
 ## [3.0.0+1.21-build.4] - 2024-06-18
 ### 🔧 Fixed
