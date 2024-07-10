@@ -68,6 +68,26 @@ When you find a bug or compatibility problem, [you can raise an issue](https://g
 * [Mod API for developers](https://github.com/lonefelidae16/extra-sounds/wiki/Custom-sounds-for-mod-developers)
 * [Every sound is configurable via resource packs](https://github.com/lonefelidae16/extra-sounds/wiki/Custom-sounds-for-resource-pack-creators)
 
+## ⚙ Volume Settings
+
+ExtraSounds allows volume control by pre-classified categories.
+
+1. Open “Options” screen.
+
+   ![Options in Title](md-resource/screenshots/volume-settings/001.png) ![Options in Game](md-resource/screenshots/volume-settings/001-2.png)
+
+2. Select “Music &amp; Sounds...” button.
+
+   ![Options screen](md-resource/screenshots/volume-settings/002.png)
+
+3. Click the cog next to the “ExtraSounds” slider.
+
+   ![Customized sound settings screen](md-resource/screenshots/volume-settings/003.png)
+
+4. You can see the category widgets defined in [Mixers.java](logics/src/main/java/dev/stashy/extrasounds/logics/Mixers.java).
+
+   ![ExtraSounds settings screen](md-resource/screenshots/volume-settings/004.png)
+
 ## ❓ Known Issues
 
 By the commit [508210a](https://github.com/lonefelidae16/extra-sounds/commit/508210ae20cf8cf72316d642f803fe637d7eee54) makes
