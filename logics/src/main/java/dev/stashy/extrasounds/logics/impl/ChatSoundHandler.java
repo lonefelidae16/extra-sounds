@@ -18,7 +18,7 @@ public class ChatSoundHandler {
         } catch (Exception ignore) {
         }
 
-        if (containsPlName) {
+        if (containsPlName && !ExtraSounds.MANAGER.isMuted(SoundType.CHAT_MENTION)) {
             ExtraSounds.MANAGER.playSound(Sounds.CHAT_MENTION, SoundType.CHAT_MENTION);
         } else {
             ExtraSounds.MANAGER.playSound(Sounds.CHAT, SoundType.CHAT);

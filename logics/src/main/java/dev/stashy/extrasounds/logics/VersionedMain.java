@@ -7,14 +7,11 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.IndexedIterable;
 
-import java.lang.reflect.Constructor;
-
 public abstract class VersionedMain {
     public static VersionedMain newInstance() {
         try {
             Class<VersionedMain> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "Main");
-            Constructor<VersionedMain> init = clazz.getConstructor();
-            return init.newInstance();
+            return clazz.getConstructor().newInstance();
         } catch (Exception ex) {
             ExtraSounds.LOGGER.error("Cannot initialize 'Main'", ex);
         }

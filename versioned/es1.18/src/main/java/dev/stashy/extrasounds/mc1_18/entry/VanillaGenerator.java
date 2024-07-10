@@ -10,7 +10,8 @@ import static dev.stashy.extrasounds.sounds.Categories.*;
 import static dev.stashy.extrasounds.sounds.Sounds.aliased;
 
 public final class VanillaGenerator extends BaseVanillaGenerator {
-    public static SoundGenerator generate() {
+    @Override
+    protected SoundGenerator generate() {
         return SoundGenerator.of(Identifier.DEFAULT_NAMESPACE, item -> {
             if (item instanceof BlockItem blockItem) {
                 return generateFromBlock(blockItem.getBlock());
@@ -40,11 +41,11 @@ public final class VanillaGenerator extends BaseVanillaGenerator {
         });
     }
 
-    private static boolean isPotionItem(Item item) {
+    private boolean isPotionItem(Item item) {
         return item instanceof PotionItem || item instanceof ExperienceBottleItem;
     }
 
-    private static SoundDefinition fromArmorMaterial(ArmorMaterial mat) {
+    private SoundDefinition fromArmorMaterial(ArmorMaterial mat) {
         if (mat == null) {
             return SoundDefinition.of(aliased(Gear.GENERIC));
         } else if (mat == ArmorMaterials.IRON) {

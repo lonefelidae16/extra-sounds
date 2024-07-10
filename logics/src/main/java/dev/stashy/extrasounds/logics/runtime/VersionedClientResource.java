@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -51,6 +50,16 @@ public abstract class VersionedClientResource {
 
     protected abstract Supplier<InputStream> openRootImpl(String... segments);
 
+    public static VersionedClientResource newInstance(String modId, String name) {
+        try {
+            Class<VersionedClientResource> instance = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "runtime.ClientResource");
+            return instance.getConstructor(String.class, String.class).newInstance(modId, name);
+        } catch (Exception ex) {
+            ExtraSounds.LOGGER.error("Failed to initialize 'ClientResource'", ex);
+        }
+        return null;
+    }
+
     public void addResourceAsync(Identifier location, Function<Identifier, byte[]> supplier) {
         var future = EXECUTOR_SERVICE.submit(() -> supplier.apply(location));
         this.assets.put(location, () -> {
@@ -65,17 +74,6 @@ public abstract class VersionedClientResource {
     protected VersionedClientResource(String modId, String packName) {
         this.packVersion = 5;
         this.assets = new ConcurrentHashMap<>();
-    }
-
-    public static VersionedClientResource newInstance(String modId, String name) {
-        try {
-            Class<VersionedClientResource> instance = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "runtime.ClientResource");
-            Constructor<VersionedClientResource> init = instance.getConstructor(String.class, String.class);
-            return init.newInstance(modId, name);
-        } catch (Exception ex) {
-            ExtraSounds.LOGGER.error("Failed to initialize 'ClientResource'", ex);
-        }
-        return null;
     }
 
     public Set<String> getNamespacesImpl(ResourceType type) {

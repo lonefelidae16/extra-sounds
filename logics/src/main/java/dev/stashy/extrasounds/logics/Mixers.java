@@ -3,7 +3,7 @@ package dev.stashy.extrasounds.logics;
 import dev.stashy.soundcategories.CategoryLoader;
 import net.minecraft.sound.SoundCategory;
 
-public class Mixers implements CategoryLoader {
+public final class Mixers implements CategoryLoader {
     @Register(master = true, defaultLevel = 0.5f)
     public static SoundCategory MASTER;
     @Register

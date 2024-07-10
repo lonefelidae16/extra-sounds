@@ -10,7 +10,6 @@ import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
 
-import java.lang.reflect.Method;
 import java.util.Objects;
 
 import static dev.stashy.extrasounds.sounds.Categories.*;
@@ -22,47 +21,48 @@ public abstract class BaseVanillaGenerator {
     public static final SoundGenerator GENERATOR;
 
     static {
-        SoundGenerator result = null;
+        BaseVanillaGenerator instance = null;
         try {
             Class<BaseVanillaGenerator> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "entry.VanillaGenerator");
-            Method generator = clazz.getMethod("generate");
-            result = (SoundGenerator) generator.invoke(null);
+            instance = clazz.getConstructor().newInstance();
         } catch (Exception ex) {
             ExtraSounds.LOGGER.error("Cannot initialize 'VanillaGenerator'", ex);
         }
-        GENERATOR = Objects.requireNonNull(result);
+        GENERATOR = Objects.requireNonNull(instance).generate();
     }
 
-    protected static String getItemIdPath(Item item) {
+    protected abstract SoundGenerator generate();
+
+    protected String getItemIdPath(Item item) {
         return ExtraSounds.fromItemRegistry(item).getPath();
     }
 
-    protected static boolean isBrickItem(Item item) {
+    protected boolean isBrickItem(Item item) {
         final String idPath = getItemIdPath(item);
         return item == Items.BRICK || idPath.endsWith("pottery_sherd") || idPath.startsWith("pottery_shard");
     }
 
-    protected static boolean isPaperItem(Item item) {
+    protected boolean isPaperItem(Item item) {
         return item instanceof BannerPatternItem || item instanceof BookItem || item instanceof WritableBookItem ||
                 item instanceof WrittenBookItem || item instanceof EnchantedBookItem || item instanceof EmptyMapItem ||
                 item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem;
     }
 
-    protected static boolean isGearGoldenItem(Item item) {
+    protected boolean isGearGoldenItem(Item item) {
         return item instanceof CompassItem ||
                 item instanceof SpyglassItem || item instanceof ShearsItem;
     }
 
-    protected static boolean isGearLeatherItem(Item item) {
+    protected boolean isGearLeatherItem(Item item) {
         return item instanceof LeadItem || item instanceof ElytraItem || item instanceof SaddleItem;
     }
 
-    protected static boolean isGearGenericItem(Item item) {
+    protected boolean isGearGenericItem(Item item) {
         return item instanceof BowItem || item instanceof CrossbowItem || item instanceof FishingRodItem ||
                 item instanceof OnAStickItem;
     }
 
-    protected static SoundDefinition generateFromToolMaterial(ToolMaterial mat) {
+    protected SoundDefinition generateFromToolMaterial(ToolMaterial mat) {
         if (mat == null) {
             return SoundDefinition.of(aliased(Gear.GENERIC));
         } else if (mat == ToolMaterials.WOOD) {
@@ -83,7 +83,7 @@ public abstract class BaseVanillaGenerator {
         }
     }
 
-    protected static SoundDefinition generateFromBlock(Block block) {
+    protected SoundDefinition generateFromBlock(Block block) {
         final BlockState blockState = block.getDefaultState();
         final Identifier blockSoundId = blockState.getSoundGroup().getPlaceSound().getId();
 
@@ -104,7 +104,7 @@ public abstract class BaseVanillaGenerator {
         return SoundDefinition.of(event(blockSoundId));
     }
 
-    protected static SoundDefinition generalSounds(Item item) {
+    protected SoundDefinition generalSounds(Item item) {
         if (item instanceof BoatItem) {
             return SoundDefinition.of(aliased(BOAT));
         } else if (item instanceof ShieldItem) {

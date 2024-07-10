@@ -235,7 +235,7 @@ public final class SoundManager {
                 volume = Math.min(this.getSoundVolume(cat), volume);
             }
         }
-        if (volume == 0) {
+        if (volume == 0 || this.isMuted(category)) {
             // skip reflection when volume is zero.
             if (DebugUtils.DEBUG) {
                 this.logZeroVolume(snd);
@@ -251,7 +251,7 @@ public final class SoundManager {
 
     public void playSound(SoundEvent snd, SoundType type, float volume, float pitch, BlockPos position) {
         volume *= this.getSoundVolume(Mixers.MASTER);
-        if (volume == 0) {
+        if (volume == 0 || this.isMuted(type)) {
             // skip reflection when volume is zero.
             if (DebugUtils.DEBUG) {
                 this.logZeroVolume(snd);
@@ -262,6 +262,14 @@ public final class SoundManager {
                 snd, type.category, volume, pitch, position
         );
         this.playSound(Objects.requireNonNull(soundInstance));
+    }
+
+    public boolean isMuted(SoundType type) {
+        return this.isMuted(type.category);
+    }
+
+    private boolean isMuted(SoundCategory category) {
+        return this.getSoundVolume(category) == 0;
     }
 
     private void logZeroVolume(SoundEvent snd) {
