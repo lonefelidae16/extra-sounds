@@ -14,7 +14,7 @@ body:
         Please list what Minecraft version and mods you are using.
       placeholder: |
         - Minecraft version, ExtraSounds version you are using.
-        - Fabric API or Quilted Fabric API version.
+        - Fabric API version or QSL version.
         - Other mods and their versions.
         - optional: Operating system you are using and Java version (e.g. "Windows 10 with Bundled JRE", "Ubuntu 22.04 with OpenJDK 17.0.8+7-Ubuntu-122.04", etc.)
     validations:

@@ -1,0 +1,63 @@
+name: Build problem
+description: Create a report of problems encountered during the build
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this report! Your time is a valuable first step for our developers to improve the documents.
+
+  - type: textarea
+    attributes:
+      label: Environment info
+      description: |
+        Please list what Operating System and JDK version you are using, and ExtraSounds version you attempted to build.
+        Note: This repository owner doesn’t have Mac OS series, so questions about Macs may be answered with results verified on Linux.
+      placeholder: |
+        - Operating system and JDK you are using (e.g. “Windows 11 with Oracle JDK 21”, “Ubuntu 22.04 with OpenJDK 21”, etc.)
+        - ExtraSounds version you want to build. If not provided, it’s assumed to be the latest source on “dev” branch.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Description
+      description: Please write a brief description of the problem, including what you expect to happen and what is currently happening.
+      placeholder: |
+        (e.g.) Command './gradlew build' is not working properly. I got error message saying 'Could not get unknown property 'java_lang_version' for root project 'extra-sounds' of type org.gradle.api.Project'.
+        (e.g.2) The “Environments and Requirements” section in the wiki page “How to build this project” is difficult for me. I’m not sure what should I do.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Step-by-step reproduction instructions
+      description: Please write the steps needed to reproduce.
+      placeholder: |
+        1. Clone this fork using the command 'git clone --recursive https://github.com/lonefelidae16/extra-sounds'
+        2. Check out with tag 'stable/1.20.4-build.3'
+        3. Run build with './gradlew build'
+        4. Error above
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: prebuilds
+    attributes:
+      label: By submitting this issue, I have confirmed I can download pre-built jars from GitHub Tags.
+      options:
+        - label: 'Yes, and I want to build this project myself.'
+          required: true
+
+#  - type: dropdown
+#    id: existing
+#    attributes:
+#      label: Please confirm that you have searched existing issues in the repo.
+#      description: You can do this by searching https://github.com/lonefelidae16/extra-sounds/issues
+#      multiple: true
+#      options:
+#        - 'Yes'
+#        - 'No'
+#    validations:
+#      required: true
+#
