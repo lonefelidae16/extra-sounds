@@ -83,20 +83,11 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
         this.inventoryHandler.onClick(this.client.player, slot, slotId, button, actionType, this.handler.getCursorStack());
     }
 
-    @Inject(method = "mouseReleased", at = @At("HEAD"))
-    private void extrasounds$tabChange(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        if (button != 0) {
-            return;
-        }
-
-        final double screenX = mouseX - this.x;
-        final double screenY = mouseY - this.y;
-        for (ItemGroup itemGroup : ItemGroup.GROUPS) {
-            if (this.isClickInTab(itemGroup, screenX, screenY) && selectedTab != itemGroup.getIndex()) {
-                ExtraSounds.MANAGER.playSound(itemGroup.getIcon().getItem(), SoundType.PICKUP);
-                this.soundHandler.resetScrollPos();
-                return;
-            }
+    @Inject(method = "setSelectedTab", at = @At("HEAD"))
+    private void extrasounds$tabChange(ItemGroup group, CallbackInfo ci) {
+        if (selectedTab != group.getIndex()) {
+            ExtraSounds.MANAGER.playSound(group.getIcon().getItem(), SoundType.PICKUP);
+            this.soundHandler.resetScrollPos();
         }
     }
 

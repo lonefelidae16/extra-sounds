@@ -99,7 +99,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     modImplementation include("me.lonefelidae16:groominglib:${project.groom_version}")
 
-    // Extra Sounds modules
+    // <editor-fold desc="Extra Sounds modules">
     compileOnly include(project(path: 'logics'))
     // 1.21 family
     compileOnly include(project(path: 'versioned:es1.21'))
@@ -115,6 +115,7 @@ dependencies {
     // 1.18 family
     compileOnly include(project(path: 'versioned:es1.18.2'))
     compileOnly include(project(path: 'versioned:es1.18'))
+    // </editor-fold>
 
     // Sound Categories modules
     compileOnly include(project(path: 'sound-categories'))

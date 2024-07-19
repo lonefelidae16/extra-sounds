@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
@@ -65,9 +64,6 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     private float scrollPosition;
 
     @Shadow
-    protected abstract boolean isClickInTab(ItemGroup group, double mouseX, double mouseY);
-
-    @Shadow
     abstract boolean isCreativeInventorySlot(@Nullable Slot slot);
 
     public CreativeInventoryScreenMixin(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
@@ -83,20 +79,11 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
         this.inventoryHandler.onClick(this.client.player, slot, slotId, button, actionType, this.handler.getCursorStack());
     }
 
-    @Inject(method = "mouseReleased", at = @At("HEAD"))
-    private void extrasounds$tabChange(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
-        if (button != 0) {
-            return;
-        }
-
-        final double screenX = mouseX - this.x;
-        final double screenY = mouseY - this.y;
-        for (ItemGroup itemGroup : ItemGroups.getGroupsToDisplay()) {
-            if (this.isClickInTab(itemGroup, screenX, screenY) && selectedTab != itemGroup) {
-                ExtraSounds.MANAGER.playSound(itemGroup.getIcon().getItem(), SoundType.PICKUP);
-                this.soundHandler.resetScrollPos();
-                return;
-            }
+    @Inject(method = "setSelectedTab", at = @At("HEAD"))
+    private void extrasounds$tabChange(ItemGroup group, CallbackInfo ci) {
+        if (selectedTab != group) {
+            ExtraSounds.MANAGER.playSound(group.getIcon().getItem(), SoundType.PICKUP);
+            this.soundHandler.resetScrollPos();
         }
     }
 
