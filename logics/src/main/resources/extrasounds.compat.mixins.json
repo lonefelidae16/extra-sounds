@@ -5,7 +5,8 @@
   "plugin": "dev.stashy.extrasounds.logics.compat.CompatibilityMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "rei.TextFieldWidgetMixin"
+    "rei.TextFieldWidgetMixin",
+    "midnightcontrols.InputHandlersMixin"
   ],
   "injectors": {
     "defaultRequire": 1

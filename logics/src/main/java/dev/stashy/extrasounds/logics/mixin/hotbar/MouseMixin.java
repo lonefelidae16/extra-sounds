@@ -1,12 +1,12 @@
 package dev.stashy.extrasounds.logics.mixin.hotbar;
 
-import dev.stashy.extrasounds.logics.ExtraSounds;
+import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
-import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -19,6 +19,9 @@ public abstract class MouseMixin {
     @Shadow
     private @Final MinecraftClient client;
 
+    @Unique
+    private final HotbarSoundHandler soundHandler = new HotbarSoundHandler();
+
     @Inject(
             method = "onMouseScroll",
             at = @At(
@@ -28,11 +31,6 @@ public abstract class MouseMixin {
             )
     )
     private void extrasounds$hotbarScroll(long window, double horizontal, double vertical, CallbackInfo ci) {
-        final ClientPlayerEntity player = this.client.player;
-        if (player == null) {
-            return;
-        }
-
-        ExtraSounds.MANAGER.hotbar(player.getInventory().selectedSlot);
+        this.soundHandler.onChange();
     }
 }
