@@ -3,7 +3,9 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-<small>_Exciting new features may be coming here._</small>
+[//]: # (<small>_Exciting new features may be coming here._</small>)
+* New mod integration
+  - [MidnightControls](https://www.curseforge.com/minecraft/mc-mods/midnightcontrols) - under testing
 
 ### 💭 Bugs / Issues
 
