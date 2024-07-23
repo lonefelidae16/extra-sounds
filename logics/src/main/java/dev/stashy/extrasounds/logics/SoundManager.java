@@ -184,8 +184,14 @@ public final class SoundManager {
         if (player == null) {
             return;
         }
+
+        if (!PlayerInventory.isValidHotbarIndex(i)) {
+            LOGGER.error("Invalid index '{}' was passed.", i, new IndexOutOfBoundsException(i));
+            return;
+        }
+
         ItemStack stack = player.getInventory().getStack(i);
-        if (stack.getItem() == Items.AIR) {
+        if (stack.isEmpty()) {
             this.playSound(Sounds.HOTBAR_SCROLL, SoundType.HOTBAR);
         } else {
             this.playSound(stack.getItem(), SoundType.HOTBAR);

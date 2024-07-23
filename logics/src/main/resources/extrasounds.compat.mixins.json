@@ -6,7 +6,8 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "rei.TextFieldWidgetMixin",
-    "midnightcontrols.InputHandlersMixin"
+    "midnightcontrols.InputHandlersMixin",
+    "midnightcontrols.MouseMixin"
   ],
   "injectors": {
     "defaultRequire": 1

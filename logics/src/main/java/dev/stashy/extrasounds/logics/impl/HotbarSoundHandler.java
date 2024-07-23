@@ -9,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 
 public class HotbarSoundHandler {
+    public static final int FORCE_HOTBAR_CHANGE = -1;
+
     public void onSwapEvent(Item mainHand, Item offHand) {
         if (offHand != Items.AIR) {
             ExtraSounds.MANAGER.playSound(offHand, SoundType.PICKUP);
@@ -18,12 +20,22 @@ public class HotbarSoundHandler {
     }
 
     public void onChange() {
+        this.onChange(FORCE_HOTBAR_CHANGE);
+    }
+
+    public void onChange(int newSlot) {
         final ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) {
             return;
         }
 
-        ExtraSounds.MANAGER.hotbar(player.getInventory().selectedSlot);
+        final int selectedSlot = player.getInventory().selectedSlot;
+
+        if (newSlot == FORCE_HOTBAR_CHANGE) {
+            ExtraSounds.MANAGER.hotbar(selectedSlot);
+        } else if (newSlot != selectedSlot) {
+            ExtraSounds.MANAGER.hotbar(newSlot);
+        }
     }
 
     public void spectatorHotbar() {
