@@ -103,8 +103,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
             locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private void extrasounds$afterOnUse(ClientPlayerEntity player, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir, MutableObject<ActionResult> mutableObject) {
-        final World world = this.client.world;
-        if (player == null || world == null || player.isSpectator()) {
+        if (player == null || player.isSpectator()) {
             return;
         }
 

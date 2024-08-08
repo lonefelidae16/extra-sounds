@@ -26,8 +26,8 @@ import java.util.function.Supplier;
 
 /**
  * Version-compatible class for {@link net.minecraft.resource.ResourcePack}.<br>
- * Needs to append prefix {@code *Impl} for each method as this class does not implement
- * {@link net.minecraft.resource.ResourcePack} directly and will not re-mapped.
+ * Needs to append post-fix {@code *Impl} for each method as this class does not implement
+ * {@link net.minecraft.resource.ResourcePack} directly and will not be re-mapped.
  */
 public abstract class VersionedClientResource {
     protected static final ExecutorService EXECUTOR_SERVICE;

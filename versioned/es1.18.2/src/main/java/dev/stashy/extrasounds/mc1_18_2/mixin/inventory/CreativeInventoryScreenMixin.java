@@ -2,6 +2,7 @@ package dev.stashy.extrasounds.mc1_18_2.mixin.inventory;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.impl.AbstractCreativeInventoryHandler;
+import dev.stashy.extrasounds.logics.impl.InventoryTabType;
 import dev.stashy.extrasounds.logics.impl.ScreenScrollHandler;
 import dev.stashy.extrasounds.sounds.SoundType;
 import net.minecraft.client.MinecraftClient;
@@ -37,11 +38,11 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     @Unique
     private final AbstractCreativeInventoryHandler inventoryHandler = new AbstractCreativeInventoryHandler() {
         @Override
-        protected TabType getTabType() {
+        protected InventoryTabType getTabType() {
             if (selectedTab == TYPE_INVENTORY) {
-                return TabType.INVENTORY;
+                return InventoryTabType.INVENTORY;
             } else {
-                return TabType.CREATIVE;
+                return InventoryTabType.CREATIVE;
             }
         }
 
@@ -63,9 +64,6 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     private Slot deleteItemSlot;
     @Shadow
     private float scrollPosition;
-
-    @Shadow
-    protected abstract boolean isClickInTab(ItemGroup group, double mouseX, double mouseY);
 
     @Shadow
     abstract boolean isCreativeInventorySlot(@Nullable Slot slot);

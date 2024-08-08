@@ -1,7 +1,6 @@
 package dev.stashy.extrasounds.mc1_18_2.mixin.action.block;
 
 import dev.stashy.extrasounds.logics.impl.AbstractInteractionHandler;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.world.ClientWorld;
@@ -18,9 +17,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -75,9 +72,6 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
     };
 
-    @Shadow
-    private @Final MinecraftClient client;
-
     @Inject(method = "interactBlock", at = @At(value = "HEAD"))
     private void extrasounds$storeState(ClientPlayerEntity player, ClientWorld world, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
         if (player == null || world == null) {
@@ -91,7 +85,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
 
     @Inject(method = "interactBlock", at = @At(value = "RETURN", ordinal = 2))
     private void extrasounds$afterOnUse(ClientPlayerEntity player, ClientWorld world, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
-        if (player == null || world == null || player.isSpectator()) {
+        if (player == null || player.isSpectator()) {
             return;
         }
 

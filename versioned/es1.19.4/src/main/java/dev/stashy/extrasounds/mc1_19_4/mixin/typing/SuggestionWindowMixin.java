@@ -14,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SuggestionWindowMixin {
     @Shadow
     private int selection;
-    @Shadow
-    private boolean completed;
 
     @Unique
     private final TextFieldHandler soundHandler = new TextFieldHandler();

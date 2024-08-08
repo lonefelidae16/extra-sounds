@@ -56,28 +56,30 @@ public abstract class AbstractInteractionHandler {
     }
 
     public final void onUse(ClientPlayerEntity player, BlockPos blockPos, ActionResult actionResult) {
+        final boolean bCanInteract = this.canInteractBlock(player);
+
         if (this.blockState.isOf(Blocks.REPEATER) &&
                 this.blockState.contains(RepeaterBlock.DELAY) &&
-                this.canInteractBlock(player)
+                bCanInteract
         ) {
             // Repeater
             final SoundEvent sound = this.blockState.get(RepeaterBlock.DELAY) == 4 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
             ExtraSounds.MANAGER.blockInteract(sound, blockPos);
         } else if (this.blockState.isOf(Blocks.DAYLIGHT_DETECTOR) &&
                 this.blockState.contains(DaylightDetectorBlock.INVERTED) &&
-                this.canInteractBlock(player)
+                bCanInteract
         ) {
             // Daylight Detector
             final SoundEvent sound = this.blockState.get(DaylightDetectorBlock.INVERTED) ? Sounds.Actions.REDSTONE_COMPONENT_ON : Sounds.Actions.REDSTONE_COMPONENT_OFF;
             ExtraSounds.MANAGER.blockInteract(sound, blockPos);
-        } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && this.canInteractBlock(player) &&
+        } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && bCanInteract &&
                 actionResult == ActionResult.SUCCESS
         ) {
             // Redstone Wire
             ExtraSounds.MANAGER.blockInteract(Sounds.Actions.REDSTONE_WIRE_CHANGE, blockPos);
         } else if (this.isRedstoneOreBlocks() &&
                 this.blockState.contains(RedstoneOreBlock.LIT) &&
-                this.canInteractBlock(player) && !(this.mainHandStack.getItem() instanceof BlockItem)
+                bCanInteract && !(this.mainHandStack.getItem() instanceof BlockItem)
         ) {
             // Redstone Ores
             ExtraSounds.MANAGER.blockInteract(this.block.asItem(), blockPos);

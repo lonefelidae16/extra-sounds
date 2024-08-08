@@ -2,6 +2,14 @@
   "muted": {
     "sounds": [ "extrasounds:muted" ]
   },
+  "item.pickup.minecraft.air": {
+    "sounds": [
+      {
+        "name": "extrasounds:muted",
+        "type": "event"
+      }
+    ]
+  },
   "chat.mention": {
     "sounds": [
       {

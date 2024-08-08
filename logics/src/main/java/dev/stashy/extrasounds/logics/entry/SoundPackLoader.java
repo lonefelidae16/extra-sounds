@@ -1,6 +1,6 @@
 package dev.stashy.extrasounds.logics.entry;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.gson.*;
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.SoundManager;
@@ -152,7 +152,7 @@ public class SoundPackLoader {
      */
     private static void processSounds(Map<String, SoundGenerator> soundGenerator, Map<String, SoundEntry> resource) {
         final SoundEntry fallbackSoundEntry = Sounds.aliased(SoundManager.FALLBACK_SOUND_EVENT);
-        final List<String> inSoundsJsonIds = Lists.newArrayList();
+        final Set<String> inSoundsJsonIds = Sets.newHashSet();
         final String fallbackSoundJson = GSON.toJson(fallbackSoundEntry);
         if (DebugUtils.SEARCH_UNDEF_SOUND) {
             try (InputStream stream = SoundPackLoader.class.getClassLoader().getResourceAsStream("assets/extrasounds/sounds.json")) {
@@ -266,6 +266,7 @@ public class SoundPackLoader {
             return false;
         }
 
+        @Override
         public String toString() {
             final CharSequence[] data = new CharSequence[]{
                     String.valueOf(version), String.valueOf(itemCount), String.join(DELIMITER_MOD_INFO, modInfo)
@@ -299,7 +300,7 @@ public class SoundPackLoader {
     /**
      * Shows the cache data that include {@link CacheInfo} and Json String.
      */
-    static class CacheData {
+    static final class CacheData {
         /**
          * The cache info.
          */
