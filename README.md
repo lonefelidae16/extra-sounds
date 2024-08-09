@@ -33,7 +33,7 @@ and works with the following Minecraft versions:
 * Minecraft 1.20 family
   - 1.20 - 1.20.6
 * Minecraft 1.21 family
-  - 1.21
+  - 1.21 - 1.21.1
 
 If the version you want isn’t available, [you can request a new backward compatibility](https://github.com/lonefelidae16/extra-sounds/issues/new?assignees=&labels=backward,enhancement&projects=&template=backward.yml).
 

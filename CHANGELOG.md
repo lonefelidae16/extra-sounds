@@ -3,15 +3,30 @@
 ## [Unreleased]
 ### ⌛ Coming
 
-[//]: # (<small>_Exciting new features may be coming here._</small>)
-* New mod integration
-  - [MidnightControls](https://www.curseforge.com/minecraft/mc-mods/midnightcontrols)
+<small>_Exciting new features may be coming here._</small>
 
 ### 💭 Bugs / Issues
 
-<!-- <small>_Caught bugs and known issues are written._</small> -->
-* Chat sound won’t hear when Chat Mention is muted.
-* Unnecessary versioned classes.
+<small>_Caught bugs and known issues are written._</small>
+
+## [3.0.0+1.21.1-build.1] - 2024-08-09
+### ✨ Added
+
+* Supports 1.21.1.
+* New mod integration
+  - [MidnightControls](https://www.curseforge.com/minecraft/mc-mods/midnightcontrols)
+
+### 🔧 Fixed
+
+* Play Chat sound when Chat Mention is muted.
+* Prevent sound when placing an item in a slot that doesn’t accept it.
+
+### 👷 Technical
+
+* Some files were refactored.
+* Dependency updates:
+  - yarn mappings 1.21.1+build.1
+  - fabric api 0.102.0+1.21
 
 ## [3.0.0+1.21-build.4] - 2024-06-18
 ### 🔧 Fixed
