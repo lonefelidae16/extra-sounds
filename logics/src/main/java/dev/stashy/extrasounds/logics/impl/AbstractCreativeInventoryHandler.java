@@ -21,6 +21,7 @@ public abstract class AbstractCreativeInventoryHandler {
         final boolean bOnHotbar = slot != null && !this.isCreativeInventorySlot(slot);
         final boolean bMatchDeleteSlot = slot != null && slot == this.getDeleteItemSlot();
         final InventoryClickStatus status = new InventoryClickStatus(slot, slotId, cursor, actionType, button, this.getTabType());
+        final boolean bOnCreativeTab = status.isOnCreativeTab();
 
         if (player == null) {
             return;
@@ -31,13 +32,13 @@ public abstract class AbstractCreativeInventoryHandler {
         if (actionType == SlotActionType.THROW) {
             // When CreativeInventory is opened, can drop items from any slots while holding an item on cursor.
             final ItemStack slotStack = status.getSlotStack();
-            if (status.isOnCreativeTab() && (slotStack.getCount() == 1 || button == 1) && status.cursorStack.isEmpty() && bOnHotbar) {
+            if (bOnCreativeTab && (slotStack.getCount() == 1 || button == 1) && status.cursorStack.isEmpty() && bOnHotbar) {
                 // When stack is gone, will not be popped.
                 ExtraSounds.MANAGER.playSound(Sounds.ITEM_DELETE_PARTIAL, SoundType.PICKUP);
             } else {
                 if (button == 0) {
                     slotStack.setCount(1);
-                } else if (button == 1 && status.isOnCreativeTab()) {
+                } else if (button == 1 && bOnCreativeTab) {
                     // With holding the Ctrl key; (slotActionType == THROW && button == 1)
                     slotStack.setCount(slotStack.getMaxCount());
                 }
@@ -48,7 +49,7 @@ public abstract class AbstractCreativeInventoryHandler {
 
         if (actionType == SlotActionType.QUICK_MOVE) {
             // With holding the Shift key; (slotActionType == QUICK_MOVE)
-            if (status.isOnCreativeTab() && bOnHotbar && slot.hasStack()) {
+            if (bOnCreativeTab && bOnHotbar && slot.hasStack()) {
                 // Quick move from Hotbar to Creative slots; stack will be deleted.
                 ExtraSounds.MANAGER.playSound(Sounds.ITEM_DELETE_PARTIAL, SoundType.PICKUP);
                 return;
@@ -67,13 +68,13 @@ public abstract class AbstractCreativeInventoryHandler {
                 return;
             }
 
-            if (status.isEmptySpaceClicked() && !status.isOnCreativeTab()) {
+            if (status.isEmptySpaceClicked() && !bOnCreativeTab) {
                 // On Inventory tab, entire stack will be thrown regardless of mouse buttons.
                 ExtraSounds.MANAGER.playThrow(status.cursorStack);
                 return;
             }
 
-            if (status.isOnCreativeTab() && !bOnHotbar) {
+            if (bOnCreativeTab && !bOnHotbar) {
                 if (ExtraSounds.canItemsCombine(status.getSlotStack(), status.cursorStack) && !status.isRMB) {
                     // Left Mouse Clicked on the same slot in CreativeInventory tab except Hotbar.
                     ExtraSounds.MANAGER.playSound(status.cursorStack.getItem(), SoundType.PICKUP);
