@@ -1,20 +1,21 @@
 package dev.stashy.extrasounds.logics.mixin.action.entity;
 
-import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.sounds.SoundType;
-import dev.stashy.extrasounds.sounds.Sounds;
+import dev.stashy.extrasounds.logics.impl.EntitySoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
+    @Unique
+    private final EntitySoundHandler soundHandler = new EntitySoundHandler();
+
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -25,8 +26,6 @@ public abstract class LivingEntityMixin extends Entity {
             return;
         }
 
-        final float flu = (this.random.nextFloat() - 0.5f) * 0.333333f;
-        final float pitch = flu + (float) MathHelper.clampedLerp(2f, 0.5f, Math.sqrt(this.getHeight() * this.getWidth()) * 0.4f);
-        ExtraSounds.MANAGER.playSound(Sounds.Entities.POOF, SoundType.ENTITY, .7f, pitch, this.getBlockPos());
+        this.soundHandler.onDeath(LivingEntity.class.cast(this), this.getBlockPos());
     }
 }

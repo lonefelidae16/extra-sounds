@@ -318,7 +318,7 @@ public final class SoundManager {
         return MinecraftClient.getInstance().options.getSoundVolume(category);
     }
 
-    private SoundEvent getSoundByItem(Item item, SoundType type) {
+    public SoundEvent getSoundByItem(Item item, SoundType type) {
         var itemId = ExtraSounds.fromItemRegistry(item);
         Identifier id = ExtraSounds.getClickId(itemId, type);
         SoundEvent sound = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
