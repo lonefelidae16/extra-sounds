@@ -2,13 +2,13 @@ package dev.stashy.extrasounds.logics.impl;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
+import dev.stashy.extrasounds.logics.runtime.VersionedSoundEventWrapper;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -26,7 +26,7 @@ public class EntitySoundHandler {
             ExtraSounds.LOGGER.info("EffectType = {}, Effect = {}", type, effect.getName().getString());
         }
 
-        final SoundEvent sound;
+        final VersionedSoundEventWrapper sound;
         if (type == EffectType.ADD) {
             sound = switch (effect.getCategory()) {
                 case HARMFUL -> Sounds.EFFECT_ADD_NEGATIVE;

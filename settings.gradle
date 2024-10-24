@@ -1,6 +1,6 @@
 pluginManagement {
     plugins {
-        id 'fabric-loom' version '1.7-SNAPSHOT' apply false
+        id 'fabric-loom' version '1.8-SNAPSHOT' apply false
         id "maven-publish" apply false
         id 'com.palantir.git-version' version '3.0.0' apply false
     }
@@ -27,7 +27,7 @@ include 'sound-categories:versioned:sc1.18'
 // ExtraSounds modules
 include 'logics'
 // 1.21 family
-include 'versioned:es1.21'
+include 'versioned:es1.21.2', 'versioned:es1.21'
 // 1.20 family
 include 'versioned:es1.20.5', 'versioned:es1.20.2', 'versioned:es1.20'
 // 1.19 family

@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.logics.impl;
+package dev.stashy.extrasounds.logics.impl.state;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Helper class that handles click events on Inventory screens.
  */
-public final class InventoryClickStatus {
+public final class InventoryClickState {
     /**
      * Indicates clicked slot. If null, screen border or off-screen area was clicked.
      * Or {@code QuickCrafting} is finished - mouse button has been released.
@@ -45,7 +45,7 @@ public final class InventoryClickStatus {
      */
     public final InventoryTabType tabType;
 
-    public InventoryClickStatus(@Nullable Slot slot, int slotIndex, ItemStack cursor, SlotActionType actionType, int button, InventoryTabType inventoryTabType) {
+    public InventoryClickState(@Nullable Slot slot, int slotIndex, ItemStack cursor, SlotActionType actionType, int button, InventoryTabType inventoryTabType) {
         this.slot = slot;
         this.slotIndex = slotIndex;
         this.cursorStack = cursor.copy();

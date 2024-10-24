@@ -52,8 +52,8 @@ public abstract class VersionedClientResource {
 
     public static VersionedClientResource newInstance(String modId, String name) {
         try {
-            Class<VersionedClientResource> instance = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "runtime.ClientResource");
-            return instance.getConstructor(String.class, String.class).newInstance(modId, name);
+            Class<VersionedClientResource> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "runtime.ClientResource");
+            return clazz.getConstructor(String.class, String.class).newInstance(modId, name);
         } catch (Exception ex) {
             ExtraSounds.LOGGER.error("Failed to initialize 'ClientResource'", ex);
         }

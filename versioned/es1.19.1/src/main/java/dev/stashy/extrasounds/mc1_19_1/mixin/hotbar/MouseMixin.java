@@ -1,4 +1,4 @@
-package dev.stashy.extrasounds.logics.mixin.hotbar;
+package dev.stashy.extrasounds.mc1_19_1.mixin.hotbar;
 
 import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
 import net.minecraft.client.Mouse;
@@ -24,7 +24,7 @@ public abstract class MouseMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void extrasounds$hotbarScroll(long window, double horizontal, double vertical, CallbackInfo ci) {
+    private void extrasounds$hotbarScroll(CallbackInfo ci) {
         this.soundHandler.onChange();
     }
 }

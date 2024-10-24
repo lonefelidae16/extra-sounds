@@ -1,8 +1,8 @@
 package dev.stashy.extrasounds.logics.mixin.inventory;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.impl.InventoryClickStatus;
-import dev.stashy.extrasounds.logics.impl.InventoryTabType;
+import dev.stashy.extrasounds.logics.impl.state.InventoryClickState;
+import dev.stashy.extrasounds.logics.impl.state.InventoryTabType;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenHandler;
@@ -29,6 +29,6 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
 
         Slot slot = (slotIndex >= 0) ? screenHandler.slots.get(slotIndex) : null;
-        ExtraSounds.MANAGER.handleInventorySlot(player, new InventoryClickStatus(slot, slotIndex, screenHandler.getCursorStack(), actionType, button, InventoryTabType.SURVIVAL));
+        ExtraSounds.MANAGER.handleInventorySlot(player, new InventoryClickState(slot, slotIndex, screenHandler.getCursorStack(), actionType, button, InventoryTabType.SURVIVAL));
     }
 }

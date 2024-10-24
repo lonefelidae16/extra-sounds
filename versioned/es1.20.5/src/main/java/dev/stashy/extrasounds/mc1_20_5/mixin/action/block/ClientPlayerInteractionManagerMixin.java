@@ -1,6 +1,8 @@
 package dev.stashy.extrasounds.mc1_20_5.mixin.action.block;
 
 import dev.stashy.extrasounds.logics.impl.AbstractInteractionHandler;
+import dev.stashy.extrasounds.logics.impl.state.ActionResultState;
+import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -27,6 +29,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.util.Optional;
 
 /**
  * For Block Interaction sound.
@@ -66,6 +70,11 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
 
         @Override
+        protected Optional<?> getCampfireRecipe(CampfireBlockEntity campfireBlockEntity, ItemStack currentHandStack) {
+            return campfireBlockEntity.getRecipeFor(currentHandStack);
+        }
+
+        @Override
         protected boolean shouldSoundArmorStandEquipped(ItemStack currentStack, ItemStack equipped) {
             return currentStack.isEmpty() || ItemStack.areItemsAndComponentsEqual(currentStack, equipped);
         }
@@ -87,7 +96,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
 
         final BlockPos blockPos = hitResult.getBlockPos();
-        this.soundHandler.setBlockStatus(
+        this.soundHandler.setInteractionState(
                 world.getBlockState(blockPos), world.getBlockEntity(blockPos),
                 player.getStackInHand(hand), player.getMainHandStack(), player.getOffHandStack()
         );
@@ -108,7 +117,13 @@ public abstract class ClientPlayerInteractionManagerMixin {
         }
 
         final BlockPos blockPos = hitResult.getBlockPos();
-        this.soundHandler.onUse(player, blockPos, mutableObject.getValue());
+        final ActionResultState wrapper = switch (mutableObject.getValue()) {
+            case SUCCESS, SUCCESS_NO_ITEM_USED -> ActionResultState.SUCCESS;
+            case CONSUME, CONSUME_PARTIAL -> ActionResultState.CONSUME;
+            case PASS -> ActionResultState.PASS;
+            case FAIL -> ActionResultState.FAIL;
+        };
+        this.soundHandler.onUse(player, blockPos, wrapper);
     }
 
     @Inject(

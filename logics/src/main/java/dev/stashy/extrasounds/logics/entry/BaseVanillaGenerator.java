@@ -2,11 +2,11 @@ package dev.stashy.extrasounds.logics.entry;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.SoundManager;
+import dev.stashy.extrasounds.logics.runtime.VersionedSoundEventWrapper;
 import dev.stashy.extrasounds.mapping.SoundDefinition;
 import dev.stashy.extrasounds.mapping.SoundGenerator;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.minecraft.block.*;
-import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
 
@@ -17,7 +17,7 @@ import static dev.stashy.extrasounds.sounds.Sounds.aliased;
 import static dev.stashy.extrasounds.sounds.Sounds.event;
 
 public abstract class BaseVanillaGenerator {
-    protected static final SoundDefinition DEFAULT_SOUND = SoundDefinition.of(aliased(SoundManager.FALLBACK_SOUND_EVENT));
+    private static final SoundDefinition DEFAULT_SOUND = SoundDefinition.of(aliased(SoundManager.FALLBACK_SOUND_EVENT));
     public static final SoundGenerator GENERATOR;
 
     static {
@@ -34,58 +34,44 @@ public abstract class BaseVanillaGenerator {
     protected abstract SoundGenerator generate();
 
     protected String getItemIdPath(Item item) {
-        return ExtraSounds.fromItemRegistry(item).getPath();
+        return ExtraSounds.getItemId(item).getPath();
     }
 
-    protected boolean isBrickItem(Item item) {
+    private boolean isBrickItem(Item item) {
         final String idPath = getItemIdPath(item);
         return item == Items.BRICK || idPath.endsWith("pottery_sherd") || idPath.startsWith("pottery_shard");
     }
 
-    protected boolean isPaperItem(Item item) {
-        return item instanceof BannerPatternItem || item instanceof BookItem || item instanceof WritableBookItem ||
-                item instanceof WrittenBookItem || item instanceof EnchantedBookItem || item instanceof EmptyMapItem ||
-                item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem;
-    }
-
-    protected boolean isGearGoldenItem(Item item) {
+    private boolean isGearGoldenItem(Item item) {
         return item instanceof CompassItem ||
                 item instanceof SpyglassItem || item instanceof ShearsItem;
     }
 
-    protected boolean isGearLeatherItem(Item item) {
-        return item instanceof LeadItem || item instanceof ElytraItem || item instanceof SaddleItem;
+    private boolean isGearLeatherItem(Item item) {
+        return item instanceof LeadItem || getItemIdPath(item).equals("elytra") ||
+                item instanceof SaddleItem;
     }
 
-    protected boolean isGearGenericItem(Item item) {
+    private boolean isGearGenericItem(Item item) {
         return item instanceof BowItem || item instanceof CrossbowItem || item instanceof FishingRodItem ||
                 item instanceof OnAStickItem;
     }
 
-    protected SoundDefinition generateFromToolMaterial(ToolMaterial mat) {
-        if (mat == null) {
-            return SoundDefinition.of(aliased(Gear.GENERIC));
-        } else if (mat == ToolMaterials.WOOD) {
-            return SoundDefinition.of(aliased(Gear.WOOD));
-        } else if (mat == ToolMaterials.STONE) {
-            return SoundDefinition.of(aliased(Gear.STONE));
-        } else if (mat == ToolMaterials.IRON) {
-            return SoundDefinition.of(aliased(Gear.IRON));
-        } else if (mat == ToolMaterials.GOLD) {
-            return SoundDefinition.of(aliased(Gear.GOLDEN));
-        } else if (mat == ToolMaterials.DIAMOND) {
-            return SoundDefinition.of(aliased(Gear.DIAMOND));
-        } else if (mat == ToolMaterials.NETHERITE) {
-            return SoundDefinition.of(aliased(Gear.NETHERITE));
-        } else {
-            return SoundDefinition.of(aliased(Gear.GENERIC));
-            //⬆ even though not required, this is in case any mods add to the enum of materials
-        }
+    private boolean isPaperItem(Item item) {
+        return item instanceof BannerPatternItem || item instanceof WritableBookItem ||
+                item instanceof WrittenBookItem || item instanceof EmptyMapItem ||
+                item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem ||
+                item == Items.BOOK || item == Items.ENCHANTED_BOOK;
+    }
+
+    private boolean isStewItem(Item item) {
+        return item == Items.SUSPICIOUS_STEW || item == Items.RABBIT_STEW ||
+                item == Items.BEETROOT_SOUP || item == Items.MUSHROOM_STEW;
     }
 
     protected SoundDefinition generateFromBlock(Block block) {
         final BlockState blockState = block.getDefaultState();
-        final Identifier blockSoundId = blockState.getSoundGroup().getPlaceSound().getId();
+        final Identifier blockSoundId = VersionedSoundEventWrapper.fromBlockState(blockState).getId();
 
         if (block instanceof AbstractRailBlock) {
             return SoundDefinition.of(aliased(RAIL));
@@ -109,9 +95,6 @@ public abstract class BaseVanillaGenerator {
             return SoundDefinition.of(aliased(BOAT));
         } else if (item instanceof ShieldItem) {
             return SoundDefinition.of(aliased(Gear.IRON));
-        } else if (item instanceof BucketItem bucketItem) {
-            final SoundEntry soundEntry = bucketItem.fluid.getBucketFillSound().map(sound -> event(sound.getId(), 0.4f)).orElse(aliased(METAL));
-            return SoundDefinition.of(soundEntry);
         } else if (item instanceof MinecartItem) {
             return SoundDefinition.of(aliased(MINECART));
         } else if (item instanceof ItemFrameItem) {
@@ -122,6 +105,22 @@ public abstract class BaseVanillaGenerator {
             return SoundDefinition.of(aliased(DUST));
         } else if (item instanceof SpawnEggItem) {
             return SoundDefinition.of(aliased(WET_SLIPPERY));
+        } else if (this.getItemIdPath(item).startsWith("music_disc_")) {
+            return SoundDefinition.of(aliased(MUSIC_DISC));
+        } else if (this.isBrickItem(item)) {
+            return SoundDefinition.of(aliased(BRICK));
+        } else if (this.isGearGoldenItem(item)) {
+            return SoundDefinition.of(aliased(Gear.GOLDEN));
+        } else if (this.isGearLeatherItem(item)) {
+            return SoundDefinition.of(aliased(Gear.LEATHER));
+        } else if (this.isGearGenericItem(item)) {
+            return SoundDefinition.of(aliased(Gear.GENERIC));
+        } else if (this.isPaperItem(item)) {
+            return SoundDefinition.of(aliased(PAPER));
+        } else if (this.isStewItem(item)) {
+            return SoundDefinition.of(aliased(BOWL));
+        } else if (item instanceof BundleItem) {
+            return SoundDefinition.of(aliased(BUNDLES));
         }
 
         return DEFAULT_SOUND;
