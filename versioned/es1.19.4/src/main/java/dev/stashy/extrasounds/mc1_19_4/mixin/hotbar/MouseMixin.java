@@ -1,5 +1,6 @@
-package dev.stashy.extrasounds.logics.mixin.hotbar;
+package dev.stashy.extrasounds.mc1_19_4.mixin.hotbar;
 
+import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
 import net.minecraft.client.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Mouse.class)
 public abstract class MouseMixin {
     @Unique
-    private final HotbarSoundHandler soundHandler = new HotbarSoundHandler();
+    private final HotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
 
     @Inject(
             method = "onMouseScroll",
@@ -24,7 +25,7 @@ public abstract class MouseMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void extrasounds$hotbarScroll(long window, double horizontal, double vertical, CallbackInfo ci) {
+    private void extrasounds$hotbarScroll(CallbackInfo ci) {
         this.soundHandler.onChange();
     }
 }

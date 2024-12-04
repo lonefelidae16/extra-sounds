@@ -8,6 +8,7 @@ import dev.stashy.extrasounds.logics.debug.DebugUtils;
 import dev.stashy.extrasounds.logics.json.SoundEntrySerializer;
 import dev.stashy.extrasounds.logics.json.VersionedSoundSerializer;
 import dev.stashy.extrasounds.logics.runtime.VersionedClientResource;
+import dev.stashy.extrasounds.logics.runtime.VersionedSoundEventWrapper;
 import dev.stashy.extrasounds.logics.runtime.VersionedSoundWrapper;
 import dev.stashy.extrasounds.mapping.SoundDefinition;
 import dev.stashy.extrasounds.mapping.SoundGenerator;
@@ -15,13 +16,12 @@ import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.sound.SoundEntry;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,13 +32,13 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SoundPackLoader {
+public final class SoundPackLoader {
     private static final int CACHE_VERSION = 1;
     private static final Identifier SOUNDS_JSON_ID = ExtraSounds.generateIdentifier("sounds.json");
     private static final String CACHE_FNAME = ExtraSounds.MODID + ".cache";
     private static final Path CACHE_PATH = Path.of(System.getProperty("java.io.tmpdir"), ".minecraft_fabric", CACHE_FNAME);
 
-    public static final Map<Identifier, SoundEvent> CUSTOM_SOUND_EVENT = new HashMap<>();
+    public static final Map<Identifier, VersionedSoundEventWrapper> CUSTOM_SOUND_EVENT = new HashMap<>();
     public static final VersionedClientResource EXTRA_SOUNDS_RESOURCE = Objects.requireNonNull(
             VersionedClientResource.newInstance(ExtraSounds.MODID, "%s Runtime Resources".formatted(ExtraSounds.class.getSimpleName()))
     );
@@ -56,45 +56,45 @@ public class SoundPackLoader {
             .create();
 
     /**
-     * Initialization of customized sound event.<br>
+     * Initialization of customized sound events.<br>
      * The cache file stored at {@link SoundPackLoader#CACHE_PATH} will be used.
      * If it is absent or invalid, the file will be regenerated.<br>
-     * If the regeneration time over 1000 milliseconds, it may be needed to refactor.
+     * If the regeneration time is over 1000 milliseconds, it may be needed to refactor.
      */
     public static void init() {
         final long start = System.currentTimeMillis();
         final Map<String, SoundGenerator> soundGenMappers = new HashMap<>();
         final List<String> generatorVer = new ArrayList<>();
 
-        final List<EntrypointContainer<SoundGenerator>> containers = FabricLoader.getInstance().getEntrypointContainers(ExtraSounds.MODID, SoundGenerator.class);
-
+        // Collect entry points from mods.
+        final var containers = FabricLoader.getInstance().getEntrypointContainers(ExtraSounds.MODID, SoundGenerator.class);
         containers.forEach(container -> {
             final SoundGenerator generator = container.getEntrypoint();
-            if (generator == null || generator.namespace == null || generator.itemSoundGenerator == null) {
+            if (generator == null || generator.itemSoundGenerator == null) {
                 return;
             }
 
             final String namespace;
-            if (generator.namespace.isEmpty()) {
-                try {
-                    namespace = container.getProvider().getMetadata().getId();
-                    if (namespace == null || namespace.isBlank()) {
-                        throw new Exception("namespace is invalid: %s".formatted(namespace));
-                    }
-                } catch (Exception ex) {
-                    LOGGER.error("Failed to read mod metadata, ignoring.", ex);
-                    return;
+            try {
+                namespace = container.getProvider().getMetadata().getId();
+                if (namespace == null || namespace.isBlank()) {
+                    throw new Exception("namespace is invalid: %s".formatted(namespace));
                 }
-            } else {
-                // FIXME: When duplicate namespace declared from 2 or more mods, the last mod takes priority.
-                namespace = generator.namespace;
+            } catch (Exception ex) {
+                LOGGER.error("Failed to read mod metadata, ignoring.", ex);
+                return;
             }
             if (DebugUtils.DEBUG) {
                 LOGGER.info("registering generator with namespace '{}'", namespace);
             }
             soundGenMappers.put(namespace, generator);
-            generatorVer.add(CacheInfo.getModVersion(container));
+            generatorVer.add(CacheInfo.getModVersion(container.getProvider()));
         });
+
+        // Register the vanilla generator.
+        soundGenMappers.put(Identifier.DEFAULT_NAMESPACE, BaseVanillaGenerator.GENERATOR);
+        generatorVer.add(CacheInfo.getModVersion(FabricLoader.getInstance().getModContainer(Identifier.DEFAULT_NAMESPACE).orElseThrow()));
+
         final CacheInfo currentCacheInfo = CacheInfo.of(generatorVer.toArray(new String[0]));
 
         // Read from cache.
@@ -155,18 +155,18 @@ public class SoundPackLoader {
         final Set<String> inSoundsJsonIds = Sets.newHashSet();
         final String fallbackSoundJson = GSON.toJson(fallbackSoundEntry);
         if (DebugUtils.SEARCH_UNDEF_SOUND) {
-            try (InputStream stream = SoundPackLoader.class.getClassLoader().getResourceAsStream("assets/extrasounds/sounds.json")) {
+            try (InputStream stream = SoundPackLoader.class.getClassLoader().getResourceAsStream("assets/%s/%s".formatted(ExtraSounds.MODID, SOUNDS_JSON_ID.getPath()))) {
                 Objects.requireNonNull(stream);
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
                 final JsonObject jsonObject = JsonParser.parseString(reader.lines().collect(Collectors.joining())).getAsJsonObject();
                 inSoundsJsonIds.addAll(jsonObject.keySet());
             } catch (Exception ex) {
-                LOGGER.warn("cannot open ExtraSounds' sounds.json.", ex);
+                LOGGER.warn("cannot open ExtraSounds' {}.", SOUNDS_JSON_ID.getPath(), ex);
             }
         }
 
         for (Item item : ExtraSounds.getItemRegistry()) {
-            final Identifier itemId = ExtraSounds.fromItemRegistry(item);
+            final Identifier itemId = ExtraSounds.getItemId(item);
             final SoundDefinition definition;
             if (soundGenerator.containsKey(itemId.getNamespace())) {
                 definition = soundGenerator.get(itemId.getNamespace()).itemSoundGenerator.apply(item);
@@ -174,7 +174,7 @@ public class SoundPackLoader {
                 SoundDefinition blockSoundDef = SoundDefinition.of(fallbackSoundEntry);
                 try {
                     final BlockState blockState = blockItem.getBlock().getDefaultState();
-                    final SoundEvent blockSound = blockState.getSoundGroup().getPlaceSound();
+                    final VersionedSoundEventWrapper blockSound = VersionedSoundEventWrapper.fromBlockState(blockState);
                     blockSoundDef = SoundDefinition.of(Sounds.aliased(blockSound));
                 } catch (Exception ignored) {
                 }
@@ -212,7 +212,7 @@ public class SoundPackLoader {
     }
 
     /**
-     * Creates and Registers the {@link SoundEvent} from specified {@link Identifier}.
+     * Creates and Registers the SoundEvent from specified {@link Identifier}.
      *
      * @param clickId Target id.
      */
@@ -275,14 +275,14 @@ public class SoundPackLoader {
         }
 
         /**
-         * Generates the version String from specified {@link EntrypointContainer}.
+         * Generates the version String from specified {@link ModContainer}.
          *
          * @param container Target.
          * @return Generated String.
          */
-        private static String getModVersion(EntrypointContainer<?> container) {
+        private static String getModVersion(ModContainer container) {
             try {
-                final ModMetadata metadata = container.getProvider().getMetadata();
+                final ModMetadata metadata = container.getMetadata();
                 final String modId = metadata.getId();
                 final String modVer = metadata.getVersion().getFriendlyString();
                 return sanitize("%s %s".formatted(modId, modVer));

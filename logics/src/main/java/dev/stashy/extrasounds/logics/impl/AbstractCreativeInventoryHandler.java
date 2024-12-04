@@ -1,6 +1,8 @@
 package dev.stashy.extrasounds.logics.impl;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
+import dev.stashy.extrasounds.logics.impl.state.InventoryClickState;
+import dev.stashy.extrasounds.logics.impl.state.InventoryTabType;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,8 +22,8 @@ public abstract class AbstractCreativeInventoryHandler {
     public void onClick(PlayerEntity player, @Nullable Slot slot, int slotId, int button, SlotActionType actionType, ItemStack cursor) {
         final boolean bOnHotbar = slot != null && !this.isCreativeInventorySlot(slot);
         final boolean bMatchDeleteSlot = slot != null && slot == this.getDeleteItemSlot();
-        final InventoryClickStatus status = new InventoryClickStatus(slot, slotId, cursor, actionType, button, this.getTabType());
-        final boolean bOnCreativeTab = status.isOnCreativeTab();
+        final InventoryClickState state = new InventoryClickState(slot, slotId, cursor, actionType, button, this.getTabType());
+        final boolean bOnCreativeTab = state.isOnCreativeTab();
 
         if (player == null) {
             return;
@@ -31,8 +33,8 @@ public abstract class AbstractCreativeInventoryHandler {
 
         if (actionType == SlotActionType.THROW) {
             // When CreativeInventory is opened, can drop items from any slots while holding an item on cursor.
-            final ItemStack slotStack = status.getSlotStack();
-            if (bOnCreativeTab && (slotStack.getCount() == 1 || button == 1) && status.cursorStack.isEmpty() && bOnHotbar) {
+            final ItemStack slotStack = state.getSlotStack();
+            if (bOnCreativeTab && (slotStack.getCount() == 1 || button == 1) && state.cursorStack.isEmpty() && bOnHotbar) {
                 // When stack is gone, will not be popped.
                 ExtraSounds.MANAGER.playSound(Sounds.ITEM_DELETE_PARTIAL, SoundType.PICKUP);
             } else {
@@ -61,23 +63,23 @@ public abstract class AbstractCreativeInventoryHandler {
             }
         }
 
-        if (!status.cursorStack.isEmpty()) {
+        if (!state.cursorStack.isEmpty()) {
             if (bMatchDeleteSlot) {
                 // Clicked deleteItemSlot.
                 ExtraSounds.MANAGER.playSound(Sounds.ITEM_DELETE_PARTIAL, SoundType.PICKUP);
                 return;
             }
 
-            if (status.isEmptySpaceClicked() && !bOnCreativeTab) {
+            if (state.isEmptySpaceClicked() && !bOnCreativeTab) {
                 // On Inventory tab, entire stack will be thrown regardless of mouse buttons.
-                ExtraSounds.MANAGER.playThrow(status.cursorStack);
+                ExtraSounds.MANAGER.playThrow(state.cursorStack);
                 return;
             }
 
             if (bOnCreativeTab && !bOnHotbar) {
-                if (ExtraSounds.canItemsCombine(status.getSlotStack(), status.cursorStack) && !status.isRMB) {
+                if (ExtraSounds.canItemsCombine(state.getSlotStack(), state.cursorStack) && !state.isRMB) {
                     // Left Mouse Clicked on the same slot in CreativeInventory tab except Hotbar.
-                    ExtraSounds.MANAGER.playSound(status.cursorStack.getItem(), SoundType.PICKUP);
+                    ExtraSounds.MANAGER.playSound(state.cursorStack.getItem(), SoundType.PICKUP);
                     return;
                 } else if (slotId >= 0) {
                     // Clicking on another slot will delete or decrement the cursor stack.
@@ -89,6 +91,6 @@ public abstract class AbstractCreativeInventoryHandler {
 
         // </editor-fold>
 
-        ExtraSounds.MANAGER.handleInventorySlot(player, status);
+        ExtraSounds.MANAGER.handleInventorySlot(player, state);
     }
 }

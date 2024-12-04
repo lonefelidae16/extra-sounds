@@ -16,9 +16,6 @@
   "license": "${mod_license}",
   "environment": "client",
   "entrypoints": {
-    "extrasounds": [
-      "dev.stashy.extrasounds.logics.entry.BaseVanillaGenerator::GENERATOR"
-    ],
     "sound-categories": [
       "dev.stashy.extrasounds.logics.Mixers"
     ]

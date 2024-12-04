@@ -15,6 +15,8 @@
     "effect.ExtendLivingEntityMixin",
     "hotbar.ClientConnectionMixin",
     "hotbar.ClientPlayerEntityMixin",
+    "hotbar.MinecraftClientMixin",
+    "hotbar.MouseMixin",
     "inventory.CreativeInventoryScreenMixin",
     "inventory.LoomScreenMixin",
     "inventory.MerchantScreenMixin",

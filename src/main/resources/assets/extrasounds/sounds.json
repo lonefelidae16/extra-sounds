@@ -3,6 +3,7 @@
     "sounds": [ "extrasounds:muted" ]
   },
   "item.pickup.minecraft.air": {
+    "replace": true,
     "sounds": [
       {
         "name": "extrasounds:muted",
@@ -116,9 +117,9 @@
   "item.category.bowl": {
     "sounds": [
       {
-        "name": "minecraft:block.bubble_column.bubble_pop",
-        "volume": 1.6,
-        "pitch": 0.6,
+        "name": "minecraft:block.pointed_dripstone.drip_lava",
+        "volume": 2,
+        "pitch": 1.6,
         "type": "event"
       }
     ]
@@ -441,6 +442,16 @@
     ],
     "replace": true
   },
+  "item.category.bundles": {
+    "sounds": [
+      {
+        "name": "extrasounds:item.category.gear.generic",
+        "pitch": 1.5,
+        "type": "event"
+      }
+    ],
+    "replace": true
+  },
   "item.integrated.stick": {
     "sounds": [
       "extrasounds:item/stick/pickup1",
@@ -481,7 +492,7 @@
     "sounds": [
       {
         "name": "minecraft:block.stone_button.click_on",
-        "volume": 0.3,
+        "volume": 0.5,
         "pitch": 0.95,
         "type": "event"
       }
@@ -491,7 +502,7 @@
     "sounds": [
       {
         "name": "minecraft:block.stone_button.click_off",
-        "volume": 0.3,
+        "volume": 0.5,
         "pitch": 0.85,
         "type": "event"
       }
@@ -1534,7 +1545,9 @@
     "replace": true,
     "sounds": [
       {
-        "name": "extrasounds:item.category.wet_slippery",
+        "name": "minecraft:item.armor.equip_leather",
+        "volume": 0.45,
+        "pitch": 2,
         "type": "event"
       }
     ]
@@ -1942,16 +1955,6 @@
       }
     ]
   },
-  "item.pickup.minecraft.bundle": {
-    "replace": true,
-    "sounds": [
-      {
-        "name": "extrasounds:item.category.gear.generic",
-        "pitch": 1.5,
-        "type": "event"
-      }
-    ]
-  },
   "item.pickup.minecraft.brush": {
     "replace": true,
     "sounds": [
@@ -1986,6 +1989,17 @@
         "name": "minecraft:block.soul_sand.step",
         "volume": 0.4,
         "pitch": 2,
+        "type": "event"
+      }
+    ]
+  },
+  "item.pickup.minecraft.resin_brick": {
+    "replace": true,
+    "sounds": [
+      {
+        "name": "minecraft:block.resin.place",
+        "volume": 0.7,
+        "pitch": 1.6,
         "type": "event"
       }
     ]

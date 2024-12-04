@@ -7,7 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.Objects;
 
-public class ChatSoundHandler {
+public final class ChatSoundHandler {
     private int currentLines = 0;
 
     public void onMessage(PlayerEntity player, String text) {

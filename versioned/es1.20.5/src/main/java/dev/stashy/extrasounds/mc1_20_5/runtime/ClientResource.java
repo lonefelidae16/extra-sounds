@@ -93,7 +93,16 @@ public class ClientResource extends VersionedClientResource implements ResourceP
 
     @Override
     public <T> T parseMetadata(ResourceMetadataReader<T> metaReader) {
-        return super.parseMetadataImpl(metaReader);
+        try {
+            var stream = Objects.requireNonNull(this.openRootImpl("pack.mcmeta")).get();
+            return AbstractFileResourcePack.parseMetadata(metaReader, Objects.requireNonNull(stream));
+        } catch (Exception ignored) {
+            if (metaReader.getKey().equals("pack")) {
+                return metaReader.fromJson(super.createPackJson());
+            } else {
+                return null;
+            }
+        }
     }
 
     @Override

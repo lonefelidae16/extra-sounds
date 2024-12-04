@@ -1,6 +1,7 @@
 package dev.stashy.extrasounds.logics.compat.mixin.midnightcontrols;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
+import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -14,6 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MouseMixin {
     @Unique
     private int currentHotbarSlot = -1;
+    @Unique
+    private final HotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
+
     /**
      * The lambda of {@code MinecraftClient#execute(() -> { ... })}
      */
@@ -39,7 +43,7 @@ public abstract class MouseMixin {
         }
         final int selectedSlot = player.getInventory().selectedSlot;
         if (selectedSlot != this.currentHotbarSlot) {
-            ExtraSounds.MANAGER.hotbar(selectedSlot);
+            this.soundHandler.onChange();
         }
     }
 }

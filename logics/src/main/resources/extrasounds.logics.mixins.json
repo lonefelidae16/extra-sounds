@@ -6,7 +6,6 @@
   "client": [
     "action.entity.LivingEntityMixin",
     "hotbar.MinecraftClientMixin",
-    "hotbar.MouseMixin",
     "inventory.ClientPlayerInteractionManagerMixin",
     "inventory.HandledScreenMixin",
     "inventory.MinecraftClientMixin"
