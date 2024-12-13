@@ -9,6 +9,42 @@
 
 <small>_Caught bugs and known issues are written._</small>
 
+## [3.0.0+1.21.4-build.1] - 2024-12-14
+### ✨ Added
+
+* Supports 1.21.2 - 1.21.4.
+* New Item sounds:
+  - Resin Brick
+
+### 👷 Technical
+
+* **Huge refactoring has been performed.**
+  - class `net.minecraft.sound.SoundEvent` is not compatible between 1.21.1 and 1.21.2,
+    so we should use a new wrapper class; named [`VersionedSoundEventWrapper`](./logics/src/main/java/dev/stashy/extrasounds/logics/runtime/VersionedSoundEventWrapper.java).
+    This change affects all mod developers who use this mod as a library.
+  - If code exists that has references any static fields defined in [`Sounds.java`](./logics/src/main/java/dev/stashy/extrasounds/sounds/Categories.java)
+    or [`Categories.java`](logics/src/main/java/dev/stashy/extrasounds/sounds/Categories.java),
+    please modify the type definition to `VersionedSoundEventWrapper` and re-compile it.
+  - To instantiate `VersionedSoundEventWrapper`, call `VersionedSoundEventWrapper#newInstance(Identifier)`
+    or `VersionedSoundEventWrapper#fromBlockState(BlockState)`.
+* Dependency updates:
+  - yarn mappings 1.21.4+build.1
+  - fabric api 0.110.5
+  - fabric loader 0.16.9
+  - fabric loom 1.9
+  - Gradle 8.11.1
+  - MidnightControls 1.10.1
+  - SoundCategories
+* API specification updates:
+  - AutoGenerator now obtains the namespace of your custom items
+    from the mod id defined in `fabric.mod.json`.
+    Make sure that both namespaces match.
+    Thus, overriding the namespace programmatically is now effectively no longer possible
+    (such as overriding the `minecraft` namespace item sounds that
+    predefined in this mod with another mod).<br>
+    This change does not affect modifications to `assets/extrasounds/sounds.json` via resource pack.
+    Resource pack feature will remain available.
+
 ## [3.0.0+1.21.1-build.1] - 2024-08-09
 ### ✨ Added
 

@@ -33,7 +33,7 @@ and works with the following Minecraft versions:
 * Minecraft 1.20 family
   - 1.20 - 1.20.6
 * Minecraft 1.21 family
-  - 1.21 - 1.21.1
+  - 1.21 - 1.21.4
 
 If the version you want isn’t available, [you can request a new backward compatibility](https://github.com/lonefelidae16/extra-sounds/issues/new?assignees=&labels=backward,enhancement&projects=&template=backward.yml).
 
@@ -65,6 +65,7 @@ When you find a bug or compatibility problem, [you can raise an issue](https://g
   - Armor stand
 * Mod integrations
   - [RoughlyEnoughItems](https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items)
+  - [MidnightControls](https://www.curseforge.com/minecraft/mc-mods/midnightcontrols)
 * [Mod API for developers](https://github.com/lonefelidae16/extra-sounds/wiki/Custom-sounds-for-mod-developers)
 * [Every sound is configurable via resource packs](https://github.com/lonefelidae16/extra-sounds/wiki/Custom-sounds-for-resource-pack-creators)
 
@@ -94,11 +95,9 @@ By the commit [508210a](https://github.com/lonefelidae16/extra-sounds/commit/508
 ExtraSounds a full client mod and has the following problems:
 
 * Since it’s necessary to communicate with the server to obtain the results,
-  the sound is played regardless of whether the action succeeds or fails.
+  a sound is played regardless of whether your action succeeds or fails.
   - e.g.) When both Chest and PlayerInventory are full and trying to move the stack with
     <kbd>Shift</kbd> + Click. The stack will not be moved, but the sound will be played.
-  - e.g.2) Trying to place an item in a slot that doesn’t accept it, such as
-    placing in the Result slot on the Crafting, Furnace, Brewing screen, and so on.
 
 ## 🛠 Development
 To build this project yourself, [follow the guide on the Wiki](https://github.com/lonefelidae16/extra-sounds/wiki).
