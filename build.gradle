@@ -19,10 +19,10 @@ allprojects {
         maven {
             url = uri("https://api.modrinth.com/maven/")
         }
-        maven {
-            name = "stashymane's repo"
-            url = "https://repo.stashy.dev/releases"
-        }
+//        maven {
+//            name = "stashymane's repo"
+//            url = "https://repo.stashy.dev/releases"
+//        }
         maven {
             url = "https://artifactory.kow08absty.com/artifactory/fabricmc"
         }
@@ -102,6 +102,8 @@ dependencies {
     // <editor-fold desc="Extra Sounds modules">
     compileOnly include(project(path: 'logics'))
     // 1.21 family
+    compileOnly include(project(path: 'versioned:es1.21.4'))
+    compileOnly include(project(path: 'versioned:es1.21.2'))
     compileOnly include(project(path: 'versioned:es1.21'))
     // 1.20 family
     compileOnly include(project(path: 'versioned:es1.20.5'))

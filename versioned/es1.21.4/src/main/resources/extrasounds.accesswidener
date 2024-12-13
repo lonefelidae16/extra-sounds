@@ -1,0 +1,5 @@
+accessWidener	v2	named
+accessible field net/minecraft/item/BucketItem fluid Lnet/minecraft/fluid/Fluid;
+accessible method net/minecraft/entity/decoration/ArmorStandEntity getSlotFromPosition (Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/entity/EquipmentSlot;
+accessible method net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen$CreativeScreenHandler getRow (F)I
+accessible class net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen$LockableSlot

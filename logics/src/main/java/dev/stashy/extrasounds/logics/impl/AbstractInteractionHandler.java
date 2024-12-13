@@ -1,6 +1,7 @@
 package dev.stashy.extrasounds.logics.impl;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
+import dev.stashy.extrasounds.logics.impl.state.ActionResultState;
 import dev.stashy.extrasounds.sounds.Sounds;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -12,11 +13,11 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.Optional;
 
 public abstract class AbstractInteractionHandler {
     protected BlockState blockState;
@@ -38,6 +39,8 @@ public abstract class AbstractInteractionHandler {
 
     protected abstract boolean isCampfireBlocks();
 
+    protected abstract Optional<?> getCampfireRecipe(CampfireBlockEntity campfireBlockEntity, ItemStack currentHandStack);
+
     protected abstract boolean shouldSoundArmorStandEquipped(ItemStack currentStack, ItemStack equipped);
 
     protected abstract boolean shouldSoundArmorStandPreferred(ItemStack currentStack, ItemStack preferred);
@@ -46,7 +49,7 @@ public abstract class AbstractInteractionHandler {
         return !player.isSneaking() || (player.isSneaking() && this.mainHandStack.isEmpty() && this.offHandStack.isEmpty());
     }
 
-    public final void setBlockStatus(BlockState blockState, BlockEntity blockEntity, ItemStack stackInHand, ItemStack mainHandStack, ItemStack offHandStack) {
+    public final void setInteractionState(BlockState blockState, BlockEntity blockEntity, ItemStack stackInHand, ItemStack mainHandStack, ItemStack offHandStack) {
         this.blockState = blockState;
         this.blockEntity = blockEntity;
         this.block = blockState.getBlock();
@@ -55,7 +58,7 @@ public abstract class AbstractInteractionHandler {
         this.offHandStack = offHandStack.copy();
     }
 
-    public final void onUse(ClientPlayerEntity player, BlockPos blockPos, ActionResult actionResult) {
+    public final void onUse(ClientPlayerEntity player, BlockPos blockPos, ActionResultState actionResult) {
         final boolean bCanInteract = this.canInteractBlock(player);
 
         if (this.blockState.isOf(Blocks.REPEATER) &&
@@ -63,17 +66,17 @@ public abstract class AbstractInteractionHandler {
                 bCanInteract
         ) {
             // Repeater
-            final SoundEvent sound = this.blockState.get(RepeaterBlock.DELAY) == 4 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
+            final var sound = this.blockState.get(RepeaterBlock.DELAY) == 4 ? Sounds.Actions.REPEATER_RESET : Sounds.Actions.REPEATER_ADD;
             ExtraSounds.MANAGER.blockInteract(sound, blockPos);
         } else if (this.blockState.isOf(Blocks.DAYLIGHT_DETECTOR) &&
                 this.blockState.contains(DaylightDetectorBlock.INVERTED) &&
                 bCanInteract
         ) {
             // Daylight Detector
-            final SoundEvent sound = this.blockState.get(DaylightDetectorBlock.INVERTED) ? Sounds.Actions.REDSTONE_COMPONENT_ON : Sounds.Actions.REDSTONE_COMPONENT_OFF;
+            final var sound = this.blockState.get(DaylightDetectorBlock.INVERTED) ? Sounds.Actions.REDSTONE_COMPONENT_ON : Sounds.Actions.REDSTONE_COMPONENT_OFF;
             ExtraSounds.MANAGER.blockInteract(sound, blockPos);
         } else if (this.blockState.isOf(Blocks.REDSTONE_WIRE) && bCanInteract &&
-                actionResult == ActionResult.SUCCESS
+                actionResult == ActionResultState.SUCCESS
         ) {
             // Redstone Wire
             ExtraSounds.MANAGER.blockInteract(Sounds.Actions.REDSTONE_WIRE_CHANGE, blockPos);
@@ -85,13 +88,17 @@ public abstract class AbstractInteractionHandler {
             ExtraSounds.MANAGER.blockInteract(this.block.asItem(), blockPos);
         } else if (this.isCampfireBlocks() && (this.blockEntity instanceof CampfireBlockEntity campfireBlockEntity)) {
             // Put item on Campfire
-            var recipe = campfireBlockEntity.getRecipeFor(this.currentHandStack);
-            if (recipe.isPresent() && actionResult == ActionResult.CONSUME) {
+            if (campfireBlockEntity.getItemsBeingCooked().stream().noneMatch(ItemStack::isEmpty)) {
+                return;
+            }
+
+            var recipe = this.getCampfireRecipe(campfireBlockEntity, this.currentHandStack);
+            if (recipe.isPresent() && actionResult == ActionResultState.CONSUME) {
                 ExtraSounds.MANAGER.blockInteract(this.currentHandStack.getItem(), blockPos);
             }
         } else if (this.isFlowerPotBlocks() &&
                 (this.block instanceof FlowerPotBlock potBlock) &&
-                actionResult == ActionResult.SUCCESS
+                actionResult == ActionResultState.SUCCESS
         ) {
             if (!potBlock.isEmpty()) {
                 // Take from pot
@@ -103,7 +110,7 @@ public abstract class AbstractInteractionHandler {
         }
     }
 
-    public void onInteractEntityAt(ItemStack stackInHand, Entity entity, EntityHitResult hitResult, Vec3d target) {
+    public final void onInteractEntityAt(ItemStack stackInHand, Entity entity, EntityHitResult hitResult, Vec3d target) {
         final ItemStack currentStack = stackInHand.copy();
         if (entity instanceof ArmorStandEntity armorStandEntity) {
             final EquipmentSlot slotFromPosition = this.getSlotFromPosition(armorStandEntity, target);

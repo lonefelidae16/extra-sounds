@@ -7,7 +7,7 @@ import dev.stashy.extrasounds.sounds.Sounds;
 /**
  * Helper class for managing {@link net.minecraft.client.gui.screen.Screen} and its inherited class.
  */
-public class ScreenScrollHandler {
+public final class ScreenScrollHandler {
     /**
      * Latest scroll time in milliseconds.
      */

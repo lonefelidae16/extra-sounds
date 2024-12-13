@@ -1,18 +1,17 @@
 package dev.stashy.extrasounds.logics;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
 import dev.stashy.extrasounds.logics.entry.SoundPackLoader;
-import dev.stashy.extrasounds.logics.impl.InventoryClickStatus;
+import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
+import dev.stashy.extrasounds.logics.impl.state.InventoryClickState;
 import dev.stashy.extrasounds.logics.runtime.VersionedPositionedSoundInstanceWrapper;
+import dev.stashy.extrasounds.logics.runtime.VersionedSoundEventWrapper;
 import dev.stashy.extrasounds.logics.throwable.SoundNotFoundException;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
-import me.lonefelidae16.groominglib.Util;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -22,17 +21,14 @@ import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public final class SoundManager {
     private static final Logger LOGGER = LogManager.getLogger(
@@ -43,24 +39,15 @@ public final class SoundManager {
             ))
     );
 
-    public static final SoundEvent FALLBACK_SOUND_EVENT = Sounds.ITEM_PICK;
+    public static final VersionedSoundEventWrapper FALLBACK_SOUND_EVENT = Sounds.ITEM_PICK;
 
-    /**
-     * Map of an item which should not play sounds.<br>
-     * Predicate in this value will be passed an instance of an {@link InventoryClickStatus}.<br>
-     * Item -&gt; Predicate&lt;InventoryClickStatus&gt;
-     */
-    private static final Map<Item, Predicate<InventoryClickStatus>> IGNORE_SOUND_PREDICATE_MAP = Util.make(Maps.newHashMap(), map -> {
-        map.put(Items.BUNDLE, status -> {
-            return status.isRMB && !(status.slot instanceof CreativeInventoryScreen.LockableSlot);
-        });
-    });
-
+    private final HotbarSoundHandler hotbarSoundHandler;
     private final Set<Identifier> missingSoundId;
     private long lastPlayed;
     private Item quickMovingItem;
 
     public SoundManager() {
+        this.hotbarSoundHandler = new HotbarSoundHandler();
         this.missingSoundId = Sets.newHashSet();
         this.lastPlayed = 0;
         this.quickMovingItem = Items.AIR;
@@ -70,34 +57,34 @@ public final class SoundManager {
      * Handles Click and KeyPress on inventory
      *
      * @param player player instance
-     * @param status click status
+     * @param state  click state
      */
-    public void handleInventorySlot(PlayerEntity player, InventoryClickStatus status) {
-        final SlotActionType actionType = status.actionType;
+    public void handleInventorySlot(PlayerEntity player, InventoryClickState state) {
+        final SlotActionType actionType = state.actionType;
 
-        if (status.isQuickCrafting()) {
+        if (state.isQuickCrafting()) {
             // while dragging.
             return;
         }
-        if (status.slotIndex == -1) {
+        if (state.slotIndex == -1) {
             // screen border clicked.
-            return;
-        }
-        if (status.isSlotBlocked()) {
-            // cannot insert.
             return;
         }
 
         // Determine Slot item.
-        final ItemStack slotStack = status.getSlotStack();
+        final ItemStack slotStack = state.getSlotStack();
         if (actionType == SlotActionType.QUICK_MOVE) {
             // cursor holding an item, then Shift + mouse (double) click.
             this.handleQuickMoveSound(slotStack.getItem());
             return;
         }
+        if (state.isSlotBlocked()) {
+            // cannot insert.
+            return;
+        }
 
         // Determine Cursor item.
-        final ItemStack cursorStack = status.getCursorStack(player);
+        final ItemStack cursorStack = state.getCursorStack(player);
 
         final boolean hasCursor = !cursorStack.isEmpty();
         final boolean hasSlot = !slotStack.isEmpty();
@@ -106,9 +93,9 @@ public final class SoundManager {
             return;
         }
 
-        if (status.isEmptySpaceClicked()) {
+        if (state.isEmptySpaceClicked()) {
             // Out of screen area.
-            if (status.isRMB) {
+            if (state.isRMB) {
                 cursorStack.setCount(1);
             }
             this.playThrow(cursorStack);
@@ -116,15 +103,8 @@ public final class SoundManager {
         }
 
         // Test if the item should not play sound.
-        {
-            var predicateForCursor = IGNORE_SOUND_PREDICATE_MAP.getOrDefault(cursorStack.getItem(), null);
-            if (predicateForCursor != null && predicateForCursor.test(status)) {
-                return;
-            }
-            var predicateForSlot = IGNORE_SOUND_PREDICATE_MAP.getOrDefault(slotStack.getItem(), null);
-            if (predicateForSlot != null && predicateForSlot.test(status)) {
-                return;
-            }
+        if (ExtraSounds.MAIN.shouldIgnoreItemSound(cursorStack.getItem(), slotStack.getItem(), state)) {
+            return;
         }
 
         switch (actionType) {
@@ -135,7 +115,7 @@ public final class SoundManager {
             }
             case THROW -> {
                 if (!hasCursor) {
-                    if (status.button == 0) {
+                    if (state.button == 0) {
                         // one item drop from stack (default: Q key)
                         slotStack.setCount(1);
                     }
@@ -181,7 +161,7 @@ public final class SoundManager {
         }
     }
 
-    public void blockInteract(SoundEvent snd, BlockPos position) {
+    public void blockInteract(VersionedSoundEventWrapper snd, BlockPos position) {
         SoundType blockIntr = SoundType.BLOCK_INTR;
         this.playSound(snd, blockIntr, 1f, blockIntr.pitch, position);
     }
@@ -190,7 +170,7 @@ public final class SoundManager {
         this.blockInteract(this.getSoundByItem(item, SoundType.PICKUP), position);
     }
 
-    public void playSound(SoundEvent snd, SoundType type) {
+    public void playSound(VersionedSoundEventWrapper snd, SoundType type) {
         this.playSound(snd, type.pitch, type.category);
     }
 
@@ -217,7 +197,7 @@ public final class SoundManager {
         }
     }
 
-    public void playSound(SoundEvent snd, float pitch, SoundCategory category, SoundCategory... optionalVolumes) {
+    public void playSound(VersionedSoundEventWrapper snd, float pitch, SoundCategory category, SoundCategory... optionalVolumes) {
         float volume = this.getSoundVolume(Mixers.MASTER);
         if (optionalVolumes != null) {
             for (SoundCategory cat : optionalVolumes) {
@@ -238,9 +218,9 @@ public final class SoundManager {
         this.playSound(Objects.requireNonNull(soundInstance));
     }
 
-    public void playSound(SoundEvent snd, SoundType type, float volume, float pitch, BlockPos position) {
+    public void playSound(VersionedSoundEventWrapper snd, SoundType type, float volume, float pitch, BlockPos position) {
         volume *= this.getSoundVolume(Mixers.MASTER);
-        if (volume == 0 || this.isMuted(type)) {
+        if (volume == 0 || this.isMuted(type.category)) {
             // skip reflection when volume is zero.
             if (DebugUtils.DEBUG) {
                 this.logZeroVolume(snd);
@@ -261,7 +241,7 @@ public final class SoundManager {
         return this.getSoundVolume(category) == 0;
     }
 
-    private void logZeroVolume(SoundEvent snd) {
+    private void logZeroVolume(VersionedSoundEventWrapper snd) {
         LOGGER.warn("Sound suppressed due to zero volume, was '{}'.", snd.getId());
     }
 
@@ -269,8 +249,7 @@ public final class SoundManager {
         try {
             long now = System.currentTimeMillis();
             if (now - this.lastPlayed > 5) {
-                final MinecraftClient client = MinecraftClient.getInstance();
-                client.send(() -> client.getSoundManager().play(instance));
+                ExtraSounds.MAIN.playSound(instance);
                 this.lastPlayed = now;
                 if (DebugUtils.DEBUG) {
                     LOGGER.info("Playing sound: {}", instance.getId());
@@ -306,11 +285,11 @@ public final class SoundManager {
         }
         final float maxPitch = 2f;
         final float pitch = (!itemStack.isStackable()) ? maxPitch :
-                MathHelper.lerp((float) itemStack.getCount() / itemStack.getItem().getMaxCount(), maxPitch, 1.5f);
+                MathHelper.lerp((itemStack.getCount() - 1f) / (itemStack.getItem().getMaxCount() - 1f), maxPitch, 1.5f);
         this.playSound(Sounds.ITEM_DROP, pitch, category, Mixers.ITEM_DROP);
     }
 
-    public void stopSound(SoundEvent e, SoundType type) {
+    public void stopSound(VersionedSoundEventWrapper e, SoundType type) {
         MinecraftClient.getInstance().getSoundManager().stopSounds(e.getId(), type.category);
     }
 
@@ -318,10 +297,10 @@ public final class SoundManager {
         return MinecraftClient.getInstance().options.getSoundVolume(category);
     }
 
-    public SoundEvent getSoundByItem(Item item, SoundType type) {
-        var itemId = ExtraSounds.fromItemRegistry(item);
+    public VersionedSoundEventWrapper getSoundByItem(Item item, SoundType type) {
+        var itemId = ExtraSounds.getItemId(item);
         Identifier id = ExtraSounds.getClickId(itemId, type);
-        SoundEvent sound = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
+        VersionedSoundEventWrapper sound = SoundPackLoader.CUSTOM_SOUND_EVENT.getOrDefault(id, null);
         if (sound == null) {
             if (!this.missingSoundId.contains(id)) {
                 this.missingSoundId.add(id);
@@ -330,5 +309,9 @@ public final class SoundManager {
             return FALLBACK_SOUND_EVENT;
         }
         return sound;
+    }
+
+    public HotbarSoundHandler getHotbarSoundHandler() {
+        return this.hotbarSoundHandler;
     }
 }

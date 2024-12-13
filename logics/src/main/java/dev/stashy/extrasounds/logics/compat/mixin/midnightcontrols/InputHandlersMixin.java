@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds.logics.compat.mixin.midnightcontrols;
 
+import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
 import eu.midnightdust.midnightcontrols.client.controller.InputHandlers;
 import eu.midnightdust.midnightcontrols.client.controller.PressAction;
@@ -15,10 +16,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(InputHandlers.class)
 public abstract class InputHandlersMixin {
     @Unique
-    private static final HotbarSoundHandler SOUND_HANDLER = new HotbarSoundHandler();
+    private static final HotbarSoundHandler SOUND_HANDLER = ExtraSounds.MANAGER.getHotbarSoundHandler();
+
+    @Inject(method = "lambda$handleHotbar$2", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;setSelectedSlot(I)V", shift = At.Shift.AFTER), require = 0)
+    private static void extrasounds$hotbarScroll_integrateMidnightControls(CallbackInfoReturnable<PressAction> cir) {
+        SOUND_HANDLER.onChange();
+    }
 
     @Inject(method = "lambda$handleHotbar$2", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V", shift = At.Shift.AFTER), require = 0)
-    private static void extrasounds$hotbarScroll_integrateMidnightControls(CallbackInfoReturnable<PressAction> cir) {
+    private static void extrasounds$hotbarScroll_integrateMidnightControls197(CallbackInfoReturnable<PressAction> cir) {
         SOUND_HANDLER.onChange();
     }
 

@@ -1,5 +1,6 @@
 package dev.stashy.extrasounds.mc1_19.mixin.hotbar;
 
+import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.client.MinecraftClient;
@@ -20,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientConnection.class)
 public abstract class ClientConnectionMixin {
     @Unique
-    private final HotbarSoundHandler soundHandler = new HotbarSoundHandler();
+    private final HotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
 
     @Shadow
     public abstract boolean isOpen();
@@ -38,6 +39,6 @@ public abstract class ClientConnectionMixin {
             return;
         }
 
-        this.soundHandler.onSwapEvent(player.getMainHandStack().getItem(), player.getOffHandStack().getItem());
+        this.soundHandler.onSwap(player.getMainHandStack().getItem(), player.getOffHandStack().getItem());
     }
 }

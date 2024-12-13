@@ -2,12 +2,12 @@ package dev.stashy.extrasounds.logics;
 
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
 import dev.stashy.extrasounds.logics.entry.SoundPackLoader;
+import dev.stashy.extrasounds.logics.runtime.VersionedSoundEventWrapper;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.IndexedIterable;
 import org.apache.logging.log4j.LogManager;
@@ -24,12 +24,11 @@ public final class ExtraSounds {
             new PrefixableMessageFactory(ExtraSounds.class.getSimpleName())
     );
 
-    public static final Map<String, Method> CACHED_METHOD_MAP = new HashMap<>();
-    private static final VersionedMain MAIN = Objects.requireNonNull(VersionedMain.newInstance());
-
-    public static final String MODID = "extrasounds";
-    public static final SoundManager MANAGER = new SoundManager();
     public static final String BASE_PACKAGE = "dev.stashy.extrasounds";
+    public static final String MODID = "extrasounds";
+    public static final Map<String, Method> CACHED_METHOD_MAP = new HashMap<>();
+    public static final VersionedMain MAIN = Objects.requireNonNull(VersionedMain.newInstance());
+    public static final SoundManager MANAGER = new SoundManager();
 
     public static void init() {
         DebugUtils.init();
@@ -57,11 +56,11 @@ public final class ExtraSounds {
         return Sounds.MUTED.getId();
     }
 
-    public static SoundEvent createEvent(String path) {
+    public static VersionedSoundEventWrapper createEvent(String path) {
         return createEvent(Objects.requireNonNull(generateIdentifier(MODID, path)));
     }
 
-    public static SoundEvent createEvent(Identifier id) {
+    public static VersionedSoundEventWrapper createEvent(Identifier id) {
         return MAIN.generateSoundEvent(id);
     }
 
@@ -73,8 +72,8 @@ public final class ExtraSounds {
         return MAIN.generateIdentifier(namespace, path);
     }
 
-    public static Identifier fromItemRegistry(Item item) {
-        return MAIN.fromItemRegistry(item);
+    public static Identifier getItemId(Item item) {
+        return MAIN.getItemId(item);
     }
 
     public static IndexedIterable<Item> getItemRegistry() {

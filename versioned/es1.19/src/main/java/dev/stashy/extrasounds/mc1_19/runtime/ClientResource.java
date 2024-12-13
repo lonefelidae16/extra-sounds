@@ -1,6 +1,7 @@
 package dev.stashy.extrasounds.mc1_19.runtime;
 
 import dev.stashy.extrasounds.logics.runtime.VersionedClientResource;
+import net.minecraft.resource.AbstractFileResourcePack;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.metadata.ResourceMetadataReader;
@@ -94,7 +95,16 @@ public class ClientResource extends VersionedClientResource implements ResourceP
     @Nullable
     @Override
     public <T> T parseMetadata(ResourceMetadataReader<T> metaReader) throws IOException {
-        return super.parseMetadataImpl(metaReader);
+        try {
+            var stream = Objects.requireNonNull(this.openRootImpl("pack.mcmeta")).get();
+            return AbstractFileResourcePack.parseMetadata(metaReader, Objects.requireNonNull(stream));
+        } catch (Exception ignored) {
+            if (metaReader.getKey().equals("pack")) {
+                return metaReader.fromJson(super.createPackJson());
+            } else {
+                return null;
+            }
+        }
     }
 
     @Override

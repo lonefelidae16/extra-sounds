@@ -7,7 +7,7 @@ import dev.stashy.extrasounds.sounds.Sounds;
 /**
  * Helper class for managing {@link net.minecraft.client.gui.widget.TextFieldWidget} and its inherited class.
  */
-public class TextFieldHandler {
+public final class TextFieldHandler {
     public enum KeyType {
         ERASE,
         CUT,

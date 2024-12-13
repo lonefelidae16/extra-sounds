@@ -5,9 +5,7 @@ import com.google.gson.JsonObject;
 import dev.stashy.extrasounds.logics.ExtraSounds;
 import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
-import net.minecraft.resource.AbstractFileResourcePack;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.resource.metadata.ResourceMetadataReader;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -52,8 +49,8 @@ public abstract class VersionedClientResource {
 
     public static VersionedClientResource newInstance(String modId, String name) {
         try {
-            Class<VersionedClientResource> instance = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "runtime.ClientResource");
-            return instance.getConstructor(String.class, String.class).newInstance(modId, name);
+            Class<VersionedClientResource> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "runtime.ClientResource");
+            return clazz.getConstructor(String.class, String.class).newInstance(modId, name);
         } catch (Exception ex) {
             ExtraSounds.LOGGER.error("Failed to initialize 'ClientResource'", ex);
         }
@@ -92,19 +89,10 @@ public abstract class VersionedClientResource {
         LOGGER.info("closing pack: {}", this.name);
     }
 
-    public <T> T parseMetadataImpl(ResourceMetadataReader<T> metaReader) {
-        try {
-            var stream = Objects.requireNonNull(this.openRootImpl("pack.mcmeta")).get();
-            return AbstractFileResourcePack.parseMetadata(metaReader, Objects.requireNonNull(stream));
-        } catch (Exception ignored) {
-            if (metaReader.getKey().equals("pack")) {
-                JsonObject object = new JsonObject();
-                object.addProperty("pack_format", this.packVersion);
-                object.addProperty("description", "%s Runtime ResPack".formatted(ExtraSounds.class.getSimpleName()));
-                return metaReader.fromJson(object);
-            } else {
-                return null;
-            }
-        }
+    protected JsonObject createPackJson() {
+        JsonObject object = new JsonObject();
+        object.addProperty("pack_format", this.packVersion);
+        object.addProperty("description", "%s Runtime ResPack".formatted(ExtraSounds.class.getSimpleName()));
+        return object;
     }
 }
