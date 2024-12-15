@@ -15,6 +15,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.IndexedIterable;
 
 public final class Main extends VersionedMain {
+    public Main() {
+        IGNORE_SOUND_PREDICATE_MAP.remove(Items.BUNDLE);
+    }
+
     @Override
     public Identifier generateIdentifier(String namespace, String path) {
         return Identifier.of(namespace, path);
