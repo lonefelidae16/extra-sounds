@@ -15,7 +15,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${extraSounds.fabric_api_version}"
     modImplementation "me.lonefelidae16:groominglib:${extraSounds.groom_version}"
 
-    implementation project(path: ':sound-categories:shared', configuration: 'namedElements')
+    compileOnly project(path: ':sound-categories:shared', configuration: 'namedElements')
 
     // Integrations
     modCompileOnly "maven.modrinth:rei:${extraSounds.rei_version}+fabric"

@@ -49,7 +49,7 @@ public abstract class BaseVanillaGenerator {
 
     private boolean isGearLeatherItem(Item item) {
         return item instanceof LeadItem || getItemIdPath(item).equals("elytra") ||
-                item instanceof SaddleItem;
+                getItemIdPath(item).equals("saddle");
     }
 
     private boolean isGearGenericItem(Item item) {
@@ -58,7 +58,7 @@ public abstract class BaseVanillaGenerator {
     }
 
     private boolean isPaperItem(Item item) {
-        return item instanceof BannerPatternItem || item instanceof WritableBookItem ||
+        return getItemIdPath(item).endsWith("banner_pattern") || item instanceof WritableBookItem ||
                 item instanceof WrittenBookItem || item instanceof EmptyMapItem ||
                 item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem ||
                 item == Items.BOOK || item == Items.ENCHANTED_BOOK;

@@ -28,9 +28,7 @@ public final class VanillaGenerator extends BaseVanillaGenerator {
                     return SoundDefinition.of(event(blockSoundId, 0.3f));
                 }
                 return this.generateFromBlock(block);
-            } else if (item instanceof MiningToolItem || item instanceof SwordItem ||
-                    item instanceof ArmorItem || item instanceof AnimalArmorItem
-            ) {
+            } else if (item.getComponents().contains(DataComponentTypes.REPAIRABLE)) {
                 return this.generateFromRepairable(item.getComponents().get(DataComponentTypes.REPAIRABLE));
             } else if (this.isPotionItem(item)) {
                 return SoundDefinition.of(aliased(POTION));
