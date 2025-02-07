@@ -18,11 +18,11 @@ public final class TextFieldHandler {
     }
 
     /**
-     * Text position of the start.
+     * The start position in the text.
      */
     private int cursorStart = 0;
     /**
-     * Text position of the end.
+     * The end position in the text.
      */
     private int cursorEnd = 0;
 

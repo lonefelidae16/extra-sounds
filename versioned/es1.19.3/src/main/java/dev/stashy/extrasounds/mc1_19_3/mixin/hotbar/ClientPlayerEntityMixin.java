@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.mc1_19_3.mixin.hotbar;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
+import dev.stashy.extrasounds.logics.impl.VersionedHotbarSoundHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin {
     @Unique
-    private final HotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
+    private final VersionedHotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
 
     @Inject(
             method = "dropSelectedItem",

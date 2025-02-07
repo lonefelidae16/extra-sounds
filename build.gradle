@@ -102,6 +102,7 @@ dependencies {
     // <editor-fold desc="Extra Sounds modules">
     compileOnly include(project(path: 'logics'))
     // 1.21 family
+    compileOnly include(project(path: 'versioned:es1.21.5'))
     compileOnly include(project(path: 'versioned:es1.21.4'))
     compileOnly include(project(path: 'versioned:es1.21.2'))
     compileOnly include(project(path: 'versioned:es1.21'))

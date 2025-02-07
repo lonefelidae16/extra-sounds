@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.mc1_21_4.mixin.hotbar;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
+import dev.stashy.extrasounds.logics.impl.VersionedHotbarSoundHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
@@ -25,7 +25,7 @@ public abstract class ClientPlayerInteractionManagerMixin {
     private @Final MinecraftClient client;
 
     @Unique
-    private final HotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
+    private final VersionedHotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
 
     @Inject(method = "pickItemFromBlock", at = @At("HEAD"))
     private void extrasounds$storePickingBlock(BlockPos blockPos, boolean includeData, CallbackInfo ci) {

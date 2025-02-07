@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.logics.compat.mixin.midnightcontrols;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
+import dev.stashy.extrasounds.logics.impl.VersionedHotbarSoundHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -16,7 +16,7 @@ public abstract class MouseMixin {
     @Unique
     private int currentHotbarSlot = -1;
     @Unique
-    private final HotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
+    private final VersionedHotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
 
     /**
      * The lambda of {@code MinecraftClient#execute(() -> { ... })}
@@ -32,7 +32,7 @@ public abstract class MouseMixin {
         if (player == null || button != 0) {
             return;
         }
-        this.currentHotbarSlot = player.getInventory().selectedSlot;
+        this.currentHotbarSlot = this.soundHandler.getPlayerInventorySlot(player);
     }
 
     @Inject(method = METHOD_SIGN_SETUP_CALLBACK_LAMBDA, at = @At(value = "INVOKE", target = METHOD_SIGN_ON_MOUSE_BUTTON, shift = At.Shift.AFTER), require = 0)
@@ -41,7 +41,7 @@ public abstract class MouseMixin {
         if (player == null || button != 0) {
             return;
         }
-        final int selectedSlot = player.getInventory().selectedSlot;
+        final int selectedSlot = this.soundHandler.getPlayerInventorySlot(player);
         if (selectedSlot != this.currentHotbarSlot) {
             this.soundHandler.onChange();
         }

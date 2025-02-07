@@ -452,6 +452,17 @@
     ],
     "replace": true
   },
+  "item.category.egg": {
+    "sounds": [
+      {
+        "name": "minecraft:block.stone.place",
+        "pitch": 1.7,
+        "type": "event",
+        "volume": 0.3
+      }
+    ],
+    "replace": true
+  },
   "item.integrated.stick": {
     "sounds": [
       "extrasounds:item/stick/pickup1",
@@ -1062,17 +1073,6 @@
         "name": "extrasounds:item.category.crunchy_dry",
         "pitch": 1.2,
         "type": "event"
-      }
-    ]
-  },
-  "item.pickup.minecraft.egg": {
-    "replace": true,
-    "sounds": [
-      {
-        "name": "minecraft:block.stone.place",
-        "pitch": 1.7,
-        "type": "event",
-        "volume": 0.3
       }
     ]
   },

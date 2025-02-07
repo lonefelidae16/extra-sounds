@@ -4,21 +4,37 @@ import dev.stashy.extrasounds.logics.ExtraSounds;
 import dev.stashy.extrasounds.logics.Mixers;
 import dev.stashy.extrasounds.sounds.SoundType;
 import dev.stashy.extrasounds.sounds.Sounds;
+import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 
-public final class HotbarSoundHandler {
+public abstract class VersionedHotbarSoundHandler {
     public static final int FORCE_HOTBAR_CHANGE = -1;
 
-    private Item pickingItem = Items.AIR;
+    private static final Item ITEM_EMPTY = Items.AIR;
+
+    private Item pickingItem = ITEM_EMPTY;
+
+    public abstract int getPlayerInventorySlot(PlayerEntity player);
+
+    public static VersionedHotbarSoundHandler newInstance() {
+        try {
+            Class<VersionedHotbarSoundHandler> clazz = McVersionInterchange.getCompatibleClass(ExtraSounds.BASE_PACKAGE, "impl.HotbarSoundHandler");
+            return clazz.getConstructor().newInstance();
+        } catch (Exception ex) {
+            ExtraSounds.LOGGER.error("Failed to initialize 'HotbarSoundHandler'", ex);
+        }
+        return null;
+    }
 
     public void onSwap(Item mainHand, Item offHand) {
-        if (offHand != Items.AIR) {
+        if (offHand != ITEM_EMPTY) {
             ExtraSounds.MANAGER.playSound(offHand, SoundType.PICKUP);
-        } else if (mainHand != Items.AIR) {
+        } else if (mainHand != ITEM_EMPTY) {
             ExtraSounds.MANAGER.playSound(mainHand, SoundType.PICKUP);
         }
     }
@@ -33,7 +49,7 @@ public final class HotbarSoundHandler {
             return;
         }
 
-        final int selectedSlot = player.getInventory().selectedSlot;
+        final int selectedSlot = this.getPlayerInventorySlot(player);
 
         if (newSlot == FORCE_HOTBAR_CHANGE) {
             ExtraSounds.MANAGER.hotbar(selectedSlot);
@@ -62,7 +78,7 @@ public final class HotbarSoundHandler {
         }
 
         final Item item = this.popPickingItem();
-        if (!player.getMainHandStack().isOf(item) && item != Items.AIR) {
+        if (!player.getMainHandStack().isOf(item) && item != ITEM_EMPTY) {
             ExtraSounds.MANAGER.playSound(item, SoundType.HOTBAR);
         }
     }
@@ -73,7 +89,7 @@ public final class HotbarSoundHandler {
 
     public Item popPickingItem() {
         final Item result = this.pickingItem;
-        this.pickingItem = Items.AIR;
+        this.pickingItem = ITEM_EMPTY;
         return result;
     }
 

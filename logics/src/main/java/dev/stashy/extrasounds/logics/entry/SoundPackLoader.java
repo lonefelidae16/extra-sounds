@@ -139,7 +139,7 @@ public final class SoundPackLoader {
         } else if (DebugUtils.DEBUG) {
             LOGGER.info("init finished; took {}ms.", tookMillis);
         }
-        LOGGER.info("sound pack successfully loaded; {} entries.", CUSTOM_SOUND_EVENT.keySet().size());
+        LOGGER.info("sound pack successfully loaded; {} entries.", CUSTOM_SOUND_EVENT.size());
     }
 
     /**

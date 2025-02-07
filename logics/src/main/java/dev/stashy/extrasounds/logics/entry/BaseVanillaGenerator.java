@@ -49,7 +49,7 @@ public abstract class BaseVanillaGenerator {
 
     private boolean isGearLeatherItem(Item item) {
         return item instanceof LeadItem || getItemIdPath(item).equals("elytra") ||
-                item instanceof SaddleItem;
+                getItemIdPath(item).equals("saddle");
     }
 
     private boolean isGearGenericItem(Item item) {
@@ -58,7 +58,7 @@ public abstract class BaseVanillaGenerator {
     }
 
     private boolean isPaperItem(Item item) {
-        return item instanceof BannerPatternItem || item instanceof WritableBookItem ||
+        return getItemIdPath(item).endsWith("banner_pattern") || item instanceof WritableBookItem ||
                 item instanceof WrittenBookItem || item instanceof EmptyMapItem ||
                 item instanceof FilledMapItem || item instanceof NameTagItem || item instanceof KnowledgeBookItem ||
                 item == Items.BOOK || item == Items.ENCHANTED_BOOK;
@@ -71,7 +71,7 @@ public abstract class BaseVanillaGenerator {
 
     protected SoundDefinition generateFromBlock(Block block) {
         final BlockState blockState = block.getDefaultState();
-        final Identifier blockSoundId = VersionedSoundEventWrapper.fromBlockState(blockState).getId();
+        final Identifier blockSoundId = Objects.requireNonNull(VersionedSoundEventWrapper.fromBlockState(blockState)).getId();
 
         if (block instanceof AbstractRailBlock) {
             return SoundDefinition.of(aliased(RAIL));
@@ -121,6 +121,8 @@ public abstract class BaseVanillaGenerator {
             return SoundDefinition.of(aliased(BOWL));
         } else if (item instanceof BundleItem) {
             return SoundDefinition.of(aliased(BUNDLES));
+        } else if (item instanceof EggItem) {
+            return SoundDefinition.of(aliased(EGG));
         }
 
         return DEFAULT_SOUND;

@@ -3,7 +3,7 @@ package dev.stashy.extrasounds.logics;
 import com.google.common.collect.Sets;
 import dev.stashy.extrasounds.logics.debug.DebugUtils;
 import dev.stashy.extrasounds.logics.entry.SoundPackLoader;
-import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
+import dev.stashy.extrasounds.logics.impl.VersionedHotbarSoundHandler;
 import dev.stashy.extrasounds.logics.impl.state.InventoryClickState;
 import dev.stashy.extrasounds.logics.runtime.VersionedPositionedSoundInstanceWrapper;
 import dev.stashy.extrasounds.logics.runtime.VersionedSoundEventWrapper;
@@ -41,13 +41,13 @@ public final class SoundManager {
 
     public static final VersionedSoundEventWrapper FALLBACK_SOUND_EVENT = Sounds.ITEM_PICK;
 
-    private final HotbarSoundHandler hotbarSoundHandler;
+    private final VersionedHotbarSoundHandler hotbarSoundHandler;
     private final Set<Identifier> missingSoundId;
     private long lastPlayed;
     private Item quickMovingItem;
 
     public SoundManager() {
-        this.hotbarSoundHandler = new HotbarSoundHandler();
+        this.hotbarSoundHandler = VersionedHotbarSoundHandler.newInstance();
         this.missingSoundId = Sets.newHashSet();
         this.lastPlayed = 0;
         this.quickMovingItem = Items.AIR;
@@ -311,7 +311,7 @@ public final class SoundManager {
         return sound;
     }
 
-    public HotbarSoundHandler getHotbarSoundHandler() {
+    public VersionedHotbarSoundHandler getHotbarSoundHandler() {
         return this.hotbarSoundHandler;
     }
 }

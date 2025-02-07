@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.mc1_21_4.mixin.hotbar;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
+import dev.stashy.extrasounds.logics.impl.VersionedHotbarSoundHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.client.network.ClientConnectionState;
@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPlayNetworkHandler.class)
 public abstract class ClientPlayNetworkHandlerMixin extends ClientCommonNetworkHandler implements ClientPlayPacketListener, TickablePacketListener {
     @Unique
-    private final HotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
+    private final VersionedHotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
 
     protected ClientPlayNetworkHandlerMixin(MinecraftClient client, ClientConnection connection, ClientConnectionState connectionState) {
         super(client, connection, connectionState);

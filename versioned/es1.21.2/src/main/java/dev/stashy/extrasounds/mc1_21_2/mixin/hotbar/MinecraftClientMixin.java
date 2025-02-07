@@ -1,7 +1,7 @@
 package dev.stashy.extrasounds.mc1_21_2.mixin.hotbar;
 
 import dev.stashy.extrasounds.logics.ExtraSounds;
-import dev.stashy.extrasounds.logics.impl.HotbarSoundHandler;
+import dev.stashy.extrasounds.logics.impl.VersionedHotbarSoundHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(MinecraftClient.class)
 public abstract class MinecraftClientMixin {
     @Unique
-    private final HotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
+    private final VersionedHotbarSoundHandler soundHandler = ExtraSounds.MANAGER.getHotbarSoundHandler();
 
     @Inject(
             method = "doItemPick",
@@ -29,5 +29,10 @@ public abstract class MinecraftClientMixin {
     )
     private void extrasounds$itemPickSound(CallbackInfo ci, boolean isCreative, BlockEntity blockEntity, ItemStack itemStack) {
         this.soundHandler.doItemPick(itemStack.getItem());
+    }
+
+    @Inject(method = "handleInputEvents", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/entity/player/PlayerInventory;selectedSlot:I"), locals = LocalCapture.CAPTURE_FAILSOFT)
+    private void extrasounds$hotbarKeySound(CallbackInfo ci, int slot) {
+        this.soundHandler.onChange(slot);
     }
 }
