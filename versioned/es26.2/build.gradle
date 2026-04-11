@@ -1,0 +1,27 @@
+plugins {
+    id 'net.fabricmc.fabric-loom'
+}
+
+var extraSounds = project.parent.parent
+
+version = "${extraSounds.mod_version}+${versionDetails().gitHash[0..7]}~lonefelidae16"
+
+base {
+    archivesName = "${extraSounds.archives_base_name}-interchanger+mc${project.minecraft_version}"
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    implementation "me.lonefelidae16:groominglib:${extraSounds.groom_version}"
+
+    compileOnly "maven.modrinth:rei:${project.rei_version}+fabric"
+
+    implementation project(path: extraSounds.project('logics').path)
+}
+
+tasks.withType(ProcessResources).configureEach {
+    project.ext['moduleId'] = 'mc26_2'
+    project.ext['moduleName'] = '26.2 module'
+}

@@ -48,7 +48,7 @@ public class SoundDefinition {
     }
 
     /**
-     * @param filler A {@link SoundDefinition} to be used if <code>null</code> contains,
+     * @param filler A {@link SoundDefinition} to be used if {@code null} contains,
      *               must be NotNull for all entries.
      * @return The copy of {@code this} and not null-ize.
      * @see #fill(SoundEventRegistration)

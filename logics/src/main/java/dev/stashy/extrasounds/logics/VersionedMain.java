@@ -7,11 +7,14 @@ import me.lonefelidae16.groominglib.api.McVersionInterchange;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.IdMap;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class VersionedMain {
     public static VersionedMain newInstance() {
@@ -40,12 +43,21 @@ public abstract class VersionedMain {
 
     public abstract void stopSound(VersionedSoundEventWrapper event, SoundType type);
 
-    public Identifier getItemIdWithComponents(ItemStack itemStack) {
-        DataComponentMap map = itemStack.getComponents();
-        if (map.has(DataComponents.ITEM_MODEL)) {
-            return map.get(DataComponents.ITEM_MODEL);
-        } else {
-            return this.getItemId(itemStack.getItem());
+    public final Identifier[] getItemIdWithComponents(ItemStack itemStack, DataComponentType<?>... components) {
+        final List<Identifier> result = new ArrayList<>();
+        result.add(this.getItemId(itemStack.getItem()));
+
+        if (components == null) {
+            return result.toArray(Identifier[]::new);
         }
+
+        final DataComponentMap map = itemStack.getComponents();
+        for (var component : components) {
+            if (map.has(component) && (map.get(component) instanceof Identifier id) && !result.contains(id)) {
+                result.addFirst(id);
+            }
+        }
+
+        return result.toArray(Identifier[]::new);
     }
 }

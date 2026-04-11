@@ -1,14 +1,14 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.stashy.extrasounds.mc26_1.mixin",
-  "plugin": "dev.stashy.extrasounds.mc26_1.VersionedMixinPlugin",
+  "package": "dev.stashy.extrasounds.mc26_2.mixin",
+  "plugin": "dev.stashy.extrasounds.mc26_2.VersionedMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
   ],
   "client": [
     "hotbar.MinecraftMixin",
-    "screens.MinecraftMixin"
+    "screens.GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

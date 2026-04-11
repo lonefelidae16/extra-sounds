@@ -17,7 +17,9 @@ pluginManagement {
 // SoundCategories modules
 include 'sound-categories', 'sound-categories:shared'
 include 'sound-categories:versioned:sc26.1'
+include 'sound-categories:versioned:sc26.2'
 
 // ExtraSounds modules
 include 'logics'
 include 'versioned:es26.1'
+include 'versioned:es26.2'

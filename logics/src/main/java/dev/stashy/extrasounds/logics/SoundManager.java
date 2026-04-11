@@ -13,6 +13,7 @@ import me.lonefelidae16.groominglib.api.PrefixableMessageFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -244,7 +245,7 @@ public final class SoundManager {
     }
 
     private void logZeroVolume(VersionedSoundEventWrapper snd) {
-        LOGGER.warn("Sound suppressed due to zero volume, was '{}'.", snd.getId());
+        LOGGER.warn("Sound '{}' was suppressed: zero volume.", snd.getId());
     }
 
     private void playSound(SoundInstance instance) {
@@ -258,7 +259,7 @@ public final class SoundManager {
                 }
             } else {
                 if (DebugUtils.DEBUG) {
-                    LOGGER.warn("Sound suppressed due to the fast interval between method calls, was '{}'.", instance.getIdentifier());
+                    LOGGER.warn("Sound '{}' was suppressed: fast interval between method calls.", instance.getIdentifier());
                 }
             }
         } catch (Exception e) {
@@ -296,24 +297,25 @@ public final class SoundManager {
     }
 
     public VersionedSoundEventWrapper getSoundByItem(ItemStack item, SoundType type) {
-        final var itemModelId = ExtraSounds.getClickId(ExtraSounds.MAIN.getItemIdWithComponents(item), type);
-        final var itemId = ExtraSounds.getClickId(ExtraSounds.MAIN.getItemId(item.getItem()), type);
-        final var sound = SoundPackLoader.getSoundEventById(itemModelId, itemId);
+        final Identifier[] itemIds = ExtraSounds.MAIN.getItemIdWithComponents(item, DataComponents.ITEM_MODEL);
+        for (int i = 0; i < itemIds.length; ++i) {
+            itemIds[i] = ExtraSounds.getClickId(itemIds[i], type);
+        }
+        final var sound = SoundPackLoader.getSoundEventById(itemIds);
         if (sound.isEmpty()) {
-            logMissingSoundId(itemId);
-            if (!itemModelId.equals(itemId)) {
-                logMissingSoundId(itemModelId);
-            }
+            logMissingSoundIds(itemIds);
             return FALLBACK_SOUND_EVENT;
         } else {
             return sound.get();
         }
     }
 
-    private void logMissingSoundId(Identifier id) {
-        if (!this.missingSoundId.contains(id)) {
-            this.missingSoundId.add(id);
-            LOGGER.error("Sound '{}' cannot be found in packs.", id);
+    private void logMissingSoundIds(Identifier... ids) {
+        for (Identifier id : ids) {
+            if (!this.missingSoundId.contains(id)) {
+                this.missingSoundId.add(id);
+                LOGGER.error("Sound '{}' cannot be found in packs.", id);
+            }
         }
     }
 

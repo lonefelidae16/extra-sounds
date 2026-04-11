@@ -38,13 +38,7 @@ public final class ExtraSounds {
             final String namespace = id.getNamespace();
             final String path = id.getPath();
             if (prefix.isBlank() || namespace.isBlank() || path.isBlank()) {
-                throw new IllegalArgumentException(
-                        "Identifier cannot contain blank String: prefix = '%s', namespace = '%s', path = '%s'".formatted(
-                                prefix,
-                                namespace,
-                                path
-                        )
-                );
+                throw new IllegalArgumentException("%s cannot contain blank String: prefix = '%s', namespace = '%s', path = '%s'".formatted(Identifier.class.getSimpleName(), prefix, namespace, path));
             }
             return Identifier.fromNamespaceAndPath(ExtraSounds.MODID, "%s.%s.%s".formatted(prefix, namespace, path));
         } catch (Exception ex) {

@@ -106,6 +106,7 @@ dependencies {
     // <editor-fold desc="Extra Sounds modules">
     compileOnly include(project(path: 'logics'))
     compileOnly include(project(path: 'versioned:es26.1'))
+    compileOnly include(project(path: 'versioned:es26.2'))
     // </editor-fold>
 
     // Sound Categories modules

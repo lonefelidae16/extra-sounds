@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.stashy.extrasounds.mc26_2.compat.mixin",
+  "plugin": "dev.stashy.extrasounds.mc26_2.compat.VersionedCompatMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
