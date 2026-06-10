@@ -29,7 +29,7 @@ Sign in to GitHub to get it.
 > For more information, please check [issue #32](https://github.com/lonefelidae16/extra-sounds/issues/32).
 > 
 > Updates for version 1.x will continue to be available via a separate project called
-> “[<img src="https://github.com/lonefelidae16/extra-sounds-v3-legacy/blob/main/src/main/resources/assets/extrasounds/icon.png?raw=true" width="18"> ExtraSounds v3 Legacy](https://modrinth.com/mod/extrasounds-v3-legacy).”
+> “[<img src="https://github.com/lonefelidae16/extra-sounds-v3-legacy/blob/main/src/main/resources/assets/extrasounds/icon.png?raw=true" width="18"> ExtraSounds v3 Legacy](https://github.com/lonefelidae16/extra-sounds-v3-legacy).”
 
 This port has been bumped to **v3**
 and works with the following Minecraft versions:
