@@ -144,7 +144,7 @@
     "sounds": [
       {
         "name": "minecraft:block.wool.place",
-        "volume": 0.85,
+        "volume": 0.95,
         "pitch": 1.5,
         "type": "event"
       }
@@ -213,7 +213,7 @@
   "item.category.gear.chain": {
     "sounds": [
       {
-        "name": "minecraft:block.chain.place",
+        "name": "minecraft:item.armor.equip_chain",
         "volume": 0.7,
         "pitch": 1.1,
         "type": "event"
@@ -871,7 +871,7 @@
         "name": "minecraft:block.wool.place",
         "pitch": 1.8,
         "type": "event",
-        "volume": 0.7
+        "volume": 0.9
       }
     ]
   },
